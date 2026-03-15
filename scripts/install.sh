@@ -482,7 +482,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
     printf "[+] Home: $HOME\n"
     
     # Execute from the dir the script is in
-    cd "$(  cd $(dirname "$0") && pwd  )" || exit
+    cd $(dirname "$0") && cd ../ && pwd || exit
 
     PWD=$(pwd)
     printf "[+] PWD: $PWD\n"
@@ -587,7 +587,8 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
     if which zsh >/dev/null 2>&1; then
     
         # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
-        cd "$(  cd $(dirname "$0") && pwd  )" || exit
+        cd $(dirname "$0") && cd ../ && pwd || exit
+
         cp -v ./config/.zshrc   $HOME/
 
         current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
