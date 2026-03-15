@@ -1,0 +1,1 @@
+/mnt/c/Users/Bobby/.wezterm.lua

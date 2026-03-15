@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+FILE_LOCATION=/home/bobby/my_repos/OpenAI-Chatbot
+
+cd $FILE_LOCATION/
+
+if [[ $1 == "--code" ]]; then
+        python3 $FILE_LOCATION/app.py --msg "$2 . Only return the code itself, do not include any explanations, delimeters, or any other text that wouldn't be part of the program itself." | pygmentize -f terminal
+else
+        python3 $FILE_LOCATION/app.py --msg "$1"
+fi
