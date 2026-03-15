@@ -78,4 +78,3 @@ Each can be further configured manually or using any of their respective presets
 <br />
 
 `init.sh` - Clones repo and runs `install.sh` (installing both packages and config files)  
-`jammy_init.sh` - Sets up Docker container
