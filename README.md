@@ -1,13 +1,10 @@
-I have lots already set up in my terminal:
-- Ohmyzsh (zsh theming and plugins)
-- nvim
-- updates to my $PATH
-- Utillity bash functions
-- Tmux conguration
-- Yazi configuration
-- zsh configuration
-- Spotify-tmux integration
-- etc
+My setup:
+- Shell: zsh
+- Shell Environment: Ohmyzsh (zsh theming and plugins)
+- Prompt customizers: powerline10k, starship, and ohmyposh (overkill really)
+- Edtor: Neovim/vim
+- Multiplexer: Tmux
+- Spotify-tmux integration (+10 rice-factor points)
 
 Instead of re-configuring everything all over from scrath on a new system, I've created a script to install the necessary packages and copy the relevant config files so I can get my workflow up an running on any (ubuntu) system with a single command.
 
