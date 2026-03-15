@@ -216,11 +216,14 @@ repo synchronization tool
 - Custom Bind key I've set: `<C-t> R`  
 - Open cheat.sh: `<bind-key> S`  
 
-## Tmux search  
+## Tmux copy mode options (so vimmy)    
 - `<bind-key> [` - Enter copy mode  
-  - `/`/`?` - Start search (once in copy mode)   
+- `/`/`?` - Start search (once in copy mode)   
   - Enter search term and then `<Enter>` (then use `n`/`N` to search throughout matches - search starts at top of page, use `N` to search backwards)  
   - End search: `q` 
+- `g` - go to top of pane (scrolls to top)  
+- `G` - go to the bottom of the file (scrolls to bottom)  
+- `<C-e>` / `<C-y>` / `<C-u>` / `<C-d>` - act as they do in vim  
 ## TMUX Copy and Paste  
  
 __tmux copy/paste [MAIN]__  _(copy to tmux buffer and clipboard)_  
