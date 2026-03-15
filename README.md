@@ -1,4 +1,4 @@
-My setup:
+# My setup:
 - Shell: zsh
 - Shell Environment: Ohmyzsh (zsh theming and plugins)
 - Prompt customizers: powerline10k, starship, and ohmyposh (overkill really)
