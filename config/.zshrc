@@ -10,6 +10,9 @@
 # Add $HOME/bin if it hasn't been already added
 [[ ":$PATH:" == *":$HOME/bin:"* ]] || PATH="$PATH:$HOME/bin"
 
+# Add $HOME/.local/bin if it hasn't been already added
+[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || PATH="$PATH:$HOME/.local/bin"
+
 # Add path for go installs
 export PATH="$PATH:$HOME/go/bin"
 

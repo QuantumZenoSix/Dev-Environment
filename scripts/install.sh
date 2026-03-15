@@ -171,7 +171,7 @@ if [ "$1" != "configonly" ]; then
         $SUDO apt install pkg-config -y
         $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
         $SUDO apt install font-manager -y # GUI
-        $SUDO apt install direnv -i
+        $SUDO apt install direnv -y
         $SUDO apt install clang -y
         
         echo "[+] Installing misc tools..."
@@ -269,6 +269,7 @@ if [ "$1" != "configonly" ]; then
         tar -xvf go1.24.4.linux-amd64.tar.gz
         $SUDO mv go /usr/local/
         rm -f go*.tar.gz
+        export PATH="$PATH:$HOME/go/bin"
     fi
     
 
