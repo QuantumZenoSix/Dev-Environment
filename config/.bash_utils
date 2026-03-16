@@ -206,7 +206,7 @@ local_config_update(){
         # Save any unsaved changed and pull down the latest
         git stash save
         git pull
-        ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
+        ./scripts/install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
 
 
         # if [[ "$1" = "update-nvim" ]]; then
