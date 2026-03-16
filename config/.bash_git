@@ -104,3 +104,18 @@ git_apply_stash_by_name(){
 
 
 
+git_setsshkey() {
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo "Error: Not inside a git repository" >&2
+        return 1
+    fi
+
+    if [[ -z "$1" || ! -f "$1" || ! -r "$1" ]]; then
+        echo "Usage: git_setsshkey <path-to-private-key>"
+        echo "Error: Please provide a readable key file" >&2
+        return 1
+    fi
+
+    git config core.sshCommand "ssh -i \"$1\" -F /dev/null" &&
+        echo "Repository now using SSH key: $1"
+}

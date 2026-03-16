@@ -492,7 +492,6 @@ mksshkey() {
     ssh-keygen -t ed25519 -C "$comment" "$@"
 
 }
-
 restart_audio(){
 
     systemctl --user restart wireplumber pipewire pipewire-pulse
