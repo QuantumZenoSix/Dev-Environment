@@ -2,44 +2,6 @@
 
 # Table of Contents
 
-- [Shell](#shell)
-  - [Apache](#apache)
-  - [Diagnostics](#diagnostics)
-  - [Dir navigation](#dir-navigation)
-  - [Docker](#docker)
-  - [Git](#git)
-  - [Oh-my-ZSH Plugins](#oh-my-zsh-plugins)
-  - [Nvim](#nvim)
-  - [PBX [custom]](#pbx-custom)
-- [TMUX](#tmux)
-  - [TMUX Configuration and Plugins](#tmux-configuration-and-plugins)
-  - [TMUX Copy and Paste](#tmux-copy-and-paste)
-  - [TMUX Panes](#tmux-panes)
-  - [TMUX Sessions](#tmux-sessions)
-  - [TMUX Windows](#tmux-windows)
-- [Vim](#vim)
-  - [Vim Custom Key Bindings](#vim-custom-key-bindings)
-  - [Vim General Commands](#vim-general-commands)
-  - [Vim File Explorer (netrw)](#vim-file-explorer-netrw)
-  - [Vim File and Buffer Management](#vim-file-and-buffer-management)
-  - [Vim Navigation](#vim-navigation)
-  - [Vim Searching and Replacing](#vim-searching-and-replacing)
-  - [Vim Editing and Text Manipulation](#vim-editing-and-text-manipulation)
-  - [Vim Macros and Automation](#vim-macros-and-automation)
-  - [Vim Troubleshooting](#vim-troubleshooting)
-- [Neovim Keybindings](#neovim-keybindings)
-  - [Custom Motions (using leader)](#custom-motions--using-leader)
-  - [Change / Replace Word Variants](#change--replace-word-variants)
-  - [Custom Motions (non-leader)](#custom-motions--non-leader)
-  - [General Information](#general-information)
-  - [Git (General + LazyGit)](#git-general--lazygit)
-  - [Gitsigns (buffer-local – usually in plugin file)](#gitsigns-buffer-local--usually-in-plugin-file)
-  - [Harpoon](#harpoon)
-  - [Indent](#indent)
-  - [LSP](#lsp)
-  - [Telescope](#telescope)
-  - [Vim-Fugitive](#vim-fugitive)
-- [Yazi](#yazi)
 
 ---
 
@@ -65,7 +27,6 @@
 `ch` - /home/bobby/bin/cht.sh (command-line client for cheat.sh cheat sheets). Example `ch perl/array`  
 `chatgpt` - [custom] - CLI interface to ChatGPT/OpenAI  
 `cless` - colorize_less  
-`clear_nvim_swaps` - [custom] self-explanatory  
 `create_and_assume_user` - [custom] self-explanatory (note: adds user to sudo group)  
 `colorme` - [custom] Pipe to this to color your text  
 `csvlens` - Interactive CSV file viewer  
@@ -73,7 +34,7 @@
 `dirsync` - [custom] Directory synchronizer (sync files between directories)  
 `docx_to_md` - [custom] self-explanatory  
 `docker_force_old_version` - [custom] Set Docker version environment variable to 1.43  
-`dockbuntu` - [custom] Spin up quick ubuntu container  
+`dockbuntu` - [custom] Spin up quick ubuntu container (with sudo, vim, git, curl, and wget`)  
 `mp3_dl` - [custom] Download MP3 audio from youtube URL  
 `egrep` - egrep --color=auto (grep -E)  
 `eget` - Easy binary downloader from GitHub releases  
@@ -167,15 +128,16 @@ repo synchronization tool
 `git_discard_old_stashes` - Current stash count (keeping latest 10)  
 `lg` - Lazygit  
 `showmerges` - Shows last 15 merges  
+`showmerges` - git log --oneline --merges -E --grep 'DEV-[0-9]+' -n 15  
 `git_force_push` - Add ssh key to agent and push  
 `gc` - 'Git Clean' - drop all local changes - head to master, git pull, and restart apache  
-`showmerges` - git log --oneline --merges -E --grep 'DEV-[0-9]+' -n 15  
 
 
 ## Oh-my-ZSH Plugins  
 - `ccat/cless` - colorized cat+less  
 - `copyfile` - copy file contents to system clipboard  
-- `<C-o>` - copy cmdline contents to system clipboard  
+- `<C-o>` - copy cmdline contents to system clipboard (copybuffer) 
+- `copypath` - copy file path  
 - Allows pressing `<C-z>` again to switch back to a background job.  
 
 
@@ -188,6 +150,8 @@ repo synchronization tool
 `nv` - NVIM_APPNAME=nvim-lazy nvim  
 `nvim` - Neovim text editor  
 `nvim-custom` - [custom] NVIM_APPNAME="nvim-custom" nvim  
+`clear_nvim_swaps` - [custom] self-explanatory  
+`fv` - fuzzy find a file to open with nvim  
 
 <br />  
 
@@ -224,13 +188,6 @@ repo synchronization tool
 - `g` - go to top of pane (scrolls to top)  
 - `G` - go to the bottom of the file (scrolls to bottom)  
 - `<C-e>` / `<C-y>` / `<C-u>` / `<C-d>` - act as they do in vim  
-## TMUX Copy and Paste  
- 
-__tmux copy/paste [MAIN]__  _(copy to tmux buffer and clipboard)_  
-- Enter copy mode: `<bind-key> [`  
-- Use arrows to find text to start to copy from  
-- Start Selection: `v`  
-- Copy: `y`  
 - Paste (from tmux buffer): `<bind-key> ]`  
 - Paste (from system clipboard): `<C-S-v>`  
 
@@ -657,7 +614,7 @@ _Note: `<C-...>` should be taken to mean `Ctrl+`. All other keys are to be enter
 - `:source $MYVIMRC` - Reload config (and plugins) without restarting nvim  
 - `:MarkdownPreview` - View MarkdownPreview in browser [🔌 Markdown-Preview]  
 - `<leader> ` or `<C-^>` (which is `Ctrl+6`) - swap back and forth between current (`#`) and alternate (`a%`) buffers. [🔌]  
-
+- `<leader>u` - undotree  
 
 
 ## Custom Motions  (using leader) 
