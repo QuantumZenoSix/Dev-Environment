@@ -201,7 +201,8 @@ function enable_ohmyposh(){
         [[ ":$PATH:" == *":$HOME/bin:"* ]] || PATH="$PATH:$HOME/bin"
     fi
 
-    posh_theme='https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/night-owl.omp.json'
+    # posh_theme='https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/night-owl.omp.json'
+    posh_theme='https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/tokyonight_storm.omp.json'
     eval "$(oh-my-posh init zsh --config $posh_theme)"
 
 }
