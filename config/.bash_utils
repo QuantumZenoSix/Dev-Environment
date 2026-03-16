@@ -2,17 +2,179 @@
 
 UTILS_LOADED=1
 
+
+local_config_update_and_nvim_update(){
+    local_config_update 'update-nvim'
+}
+local_config_update(){
+    # Gets latest config files in repo (which has been cloned) and updates local files
+
+    LOCAL_REPO=~/my_repos/Dev-Environment
+
+    if [[ ! -d $LOCAL_REPO/ ]]; then
+        LOCAL_REPO=~/Documents/Repos/Dev-Environment
+    fi
+
+    if [[ ! -d $LOCAL_REPO/ ]]; then
+        echo "[!] Repo does not exist! Cloning and updating..."
+        cd $LOCAL_REPO/
+        sh -c "$(wget https://raw.githubusercontent.com/bobby-valenzuela/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
+    else
+
+        if [[ ! -d $LOCAL_REPO/config/ ]]; then
+            mkdir -p $LOCAL_REPO/config/
+        fi
+
+        cd $LOCAL_REPO
+        # Save any unsaved changed and pull down the latest
+        git stash save
+        git pull
+        ./scripts/install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
+
+
+        # if [[ "$1" = "update-nvim" ]]; then
+        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
+        #     ./install.sh nvimonly
+        # else
+        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
+        #
+        # fi
+
+
+    fi
+
+
+    # Nvim is already updated - only continue if we want to keep revert back to current nvim
+    if [[ "$1" = "update-nvim" ]]; then
+        echo "[+] Nvim config updated!"
+        return
+    fi
+
+    # [+] Restore main nvim profile
+    # At this point our nvim config would have been moved to nvim-backup and a fresh install would be in place
+    # Revert that if we're not interested in updated nvim
+    echo "Restoring nvim config to previous one..."
+    if [ -d ~/.config/nvim-new ]; then
+        rm -rf ~/.config/nvim-new
+    fi
+    mv ~/.config/nvim ~/.config/nvim-new
+    mv ~/.config/nvim-backup ~/.config/nvim
+
+    # Restore cache
+    rm -rf ~/.local/share/nvim/
+    mv ~/.local/share/nvim-backup ~/.local/share/nvim
+
+}
+
+local_config_save(){
+    # Copies all of my main config files into my git dir so i can push them up later as needed
+    LOCAL_REPO=~/my_repos/Dev-Environment
+
+    # Sync local config files with cloned repo so i can push up my changes
+    if [[ ! -d $LOCAL_REPO/config/ ]]; then
+
+        LOCAL_REPO=~/Documents/Repos/Dev-Environment
+        mkdir -p $LOCAL_REPO/config/ 2> /dev/null
+    fi
+    DEST=$LOCAL_REPO/config/
+
+    # Ensure $DEST is set and is a valid directory
+    if [ -z "$DEST" ] || [ ! -d "$DEST" ]; then
+      echo "Error: Directory $DEST is not set or is not a valid directory."
+      return 1
+    fi
+
+    printf "Running... [ARG1: $1]\n"
+
+    # FILES
+    cp -v ~/.bash_aliases  $DEST
+    cp -v ~/.bash_git  $DEST
+    cp -v ~/.bash_pbx  $DEST
+    cp -v ~/.bash_utils  $DEST
+    cp -v ~/.bashrc  $DEST
+    # cp -v -r ~/.oh-my-zsh  $DEST
+    cp -v ~/.p10k.zsh  $DEST
+    cp -v ~/.tmux.conf  $DEST
+    cp -v ~/.vimrc  $DEST
+    cp -v ~/.zshrc   $DEST
+    cp -v ~/.zsh_customizations   $DEST
+    cp -v ~/.tmux_init.sh  $DEST
+    cp -v -r ~/.config/starship.toml  $DEST.config/
+    # DIRS
+    cp -v -r ~/.config/spotify-player/  $DEST.config/
+    cp -v -r ~/.config/lazydocker/  $DEST.config/
+    cp -v -r ~/.config/lazygit/  $DEST.config/
+    cp -v -r ~/.config/nvim/  $DEST.config/
+    cp -v -r ~/.config/nvim-lazy/  $DEST.config/
+    cp -v -r ~/.config/posting/  $DEST.config/
+    sudo cp -v -r ~/.config/yazi/  $DEST.config/
+
+    # cp -v -r ~/.config/  $DEST
+    #    cp -v -r ~/.local/share/nvim/dadbod_ui/  $DEST
+
+    DEST=$LOCAL_REPO/
+    cp -v -r ~/posting/  $DEST
+
+
+    # NEW - Copy custom files from /usr/local/bin/
+    DEST=$LOCAL_REPO/config/usr_local_bin/
+    # cp /usr/local/bin/* $DEST
+
+    if [[ ! -d $LOCAL_REPO/config/usr_local_bin/ ]]; then
+        mkdir -p $LOCAL_REPO/config/usr_local_bin/
+    fi
+
+    sudo cp -r /usr/local/bin/chatgpt $DEST
+    sudo cp -r /usr/local/bin/dirsync $DEST
+    sudo cp -r /usr/local/bin/grok $DEST
+    sudo cp -r /usr/local/bin/postboy $DEST
+    sudo cp -r /usr/local/bin/posty $DEST
+    sudo cp -r /usr/local/bin/quickconnect $DEST
+    sudo cp -r /usr/local/bin/reposync $DEST
+    sudo cp -r /usr/local/bin/restarthive.sh $DEST
+    sudo cp -r /usr/local/bin/tomahawk $DEST
+    sudo cp -r /usr/local/bin/update_aws_creds.sh $DEST
+    sudo cp -r /usr/local/bin/vscode-cleanup $DEST
+    sudo cp -r /usr/local/bin/vscode-cleanup-pbx $DEST
+
+    # OLD - Copy all files (less than 100MB) in /usr/local/bin
+    # Maximum file size in bytes (100 MB = 100 * 1024 * 1024 bytes)
+    # max_size=$((100 * 1024 * 1024))
+
+    # # Loop through each file in /usr/local/bin (not directories, not recursive)
+    # for file in /usr/local/bin/*; do
+    #     # Get file size in bytes
+    #     file_size=$(stat -c %s "$file" 2>/dev/null)
+    #     if [ -z "$file_size" ]; then
+    #       echo "Warning: Could not determine size of $file, skipping."
+    #       continue
+    #     fi
+    #     # Check if file size is less than 100 MB
+    #     if [ $file_size -lt $max_size ]; then
+    #       echo "Copying $file (size: $((file_size / 1024 / 1024)) MB)"
+    #       sudo cp -r "$file" "$DEST"
+    #       if [ $? -ne 0 ]; then
+    #         echo "Error: Failed to copy $file."
+    #         # exit 1
+    #       fi
+    #     else
+    #       echo "Skipping $file (size: $((file_size / 1024 / 1024)) MB, exceeds 100 MB)"
+    #     fi
+    # done
+
+     echo "Done!"
+}
+alias lcu="local_config_update"
+alias lcs="local_config_save"
+alias lcn="local_config_update_and_nvim_update"
+
+
+
 # ____________________ GENERAL ______________________
 
 # Get side-by-side diff only showing diffs
 diffy(){
     diff $1 $2 -y --color --suppress-common-lines
-}
-
-# cd + ls
-tere() {
-    local result=$(command tere "$@")
-    [ -n "$result" ] && cd -- "$result"
 }
 
 clear_nvim_swaps(){
@@ -180,169 +342,6 @@ tt(){
    ~/my_repos/Tomahawk/tomahawk
 }
 
-local_config_update_and_nvim_update(){
-    local_config_update 'update-nvim'
-}
-local_config_update(){
-    # Gets latest config files in repo (which has been cloned) and updates local files
-
-    LOCAL_REPO=~/my_repos/Dev-Environment
-
-    if [[ ! -d $LOCAL_REPO/ ]]; then
-        LOCAL_REPO=~/Documents/Repos/Dev-Environment
-    fi
-
-    if [[ ! -d $LOCAL_REPO/ ]]; then
-        echo "[!] Repo does not exist! Cloning and updating..."
-        cd $LOCAL_REPO/
-        sh -c "$(wget https://raw.githubusercontent.com/bobby-valenzuela/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
-    else
-
-        if [[ ! -d $LOCAL_REPO/config/ ]]; then
-            mkdir -p $LOCAL_REPO/config/
-        fi
-
-        cd $LOCAL_REPO
-        # Save any unsaved changed and pull down the latest
-        git stash save
-        git pull
-        ./scripts/install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
-
-
-        # if [[ "$1" = "update-nvim" ]]; then
-        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
-        #     ./install.sh nvimonly
-        # else
-        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
-        #
-        # fi
-
-
-    fi
-
-
-    # Nvim is already updated - only continue if we want to keep revert back to current nvim
-    if [[ "$1" = "update-nvim" ]]; then
-        echo "[+] Nvim config updated!"
-        return
-    fi
-
-    # [+] Restore main nvim profile
-    # At this point our nvim config would have been moved to nvim-backup and a fresh install would be in place
-    # Revert that if we're not interested in updated nvim
-    echo "Restoring nvim config to previous one..."
-    if [ -d ~/.config/nvim-new ]; then
-        rm -rf ~/.config/nvim-new
-    fi
-    mv ~/.config/nvim ~/.config/nvim-new
-    mv ~/.config/nvim-backup ~/.config/nvim
-
-    # Restore cache
-    rm -rf ~/.local/share/nvim/
-    mv ~/.local/share/nvim-backup ~/.local/share/nvim
-
-}
-
-local_config_save(){
-    # Copies all of my main config files into my git dir so i can push them up later as needed
-    LOCAL_REPO=~/my_repos/Dev-Environment
-
-    # Sync local config files with cloned repo so i can push up my changes
-    if [[ ! -d $LOCAL_REPO/config/ ]]; then
-
-        LOCAL_REPO=~/Documents/Repos/Dev-Environment
-        mkdir -p $LOCAL_REPO/config/ 2> /dev/null
-    fi
-    DEST=$LOCAL_REPO/config/
-
-    # Ensure $DEST is set and is a valid directory
-    if [ -z "$DEST" ] || [ ! -d "$DEST" ]; then
-      echo "Error: Directory $DEST is not set or is not a valid directory."
-      return 1
-    fi
-
-    printf "Running... [ARG1: $1]\n"
-
-    # FILES
-    cp -v ~/.bash_aliases  $DEST
-    cp -v ~/.bash_git  $DEST
-    cp -v ~/.bash_pbx  $DEST
-    cp -v ~/.bash_utils  $DEST
-    cp -v ~/.bashrc  $DEST
-    # cp -v -r ~/.oh-my-zsh  $DEST
-    cp -v ~/.p10k.zsh  $DEST
-    cp -v ~/.tmux.conf  $DEST
-    cp -v ~/.vimrc  $DEST
-    cp -v ~/.zshrc   $DEST
-    cp -v ~/.zsh_customizations   $DEST
-    cp -v ~/.tmux_init.sh  $DEST
-    cp -v -r ~/.config/starship.toml  $DEST.config/
-    # DIRS
-    cp -v -r ~/.config/spotify-player/  $DEST.config/
-    cp -v -r ~/.config/lazydocker/  $DEST.config/
-    cp -v -r ~/.config/lazygit/  $DEST.config/
-    cp -v -r ~/.config/nvim/  $DEST.config/
-    cp -v -r ~/.config/nvim-lazy/  $DEST.config/
-    cp -v -r ~/.config/posting/  $DEST.config/
-    sudo cp -v -r ~/.config/yazi/  $DEST.config/
-
-    # cp -v -r ~/.config/  $DEST
-    #    cp -v -r ~/.local/share/nvim/dadbod_ui/  $DEST
-
-    DEST=$LOCAL_REPO/
-    cp -v -r ~/posting/  $DEST
-
-
-    # NEW - Copy custom files from /usr/local/bin/
-    DEST=$LOCAL_REPO/config/usr_local_bin/
-    # cp /usr/local/bin/* $DEST
-
-    if [[ ! -d $LOCAL_REPO/config/usr_local_bin/ ]]; then
-        mkdir -p $LOCAL_REPO/config/usr_local_bin/
-    fi
-
-    sudo cp -r /usr/local/bin/chatgpt $DEST
-    sudo cp -r /usr/local/bin/dirsync $DEST
-    sudo cp -r /usr/local/bin/grok $DEST
-    sudo cp -r /usr/local/bin/postboy $DEST
-    sudo cp -r /usr/local/bin/posty $DEST
-    sudo cp -r /usr/local/bin/quickconnect $DEST
-    sudo cp -r /usr/local/bin/reposync $DEST
-    sudo cp -r /usr/local/bin/restarthive.sh $DEST
-    sudo cp -r /usr/local/bin/tomahawk $DEST
-    sudo cp -r /usr/local/bin/update_aws_creds.sh $DEST
-    sudo cp -r /usr/local/bin/vscode-cleanup $DEST
-    sudo cp -r /usr/local/bin/vscode-cleanup-pbx $DEST
-
-    # OLD - Copy all files (less than 100MB) in /usr/local/bin
-    # Maximum file size in bytes (100 MB = 100 * 1024 * 1024 bytes)
-    # max_size=$((100 * 1024 * 1024))
-
-    # # Loop through each file in /usr/local/bin (not directories, not recursive)
-    # for file in /usr/local/bin/*; do
-    #     # Get file size in bytes
-    #     file_size=$(stat -c %s "$file" 2>/dev/null)
-    #     if [ -z "$file_size" ]; then
-    #       echo "Warning: Could not determine size of $file, skipping."
-    #       continue
-    #     fi
-    #     # Check if file size is less than 100 MB
-    #     if [ $file_size -lt $max_size ]; then
-    #       echo "Copying $file (size: $((file_size / 1024 / 1024)) MB)"
-    #       sudo cp -r "$file" "$DEST"
-    #       if [ $? -ne 0 ]; then
-    #         echo "Error: Failed to copy $file."
-    #         # exit 1
-    #       fi
-    #     else
-    #       echo "Skipping $file (size: $((file_size / 1024 / 1024)) MB, exceeds 100 MB)"
-    #     fi
-    # done
-
-     echo "Done!"
-}
-alias lcu="local_config_update"
-alias lcs="local_config_save"
 
 config_sync_alpha(){
 
