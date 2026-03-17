@@ -99,6 +99,7 @@ local_config_save(){
     cp -v ~/.zshrc   $DEST
     cp -v ~/.zsh_customizations   $DEST
     cp -v ~/.tmux_init.sh  $DEST
+    cp -v ~/.wezterm.lua  $DEST
     cp -v -r ~/.config/starship.toml  $DEST.config/
     # DIRS
     cp -v -r ~/.config/spotify-player/  $DEST.config/
