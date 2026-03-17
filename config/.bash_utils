@@ -18,7 +18,7 @@ local_config_update(){
     if [[ ! -d $LOCAL_REPO/ ]]; then
         echo "[!] Repo does not exist! Cloning and updating..."
         cd $LOCAL_REPO/
-        sh -c "$(wget https://raw.githubusercontent.com/bobby-valenzuela/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
+        sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
     else
 
         if [[ ! -d $LOCAL_REPO/config/ ]]; then
