@@ -172,7 +172,28 @@ repo synchronization tool
 ---  
 <br />  
 
-# TMUX  
+# Wezterm (for multiplexing)  
+- `C-T` - New window (tab)  
+- `C-R` - Reload conf script  
+## copy mode options (so vimmy)    
+- `<Ctrl-Shift-X>` - Enter copy mode  
+- `/`/`?` - Start search (once in copy mode)   
+  - Enter search term and then `<Enter>` (then use `<C-n>`/`<C-p>` to search throughout matches  
+  - End search: `Esc`  
+- `g` - go to top of pane (scrolls to top)  
+- `G` - go to the bottom of the file (scrolls to bottom)  
+- `<C-u>` / `<C-d>` - act as they do in vim  
+
+## Panes  
+- Split Windows Vertically: `<leader> s`  
+- Split Windows Horizontally: `<leader> v`  
+- Navigate subwindows (panes): `<alt> <arrow-key>`  
+
+
+---  
+<br />  
+
+# TMUX  (no longer using)
 ## TMUX Configuration and Plugins  
 - Enable TMUX plugins by install TPM: `https://github.com/tmux-plugins/tpm`  
 - Reload config file: `tmux source ~/.tmux.conf`  
