@@ -191,9 +191,9 @@ repo synchronization tool
 - `<C-u>` / `<C-d>` - act as they do in vim  
 
 ## Panes  
-- Split Windows Vertically: `<leader> v`  
-- Split Windows Horizontally: `<leader> s`  
-- Navigate subwindows (panes): `<alt> <arrow-key>`  
+- Split Windows Vertically: `<leader> v` (like vim)  
+- Split Windows Horizontally: `<leader> s` (like vim)  
+- Navigate subwindows (panes): `<alt> <arrow-key>` (like vim)  
 - Zoom/Unzoom panes: `Ctrl+Shift+Z`
 
 
