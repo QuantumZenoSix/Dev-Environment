@@ -71,7 +71,10 @@ config.term = 'xterm-256color'
 -- config.enable_sixel = true
 
 -- Set leader key to Ctrl-t (similar to prefix)
-config.leader = { key = 't', mods = 'CTRL', timeout_milliseconds = 1000 }
+-- config.leader = { key = 't', mods = 'CTRL', timeout_milliseconds = 1000 }
+config.leader = { key = "W", mods = "CTRL", timeout_milliseconds = 1000 }
+
+
 
 -- Key bindings
 config.keys = {
@@ -94,10 +97,10 @@ config.keys = {
     { key = '|', mods = 'LEADER', action = wezterm.action.TogglePaneZoomState },
 
     -- Switch panes using Alt-arrow keys (no leader/prefix needed)
-    { key = 'LeftArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Left' },
-    { key = 'RightArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Right' },
-    { key = 'UpArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Up' },
-    { key = 'DownArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Down' },
+    { key = 'LeftArrow', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Left' },
+    { key = 'RightArrow', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Right' },
+    { key = 'UpArrow', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Up' },
+    { key = 'DownArrow', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Down' },
 }
 
 
