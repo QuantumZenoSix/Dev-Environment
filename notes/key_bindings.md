@@ -1,5 +1,10 @@
 # Key Bindings Reference  
 
+Leader key for vim/neovim: `<space>`  
+Leader key for Wezterm: `<C-W>`  
+This means window management is verly similar - <C-W> for window actions in Wezterm's multiplexer and <C-w> for window management within vim/nvim (keys for splits, movement, remain the same).  
+
+
 # Table of Contents
 
 
@@ -173,6 +178,7 @@ repo synchronization tool
 <br />  
 
 # Wezterm (for multiplexing)  
+- Leader key: `Ctrl-Space`  
 - `C-T` - New window (tab)  
 - `C-R` - Reload conf script  
 ## copy mode options (so vimmy)    
@@ -185,8 +191,8 @@ repo synchronization tool
 - `<C-u>` / `<C-d>` - act as they do in vim  
 
 ## Panes  
-- Split Windows Vertically: `<leader> s`  
-- Split Windows Horizontally: `<leader> v`  
+- Split Windows Vertically: `<leader> v`  
+- Split Windows Horizontally: `<leader> s`  
 - Navigate subwindows (panes): `<alt> <arrow-key>`  
 - Zoom/Unzoom panes: `Ctrl+Shift+Z`
 
