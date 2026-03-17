@@ -386,4 +386,4 @@ vim.keymap.set("n", "<leader>tn", ":Trouble diagnostics next<CR>", { desc = "Nex
 vim.keymap.set("n", "<leader>tp", ":Trouble diagnostics prev<CR>", { desc = "Prevous Trouble item" })
 
 -- _______________________ Undotree __________________________
-vim.keymap.set('n', '<leader><u>', vim.cmd.UndotreeToggle)
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
