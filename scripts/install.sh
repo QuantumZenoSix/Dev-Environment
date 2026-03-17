@@ -313,8 +313,8 @@ if [ "$1" != "configonly" ]; then
     echo "[+] Installing ggh ssh manager..."
     curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
     
-    echo "[+] Installing zioxide..."
-    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+    # echo "[+] Installing zioxide..."
+    # curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
     
     echo "[+] Installing csvlens"
     cargo install csvlens
