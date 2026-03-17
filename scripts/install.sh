@@ -503,6 +503,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
     cp -f -v ./config/.zshrc   $HOME/
     cp -f -v ./config/.zsh_customizations  $HOME/
     cp -f -v ./config/.tmux_init.sh  $HOME/
+    cp -f -v ./config/.wezterm_wsl.lua  $HOME/.wezterm.lua
 
     # __________ NVIM __________
     if [ -d $HOME/.config/nvim/ ]; then
