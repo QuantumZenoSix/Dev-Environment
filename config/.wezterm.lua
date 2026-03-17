@@ -85,10 +85,10 @@ config.keys = {
     { key = 't', mods = 'LEADER', action = wezterm.action.SendKey { key = 't', mods = 'CTRL' } },
 
     -- Split window horizontally (add pane to the right, like tmux split -h)
-    { key = 'v', mods = 'LEADER', action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' } },
+    { key = 's', mods = 'LEADER', action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' } },
 
     -- Split window vertically (add pane below, like tmux split -v)
-    { key = 's', mods = 'LEADER', action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+    { key = 'v', mods = 'LEADER', action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
 
     -- Zoom pane (like tmux resize-pane -Z)
     { key = '|', mods = 'LEADER', action = wezterm.action.TogglePaneZoomState },

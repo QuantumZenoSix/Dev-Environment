@@ -188,6 +188,7 @@ repo synchronization tool
 - Split Windows Vertically: `<leader> s`  
 - Split Windows Horizontally: `<leader> v`  
 - Navigate subwindows (panes): `<alt> <arrow-key>`  
+- Zoom/Unzoom panes: `Ctrl+Shift+Z`
 
 
 ---  
