@@ -243,6 +243,7 @@ hash -d z=~/.zshrc              # zsh conf (good for sourcing): . ~c
 hash -d bu=~/.bash_utils         
 hash -d ba=~/.bash_aliases         
 hash -d nc=~/.config/nvim/lua/   # Edit nvim dir: nvim -n
+hash -d de=~/Documents/Repos/Dev-Environment/         
 
 # Ctrl-x followed by gc runs git commit with cursor inside msg
 bindkey -s '^Xgc' 'git commit -m ""\C-b'
