@@ -73,8 +73,8 @@ vim.keymap.set('n', '<Leader>ll', function()
   end
 end, { noremap = true, silent = true, desc = "Toggle line numbering" })
 
--- leader+h to unhighlight)
-vim.keymap.set('n', '<leader>h', ':nohlsearch<CR><esc>', { noremap = true, silent = true })
+-- leader+h to unhighlight) - already added to the Esc key
+-- vim.keymap.set('n', '<leader>h', ':nohlsearch<CR><esc>', { noremap = true, silent = true })
 
 -- 'Remove Markers' | Remove all markers
 vim.keymap.set('n', '<leader>rm', ':delm a-zA-Z0-9<CR>', { desc = 'Remove All Markers', noremap = true, silent = true })
@@ -152,9 +152,9 @@ local function toggle_telescope(harpoon_files)
 end
 -- ==> end optional telescope menu
 
-vim.keymap.set("n", "<leader>m", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: Toggle quick menu" })
-vim.keymap.set("n", "<leader>M", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon window" })
-vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon: Add file" })
+vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: Toggle quick menu" })
+vim.keymap.set("n", "<leader>H", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon window" })
+vim.keymap.set("n", "<leader>0", function() harpoon:list():add() end, { desc = "Harpoon: Add file" })
 vim.keymap.set("n", "<leader>N", function() harpoon:list():prev() end, { desc = "Harpoon: Previous file" })
 vim.keymap.set("n", "<leader>n", function() harpoon:list():next() end, { desc = "Harpoon: Next file" })
 vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Harpoon: Go to file 1" })
