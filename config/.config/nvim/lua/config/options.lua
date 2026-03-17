@@ -41,6 +41,7 @@ vim.opt.wildignorecase = true                                   -- Ignore case w
 vim.opt.guifont = "monospace:h17"               -- the font used in graphical neovim applications
 -- vim.opt.numberwidth = 4                         -- set number column width to 2 {default 4}
 -- vim.opt.showtabline = 2                         -- always show tabs
+vim.opt.showtabline = 0                         -- always hide tabs
 -- vim.opt.swapfile = false                        -- creates a swapfile
 -- vim.opt.timeoutlen = 300                        -- time to wait for a mapped sequence to complete (in milliseconds)
 -- vim.opt.undofile = true                         -- enable persistent undo

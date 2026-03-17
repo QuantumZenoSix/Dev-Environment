@@ -12,6 +12,10 @@ vim.keymap.set('n', '<C-y>', '4<C-y>', { noremap = true, silent = true })
 -- Clear all buffers' unsaved changes
 vim.keymap.set('n', 'E!', ':bufdo e!<CR>', { noremap = true, silent = true })
 
+-- vim :bn / :bp -> <leader>bn / <leader>bp
+vim.keymap.set('n', '<leader>bn', ':bn<CR>')
+vim.keymap.set('n', '<leader>bp', ':bp<CR>')
+
 -- Integrated Terminal
 vim.keymap.set('n', '<C-_>', ':split | resize 15 | set nonumber norelativenumber | terminal<CR> | i', { noremap = true, silent = true })
 
