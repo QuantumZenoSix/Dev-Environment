@@ -179,12 +179,12 @@ repo synchronization tool
 
 # Wezterm (for multiplexing)  
 - Leader key: `Ctrl-Space`  
-- `C-T` - New window (tab)  
-- `C-R` - Reload conf script  
+- `<C-T>` - New window (tab)  
+- `<C-R>` - Reload conf script  
 ## copy mode options (so vimmy)    
-- `<Ctrl-Shift-X>` - Enter copy mode  
-- `/`/`?` - Start search (once in copy mode)   
-  - Enter search term and then `<Enter>` (then use `<C-n>`/`<C-p>` to search throughout matches  
+- `<Ctrl-X>` - Enter copy mode  
+- `<C-F>` - Start search (once in copy mode)   
+  - Enter search term and then `<Enter>` (then use `<C-n>`/`<C-N>` to search throughout matches  
   - End search: `Esc`  
 - `g` - go to top of pane (scrolls to top)  
 - `G` - go to the bottom of the file (scrolls to bottom)  
