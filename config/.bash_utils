@@ -411,6 +411,10 @@ dockbuntu(){
     sudo docker run -it --rm ubuntu:24.04 bash -c "apt update && apt install -y sudo wget git curl && DEBIAN_FRONTEND=noninteractive TZ=America/Los_Angeles apt install vim -y && exec bash"
 }
 
+archbuntu(){
+    sudo docker run -it --rm archlinux bash -c "pacman -Syu && yes | pacman -S sudo wget git curl which vim && exec bash"
+}
+
 # fedora_container(){
 #     docker run -it --rm fedora:40 bash -c "dnf update && dnf install -y wget git curl wheel"
 # }
