@@ -134,7 +134,8 @@ if [ "$1" != "configonly" ]; then
         command -v locate >/dev/null 2>&1 || $SUDO apt install locate -y
         command -v sed >/dev/null 2>&1 || $SUDO apt install sed -y
         command -v coreutils >/dev/null 2>&1 || $SUDO apt install coreutils -y
-        command -v vim-gtk3 >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y
+        command -v vim >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y
+        command -v vim-gtk3 >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y # GUI VIM
         command -v libc6 >/dev/null 2>&1 || $SUDO apt install libc6 -y
         command -v p7zip-full >/dev/null 2>&1 || $SUDO apt install p7zip-full -y
 
@@ -175,10 +176,10 @@ if [ "$1" != "configonly" ]; then
         command -v tree >/dev/null 2>&1 || $SUDO apt install tree -y
         command -v fonts-powerline >/dev/null 2>&1 || $SUDO apt install fonts-powerline -y
         command -v pkg-config >/dev/null 2>&1 || $SUDO apt install pkg-config -y
-        command -v mssql-tools --ignore-missing >/dev/null 2>&1 || $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
         command -v font-manager >/dev/null 2>&1 || $SUDO apt install font-manager -y # GUI
         command -v direnv >/dev/null 2>&1 || $SUDO apt install direnv -y
         command -v clang >/dev/null 2>&1 || $SUDO apt install clang -y
+        # command -v mssql-tools --ignore-missing >/dev/null 2>&1 || $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
         
         echo "[+] Installing misc tools..."
         # Fastfetch
@@ -235,6 +236,16 @@ if [ "$1" != "configonly" ]; then
         command -v vulkan-tools >/dev/null 2>&1 || $SUDO apt install vulkan-tools -y
         command -v mesa-utils >/dev/null 2>&1 || $SUDO apt install mesa-utils -y
 
+        echo "[+] Installing Tufw (UFW GUI)..."
+        $SUDO  wget https://github.com/peltho/tufw/releases/download/v0.2.4/tufw_0.2.4_linux_amd64.deb -O ./tufw_0.2.4_linux_amd64.deb
+        $SUDO  apt install ./tufw_0.2.4_linux_amd64.deb -y
+        $SUDO  rm ./tufw_0.2.4_linux_amd64.deb
+
+        # Keep at end
+        printf "[+] Removing stale lockfiles...\n\n"
+        $SUDO rm -f /var/lib/dpkg/lock-frontend
+        $SUDO rm -f /var/lib/dpkg/lock
+
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
@@ -248,96 +259,103 @@ if [ "$1" != "configonly" ]; then
         #
         yes | $SUDO pacman -Syu 
 
-        echo "ensure your user has sudo prvileges (member of sheel group)"
+        echo "ensure your user has sudo prvileges (member of wheel group)"
 
-        # Dssentials
-        yes | $SUDO pacman -S base-devel
-        yes | $SUDO pacman -S git
+        # Essentials
+        $SUDO pacman -S --needed base-devel  # build-essential: GCC/make/etc for system builds/AUR 
+        command -v git >/dev/null 2>&1 || yes | $SUDO pacman -S git
 
-        # Yay installation
-        yes | $SUDO pacman -S --needed git base-devel
-        yes | $SUDO pacman -S  go --needed
+        # Yay installation (for AUR)
+        command -v go >/dev/null 2>&1 || yes | $SUDO pacman -S go --needed
         git clone https://aur.archlinux.org/yay.git
-        cd yay && makepkg -si 
+        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay cd yay && makepkg -si 
         
-        yes | $SUDO pacman -S  curl  # curl: Network downloader, system scripts rely on it 
-        yes | $SUDO pacman -S  wget  # wget: Downloader, core for scripts 
-        yes | $SUDO pacman -S  tar  # tar: Archiver, base system 
-        yes | $SUDO pacman -S  unzip  # unzip: Zip handler, base 
-        yes | $SUDO pacman -S  xclip  # xclip: Clipboard, X11 integration 
-        yes | $SUDO pacman -S  base-devel  # build-essential: GCC/make/etc for system builds/AUR 
-        yes | $SUDO pacman -S  sed  # sed: Text processor, base 
-        yes | $SUDO pacman -S  coreutils  # coreutils: GNU utils, base 
-        yes | $SUDO pacman -S  gvim  # vim-gtk3: GUI vim with GTK/X11 
-        yes | $SUDO pacman -S  glibc  # libc6: Core C lib 
-        yes | $SUDO pacman -S  p7zip  # p7zip-full: 7zip compression 
+        echo "[+] Installing core tools..."
+        command -v curl >/dev/null 2>&1 || yes | $SUDO pacman -S curl  # curl: Network downloader, system scripts rely on it 
+        command -v wget >/dev/null 2>&1 || yes | $SUDO pacman -S wget  # wget: Downloader, core for scripts 
+        command -v tar >/dev/null 2>&1 || yes | $SUDO pacman -S tar  # tar: Archiver, base system 
+        command -v less >/dev/null 2>&1 || yes | $SUDO pacman -S less  # tar: Archiver, base system 
+        command -v which >/dev/null 2>&1 || yes | $SUDO pacman -S which
+        command -v unzip >/dev/null 2>&1 || yes | $SUDO pacman -S unzip  # unzip: Zip handler, base 
+        command -v xclip >/dev/null 2>&1 || yes | $SUDO pacman -S xclip  # xclip: Clipboard, X11 integration 
+        command -v sed >/dev/null 2>&1 || yes | $SUDO pacman -S sed  # sed: Text processor, base 
+        command -v coreutils >/dev/null 2>&1 || yes | $SUDO pacman -S coreutils  # coreutils: GNU utils, base 
+        command -v glibc >/dev/null 2>&1 || yes | $SUDO pacman -S glibc  # libc6: Core C lib 
+        command -v p7zip >/dev/null 2>&1 || yes | $SUDO pacman -S p7zip  # p7zip-full: 7zip compression 
+        command -v vim >/dev/null 2>&1 || yes | $SUDO pacman -S vim  # vim-gtk3: GUI vim with GTK/X11 
+        # command -v gvim >/dev/null 2>&1 || yes | $SUDO pacman -S gvim  # vim-gtk3: GUI vim with GTK/X11 
         yay -S  mlocate  # locate: File indexer, system db 
         # Focus: System-level packages via pacman for Arch Linux hybrid setup (Nix for non-system-level packages).
         
+        echo "[+] Installing dev tools..."
         # System dev/build tools (from original dev section, lines 123-147; only system-critical)
         # Why pacman: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
-        yes | $SUDO pacman -S  make  # make: Builder, base-devel 
-        yes | $SUDO pacman -S  gcc  # gcc: Compiler, base-devel 
-        yes | $SUDO pacman -S  lib32-glibc  # libc6-dev-i386: 32-bit libc dev 
-        yes | $SUDO pacman -S  binutils  # binutils: Assembler/linker, base-devel 
-        yes | $SUDO pacman -S  bc  # bc: Calculator, base 
-        yes | $SUDO pacman -S  gettext  # gettext: Localization, system 
-        yes | $SUDO pacman -S  bash  # bash: Shell, base 
-        yes | $SUDO pacman -S  gawk  # gawk: AWK, base 
+        command -v make >/dev/null 2>&1 || yes | $SUDO pacman -S make  # make: Builder, base-devel 
+        command -v gcc >/dev/null 2>&1 || yes | $SUDO pacman -S gcc  # gcc: Compiler, base-devel 
+        command -v lib32-glibc >/dev/null 2>&1 || yes | $SUDO pacman -S lib32-glibc  # libc6-dev-i386: 32-bit libc dev 
+        command -v binutils >/dev/null 2>&1 || yes | $SUDO pacman -S binutils  # binutils: Assembler/linker, base-devel 
+        command -v bc >/dev/null 2>&1 || yes | $SUDO pacman -S bc  # bc: Calculator, base 
+        command -v gettext >/dev/null 2>&1 || yes | $SUDO pacman -S gettext  # gettext: Localization, system 
+        command -v bash >/dev/null 2>&1 || yes | $SUDO pacman -S bash  # bash: Shell, base 
+        command -v gawk >/dev/null 2>&1 || yes | $SUDO pacman -S gawk  # gawk: AWK, base 
+        command -v ufw >/dev/null 2>&1 || yes | $SUDO pacman -S ufw  # gawk: AWK, base 
         
+        echo "[+] Installing  system/misc tools..."
         # Terminal/system extras (from original extras, lines 150-161)
         # Why pacman: System integration like fonts/GUI/audio mounts.
-        yes | $SUDO pacman -S  sshfs  # sshfs: FUSE mount, system fs 
-        yes | $SUDO pacman -S  sshpass  # sshpass: SSH passwords, utils 
-        yes | $SUDO pacman -S  xsel  # xsel: Clipboard, X11 
-        yes | $SUDO pacman -S  powerline-fonts  # fonts-powerline: Fonts for terminals 
-        yes | $SUDO pacman -S  pkgconf  # pkg-config: Build helper (original line 157; duplicate in deps)
-        yay -S  mssql-tools  # mssql-tools: MS SQL tools, AUR 
-        yes | $SUDO pacman -S  font-manager  # font-manager: GUI fonts 
+        command -v sshfs >/dev/null 2>&1 || yes | $SUDO pacman -S sshfs  # sshfs: FUSE mount, system fs 
+        command -v sshpass >/dev/null 2>&1 || yes | $SUDO pacman -S sshpass  # sshpass: SSH passwords, utils 
+        command -v xsel >/dev/null 2>&1 || yes | $SUDO pacman -S xsel  # xsel: Clipboard, X11 
+        command -v powerline-fonts >/dev/null 2>&1 || yes | $SUDO pacman -S powerline-fonts  # fonts-powerline: Fonts for terminals 
+        command -v pkgconf >/dev/null 2>&1 || yes | $SUDO pacman -S pkgconf  # pkg-config: Build helper (original line 157; duplicate in deps)
+        # yay -S  mssql-tools  # mssql-tools: MS SQL tools, AUR 
+        $SUDO pacman -S  font-manager  # font-manager: GUI fonts 
         
+        echo "[+] Installing others..."
         # Misc tools (from original misc, lines 165-173)
         # Why pacman: System info/process viewers.
-        yes | $SUDO pacman -S  fastfetch  # fastfetch: System info (original line 171; no PPA needed on Arch)
-        yes | $SUDO pacman -S  htop  # htop: Process viewer 
+        command -v fastfetch >/dev/null 2>&1 || yes | $SUDO pacman -S fastfetch  # fastfetch: System info (original line 171; no PPA needed on Arch)
+        command -v htop >/dev/null 2>&1 || yes | $SUDO pacman -S htop  # htop: Process viewer 
         
         # Various dependencies (from original deps, lines 176-183)
         # Why pacman: Core libs for system builds/graphics.
-        yes | $SUDO pacman -S  openssl  # libssl-dev: Crypto (original line 177; duplicate in sound)
-        yes | $SUDO pacman -S  libxcb  # libxcb1-dev: XCB (original line 178; duplicate)
-        yes | $SUDO pacman -S  libxcb  # libxcb-render0-dev: XCB render 
-        yes | $SUDO pacman -S  libxcb  # libxcb-shape0-dev: XCB shape 
-        yes | $SUDO pacman -S  libxcb  # libxcb-xfixes0-dev: XCB fixes (original line 181; duplicate)
-        yay -S  aarch64-linux-gnu-gcc  # crossbuild-essential-arm64: ARM cross-compiler, AUR 
+        command -v openssl >/dev/null 2>&1 || yes | $SUDO pacman -S openssl  # libssl-dev: Crypto (original line 177; duplicate in sound)
+        command -v libxcb >/dev/null 2>&1 || yes | $SUDO pacman -S libxcb  # libxcb1-dev: XCB (original line 178; duplicate)
+          # libxcb-render0-dev: XCB render 
+          # libxcb-shape0-dev: XCB shape 
+          # libxcb-xfixes0-dev: XCB fixes (original line 181; duplicate)
+        # yay -S  aarch64-linux-gnu-gcc  # crossbuild-essential-arm64: ARM cross-compiler, AUR 
         
         # Fragile deps (from original fragile, lines 186-191)
         # Why pacman: System services like Docker, DB connectivity.
-        yes | $SUDO pacman -S  unixodbc  # unixodbc-dev: ODBC 
-        yes | $SUDO pacman -S  docker  # docker.io: Containers, system service 
-        yes | $SUDO pacman -S  docker-compose  # docker-compose-plugin: Docker compose 
+        command -v unixodbc >/dev/null 2>&1 || yes | $SUDO pacman -S unixodbc  # unixodbc-dev: ODBC 
+        command -v docker >/dev/null 2>&1 || yes | $SUDO pacman -S docker  # docker.io: Containers, system service 
+        command -v docker-compose >/dev/null 2>&1 || yes | $SUDO pacman -S docker-compose  # docker-compose-plugin: Docker compose 
         
         # Sound-related (from original sound, lines 195-217)
         # Why pacman: Audio libs/hardware accel integration.
-        yes | $SUDO pacman -S  playerctl  # playerctl: Media control 
-        yes | $SUDO pacman -S  alsa-lib  # libasound2-dev: ALSA 
-        yes | $SUDO pacman -S  ffmpeg  # ffmpeg: Multimedia (original line 199; no PPA on Arch)
-        yes | $SUDO pacman -S  libass  # libass9: Subtitles 
-        yes | $SUDO pacman -S  libbluray  # libbluray2: Blu-ray 
-        yes | $SUDO pacman -S  libcaca  # libcaca0: Graphics 
-        yes | $SUDO pacman -S  libcdio  # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO (original lines 203-206)
-        yes | $SUDO pacman -S  rubberband  # librubberband2: Audio stretch 
-        yes | $SUDO pacman -S  dbus  # libdbus-1-dev: Bus 
-        yes | $SUDO pacman -S  ncurses  # libncursesw5-dev: Curses wide 
-        yes | $SUDO pacman -S  pulseaudio  # libpulse-dev: Pulse (original line 211; assume Pulse, adjust if PipeWire)
+        command -v playerctl >/dev/null 2>&1 || yes | $SUDO pacman -S playerctl  # playerctl: Media control 
+        $SUDO pacman -S  alsa-lib  # libasound2-dev: ALSA 
+        command -v ffmpeg >/dev/null 2>&1 || yes | $SUDO pacman -S ffmpeg  # ffmpeg: Multimedia (original line 199; no PPA on Arch)
+        command -v libass >/dev/null 2>&1 || yes | $SUDO pacman -S libass  # libass9: Subtitles 
+        command -v libbluray >/dev/null 2>&1 || yes | $SUDO pacman -S libbluray  # libbluray2: Blu-ray 
+        command -v libcaca >/dev/null 2>&1 || yes | $SUDO pacman -S libcaca  # libcaca0: Graphics 
+        command -v libcdio >/dev/null 2>&1 || yes | $SUDO pacman -S libcdio  # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO (original lines 203-206)
+        command -v rubberband >/dev/null 2>&1 || yes | $SUDO pacman -S rubberband  # librubberband2: Audio stretch 
+        command -v dbus >/dev/null 2>&1 || yes | $SUDO pacman -S dbus  # libdbus-1-dev: Bus 
+        command -v ncurses >/dev/null 2>&1 || yes | $SUDO pacman -S ncurses  # libncursesw5-dev: Curses wide 
+        command -v pulseaudio >/dev/null 2>&1 || yes | $SUDO pacman -S pulseaudio  # libpulse-dev: Pulse (original line 211; assume Pulse, adjust if PipeWire)
         yay -S  zimg  # libzimg2: Image scaling 
+        # yay -S  tufw  # GUI for ufw
 
         # PipeWire check (original lines 219-222)
         if systemctl --user is-active pipewire >/dev/null; then
-            yes | $SUDO pacman -S  pipewire  # libpipewire-0.3-0: PipeWire lib 
+            command -v pipewire >/dev/null 2>&1 || yes | $SUDO pacman -S pipewire  # libpipewire-0.3-0: PipeWire lib 
         fi
         
         # Vulkan/graphics 
         # Why pacman: GPU driver integration.
-        yes | $SUDO pacman -S  mesa-utils vulkan-tools  # mesa-utils vulkan-tools: Graphics tools 
+        command -v mesa-utils >/dev/null 2>&1 || yes | $SUDO pacman -S mesa-utils vulkan-tools  # mesa-utils vulkan-tools: Graphics tools 
         
         # Docker service (from original agnostic, line 262)
         # Why pacman: System service.
@@ -423,12 +441,8 @@ if [ "$1" != "configonly" ]; then
     printf "\n\n---------------------------------------------------\n\n"
     
     # MAIN INSTALLATIONS
-    echo "[+] Installing ggh ssh manager..."
-    curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
     
-    # echo "[+] Installing zioxide..."
-    # curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-    
+    # Cargo ____________________________________
     echo "[+] Installing csvlens"
     cargo install csvlens
     
@@ -441,16 +455,19 @@ if [ "$1" != "configonly" ]; then
     echo "[+] Installing fd..."
     cargo install fd-find
 
-    echo "[+] Installing YouTube-downloader..."
-    $SUDO  wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/local/bin/yt-dlp; $SUDO chmod +x /usr/local/bin/yt-dlp
+    echo "[+] Installing Yazi..."
+    git clone https://github.com/sxyazi/yazi.git
+    cd yazi
+    cargo build --release --locked
+    $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
+    cd ..
+    rm -rf yazi    
 
+
+
+    # Go _______________________________________
     echo "[+] Installing lazysql..."
     go install github.com/jorgerojas26/lazysql@latest
-    
-    echo "[+] Installing Tufw (UFW GUI)..."
-    $SUDO  wget https://github.com/peltho/tufw/releases/download/v0.2.4/tufw_0.2.4_linux_amd64.deb -O ./tufw_0.2.4_linux_amd64.deb
-    $SUDO  apt install ./tufw_0.2.4_linux_amd64.deb -y
-    $SUDO  rm ./tufw_0.2.4_linux_amd64.deb
     
     echo "[+] Installing eget..."
     go install github.com/zyedidia/eget@latest
@@ -461,12 +478,23 @@ if [ "$1" != "configonly" ]; then
     echo "[+] Installing glow..."
     go install github.com/charmbracelet/glow/v2@latest
 
+
+
+    # Other ___________________________________
+    echo "[+] Installing ggh ssh manager..."
+    curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
+    
     echo "[+] Installing lazydocker..."
     curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
     
     echo "[+] Installing Posting via uv..."
     uv tool install --python 3.13 posting
 
+    echo "[+] Installing YouTube-downloader..."
+    $SUDO  wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/local/bin/yt-dlp; $SUDO chmod +x /usr/local/bin/yt-dlp
+
+    # echo "[+] Installing zioxide..."
+    # curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
 
 
@@ -475,53 +503,14 @@ if [ "$1" != "configonly" ]; then
     echo "# ────────────────────────────────────────────────"
     # This third step must remain here as some of the programs in step 2 are required for this step
 
-
-    if [ "$DISTRO_FAMILY" = "debian" ]; then
-
-        # echo "[+] Installing mpv..."
-        # $SUDO  curl --output-dir /etc/apt/trusted.gpg.d -O https://apt.fruit.je/fruit.gpg
-        # ADDITION="deb http://apt.fruit.je/ubuntu $(cat /etc/os-release | grep 'VERSION_CODENAME' | awk -F= '{print $2}' | xargs) mpv"
-        # ADDITION="deb http://apt.fruit.je/ubuntu $(lsb_release -cs) mpv"
-# echo $ADDITION | $SUDO  tee -a /etc/apt/sources.list.d/fruit.list
-        # $SUDO  apt update
-        # command -v mpv >/dev/null 2>&1 || $SUDO apt install mpv -y
-        
         echo "[+] Installing llvm and related tools (clangd, cmake, etc)..."
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         $SUDO  ./llvm.sh 20 all
         # or for latest stable release...
         # sudo ./llvm.sh all
-        
-        echo "[+] Installing various tools..."
-        command -v 7zip  >/dev/null 2>&1 || $SUDO apt install 7zip  -y
-        command -v poppler-utils  >/dev/null 2>&1 || $SUDO apt install poppler-utils  -y
-        command -v imagemagick >/dev/null 2>&1 || $SUDO apt install imagemagick -y
-        # command -v zoxide  >/dev/null 2>&1 || $SUDO apt install zoxide  -y
-        # command -v fd-find  >/dev/null 2>&1 || $SUDO apt install fd-find  -y  # Installed with cargo above
-        
-        echo "[+] Installing Yazi..."
-        git clone https://github.com/sxyazi/yazi.git
-        cd yazi
-        cargo build --release --locked
-        $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
-        cd ..
-        rm -rf yazi
 
-        echo "[+] Installing Latest Tmux..."    
-        $SUDO apt-get install autotools-dev -y
-        $SUDO apt-get install automake -y
-        command -v libevent-dev >/dev/null 2>&1 || $SUDO apt install libevent-dev -y
-        command -v bison >/dev/null 2>&1 || $SUDO apt install bison -y
-        $SUDO apt install libncurses5-dev 
-        command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
-
-        git clone https://github.com/tmux/tmux.git
-        cd tmux
-        sh autogen.sh
-        ./configure --enable-sixel || { echo "Tmux configure failed"; }
-        make && $SUDO make install || { echo "Tmux build failed"; }
-        cd ../
+    if [ "$DISTRO_FAMILY" = "debian" ]; then
 
         echo "[+] Installing Spotify Player..."    
         $SUDO apt-get install autotools-dev -y
@@ -533,15 +522,77 @@ if [ "$1" != "configonly" ]; then
         cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
 
 
-        # Keep at end
-        printf "[+] Removing stale lockfiles...\n\n"
-        $SUDO rm -f /var/lib/dpkg/lock-frontend
-        $SUDO rm -f /var/lib/dpkg/lock
+        echo "[+] Installing various tools..."
+        command -v 7zip  >/dev/null 2>&1 || $SUDO apt install 7zip  -y
+        command -v poppler-utils  >/dev/null 2>&1 || $SUDO apt install poppler-utils  -y
+        command -v imagemagick >/dev/null 2>&1 || $SUDO apt install imagemagick -y
+        # command -v zoxide  >/dev/null 2>&1 || $SUDO apt install zoxide  -y
+        # command -v fd-find  >/dev/null 2>&1 || $SUDO apt install fd-find  -y  # Installed with cargo above
+        # echo "[+] Installing Latest Tmux..."    
+        # $SUDO apt-get install autotools-dev -y
+        # $SUDO apt-get install automake -y
+        # command -v libevent-dev >/dev/null 2>&1 || $SUDO apt install libevent-dev -y
+        # command -v bison >/dev/null 2>&1 || $SUDO apt install bison -y
+        # $SUDO apt install libncurses5-dev 
+        # command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
+        #
+        # git clone https://github.com/tmux/tmux.git
+        # cd tmux
+        # sh autogen.sh
+        # ./configure --enable-sixel || { echo "Tmux configure failed"; }
+        # make && $SUDO make install || { echo "Tmux build failed"; }
+        # cd ../
+
+
+        # echo "[+] Installing mpv..."
+        # $SUDO  curl --output-dir /etc/apt/trusted.gpg.d -O https://apt.fruit.je/fruit.gpg
+        # ADDITION="deb http://apt.fruit.je/ubuntu $(cat /etc/os-release | grep 'VERSION_CODENAME' | awk -F= '{print $2}' | xargs) mpv"
+        # ADDITION="deb http://apt.fruit.je/ubuntu $(lsb_release -cs) mpv"
+# echo $ADDITION | $SUDO  tee -a /etc/apt/sources.list.d/fruit.list
+        # $SUDO  apt update
+        # command -v mpv >/dev/null 2>&1 || $SUDO apt install mpv -y
 
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
         echo "TBD"
+
+    elif [ "$DISTRO_FAMILY" = "arch" ]; then
+
+        echo "[+] Installing Spotify Player dependencies..."
+
+        # PulseAudio related packages
+        $SUDO pacman -S --needed pulseaudio pulseaudio-bluetooth pulseaudio-utils pavucontrol
+
+        # libsixel (provides img2sixel + libsixel binaries & libs)
+        $SUDO pacman -S --needed libsixel
+
+        # Install spotify_player from crates.io with the features you want
+        # (pulseaudio-backend + media-control + sixel)
+        cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
+
+        echo "[+] Installing various tools..."
+
+        # 7zip (the modern package; command is usually 7zz)
+        $SUDO pacman -S --needed 7zip
+
+        # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
+        $SUDO pacman -S --needed poppler
+
+        # imagemagick
+        $SUDO pacman -S --needed imagemagick
+
+        echo "[+] Done!"
+
+        echo ""
+        echo "Notes:"
+        echo "  • spotify_player should now be in ~/.cargo/bin/spotify_player"
+        echo "  • Make sure ~/.cargo/bin is in your PATH"
+        echo "  • PulseAudio should be running (usually started automatically via pipewire-pulse or systemd)"
+        echo "  • If you use PipeWire instead of PulseAudio, you may want the pipewire-pulse + wireplumber stack"
+        echo "    and possibly pipewire-alsa pipewire-jack instead of pure pulseaudio packages."
+
+
     fi
 
     printf "\n\n\n"
