@@ -184,7 +184,7 @@ repo synchronization tool
 ## copy mode options (so vimmy)    
 - `<Ctrl-X>` - Enter copy mode  
 - `<C-F>` - Start search (once in copy mode)   
-  - Enter search term and then `<Enter>` (then use `<C-n>`/`<C-N>` to search throughout matches  
+  - Enter search term and then `<Enter>` (then use `<C-n>`/`<C-p>` to search throughout matches  
   - End search: `Esc`  
 - `g` - go to top of pane (scrolls to top)  
 - `G` - go to the bottom of the file (scrolls to bottom)  
@@ -194,7 +194,7 @@ repo synchronization tool
 - Split Windows Vertically: `<leader> v` (like vim)  
 - Split Windows Horizontally: `<leader> s` (like vim)  
 - Navigate subwindows (panes): `<alt> <arrow-key>` (like vim)  
-- Zoom/Unzoom panes: `Ctrl+Shift+Z`
+- Zoom/Unzoom panes: `<C-Z>`
 
 
 ---  
