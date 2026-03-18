@@ -1,7 +1,7 @@
 #!/bin/sh
 # Installation of packages and copying of config files
 
-# set -euo pipefail  # safer bash scripting
+set -euo pipefail  # safer bash scripting
 
 CALLING_USER=$(whoami)
 
@@ -48,10 +48,14 @@ elif echo "$ID" "$ID_LIKE" | grep -q -E 'fedora|nobara|rhel|centos|rocky|almalin
     DISTRO_FAMILY="fedora"
     PKG_MANAGER="dnf"
     echo "[+] Detected Fedora-based / RPM-based system (using dnf)"
+elif echo "$ID" "$ID_LIKE" | grep -q -E 'arch|cachy'; then
+    DISTRO_FAMILY="arch"
+    PKG_MANAGER="pacman"
+    echo "[+] Detected Arch-based (using pacman)"
 else
     echo "Error: Unsupported distribution."
     echo "       Detected ID=$ID  ID_LIKE=$ID_LIKE"
-    echo "       This script currently supports only Debian-family and Fedora-family systems."
+    echo "       This script currently supports only Debian-family, Arch,  and Fedora-family systems."
     exit 1
 fi
 
@@ -235,6 +239,112 @@ if [ "$1" != "configonly" ]; then
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
         echo "TBD"
+
+    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
+        # Why pacman: Fundamental system utils; already base or ensure kernel/driver compatibility.
+        
+        
+        # Update system
+        #
+        yes | $SUDO pacman -Syu 
+
+        echo "ensure your user has sudo prvileges (member of sheel group)"
+
+        # Dssentials
+        yes | $SUDO pacman -S base-devel
+        yes | $SUDO pacman -S git
+
+        # Yay installation
+        yes | $SUDO pacman -S --needed git base-devel
+        yes | $SUDO pacman -S  go --needed
+        git clone https://aur.archlinux.org/yay.git
+        cd yay && makepkg -si 
+        
+        yes | $SUDO pacman -S  curl  # curl: Network downloader, system scripts rely on it 
+        yes | $SUDO pacman -S  wget  # wget: Downloader, core for scripts 
+        yes | $SUDO pacman -S  tar  # tar: Archiver, base system 
+        yes | $SUDO pacman -S  unzip  # unzip: Zip handler, base 
+        yes | $SUDO pacman -S  xclip  # xclip: Clipboard, X11 integration 
+        yes | $SUDO pacman -S  base-devel  # build-essential: GCC/make/etc for system builds/AUR 
+        yes | $SUDO pacman -S  sed  # sed: Text processor, base 
+        yes | $SUDO pacman -S  coreutils  # coreutils: GNU utils, base 
+        yes | $SUDO pacman -S  gvim  # vim-gtk3: GUI vim with GTK/X11 
+        yes | $SUDO pacman -S  glibc  # libc6: Core C lib 
+        yes | $SUDO pacman -S  p7zip  # p7zip-full: 7zip compression 
+        yay -S  mlocate  # locate: File indexer, system db 
+        # Focus: System-level packages via pacman for Arch Linux hybrid setup (Nix for non-system-level packages).
+        
+        # System dev/build tools (from original dev section, lines 123-147; only system-critical)
+        # Why pacman: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
+        yes | $SUDO pacman -S  make  # make: Builder, base-devel 
+        yes | $SUDO pacman -S  gcc  # gcc: Compiler, base-devel 
+        yes | $SUDO pacman -S  lib32-glibc  # libc6-dev-i386: 32-bit libc dev 
+        yes | $SUDO pacman -S  binutils  # binutils: Assembler/linker, base-devel 
+        yes | $SUDO pacman -S  bc  # bc: Calculator, base 
+        yes | $SUDO pacman -S  gettext  # gettext: Localization, system 
+        yes | $SUDO pacman -S  bash  # bash: Shell, base 
+        yes | $SUDO pacman -S  gawk  # gawk: AWK, base 
+        
+        # Terminal/system extras (from original extras, lines 150-161)
+        # Why pacman: System integration like fonts/GUI/audio mounts.
+        yes | $SUDO pacman -S  sshfs  # sshfs: FUSE mount, system fs 
+        yes | $SUDO pacman -S  sshpass  # sshpass: SSH passwords, utils 
+        yes | $SUDO pacman -S  xsel  # xsel: Clipboard, X11 
+        yes | $SUDO pacman -S  powerline-fonts  # fonts-powerline: Fonts for terminals 
+        yes | $SUDO pacman -S  pkgconf  # pkg-config: Build helper (original line 157; duplicate in deps)
+        yay -S  mssql-tools  # mssql-tools: MS SQL tools, AUR 
+        yes | $SUDO pacman -S  font-manager  # font-manager: GUI fonts 
+        
+        # Misc tools (from original misc, lines 165-173)
+        # Why pacman: System info/process viewers.
+        yes | $SUDO pacman -S  fastfetch  # fastfetch: System info (original line 171; no PPA needed on Arch)
+        yes | $SUDO pacman -S  htop  # htop: Process viewer 
+        
+        # Various dependencies (from original deps, lines 176-183)
+        # Why pacman: Core libs for system builds/graphics.
+        yes | $SUDO pacman -S  openssl  # libssl-dev: Crypto (original line 177; duplicate in sound)
+        yes | $SUDO pacman -S  libxcb  # libxcb1-dev: XCB (original line 178; duplicate)
+        yes | $SUDO pacman -S  libxcb  # libxcb-render0-dev: XCB render 
+        yes | $SUDO pacman -S  libxcb  # libxcb-shape0-dev: XCB shape 
+        yes | $SUDO pacman -S  libxcb  # libxcb-xfixes0-dev: XCB fixes (original line 181; duplicate)
+        yay -S  aarch64-linux-gnu-gcc  # crossbuild-essential-arm64: ARM cross-compiler, AUR 
+        
+        # Fragile deps (from original fragile, lines 186-191)
+        # Why pacman: System services like Docker, DB connectivity.
+        yes | $SUDO pacman -S  unixodbc  # unixodbc-dev: ODBC 
+        yes | $SUDO pacman -S  docker  # docker.io: Containers, system service 
+        yes | $SUDO pacman -S  docker-compose  # docker-compose-plugin: Docker compose 
+        
+        # Sound-related (from original sound, lines 195-217)
+        # Why pacman: Audio libs/hardware accel integration.
+        yes | $SUDO pacman -S  playerctl  # playerctl: Media control 
+        yes | $SUDO pacman -S  alsa-lib  # libasound2-dev: ALSA 
+        yes | $SUDO pacman -S  ffmpeg  # ffmpeg: Multimedia (original line 199; no PPA on Arch)
+        yes | $SUDO pacman -S  libass  # libass9: Subtitles 
+        yes | $SUDO pacman -S  libbluray  # libbluray2: Blu-ray 
+        yes | $SUDO pacman -S  libcaca  # libcaca0: Graphics 
+        yes | $SUDO pacman -S  libcdio  # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO (original lines 203-206)
+        yes | $SUDO pacman -S  rubberband  # librubberband2: Audio stretch 
+        yes | $SUDO pacman -S  dbus  # libdbus-1-dev: Bus 
+        yes | $SUDO pacman -S  ncurses  # libncursesw5-dev: Curses wide 
+        yes | $SUDO pacman -S  pulseaudio  # libpulse-dev: Pulse (original line 211; assume Pulse, adjust if PipeWire)
+        yay -S  zimg  # libzimg2: Image scaling 
+
+        # PipeWire check (original lines 219-222)
+        if systemctl --user is-active pipewire >/dev/null; then
+            yes | $SUDO pacman -S  pipewire  # libpipewire-0.3-0: PipeWire lib 
+        fi
+        
+        # Vulkan/graphics 
+        # Why pacman: GPU driver integration.
+        yes | $SUDO pacman -S  mesa-utils vulkan-tools  # mesa-utils vulkan-tools: Graphics tools 
+        
+        # Docker service (from original agnostic, line 262)
+        # Why pacman: System service.
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        
+        echo "Pacman installations complete."
 
     fi
 
