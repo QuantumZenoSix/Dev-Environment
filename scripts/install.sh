@@ -120,113 +120,116 @@ if [ "$1" != "configonly" ]; then
         $SUDO apt update 
         
         echo "[+] Installing essential core packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
-        $SUDO apt install curl -y
-        $SUDO apt install wget -y
-        $SUDO apt install tar -y
-        $SUDO apt install unzip -y
-        $SUDO apt install xclip -y
-        $SUDO apt install build-essential -y
-        $SUDO apt install locate -y
-        $SUDO apt install sed -y
-        $SUDO apt install coreutils -y
-        $SUDO apt install vim-gtk3 -y
-        $SUDO apt install libc6 -y
-        $SUDO apt install p7zip-full -y
+        command -v curl >/dev/null 2>&1 || sudo apt install curl -y
+        command -v curl >/dev/null 2>&1 || $SUDO apt install curl -y
+        command -v wget >/dev/null 2>&1 || $SUDO apt install wget -y
+        command -v tar >/dev/null 2>&1 || $SUDO apt install tar -y
+        command -v unzip >/dev/null 2>&1 || $SUDO apt install unzip -y
+        command -v xclip >/dev/null 2>&1 || $SUDO apt install xclip -y
+        command -v build-essential >/dev/null 2>&1 || $SUDO apt install build-essential -y
+        command -v locate >/dev/null 2>&1 || $SUDO apt install locate -y
+        command -v sed >/dev/null 2>&1 || $SUDO apt install sed -y
+        command -v coreutils >/dev/null 2>&1 || $SUDO apt install coreutils -y
+        command -v vim-gtk3 >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y
+        command -v libc6 >/dev/null 2>&1 || $SUDO apt install libc6 -y
+        command -v p7zip-full >/dev/null 2>&1 || $SUDO apt install p7zip-full -y
 
         # Languages
         echo "[+] Installing dev related packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
-        $SUDO apt install python3 -y
-        $SUDO apt install perl -y
-        $SUDO apt install make -y
-        $SUDO apt install gcc -y
-        $SUDO apt install git-all -y
-        $SUDO apt install cmake -y
-        $SUDO apt install libstdc++6 -y
-        $SUDO apt install libc6-dev -y
-        $SUDO apt install libc6-dev-i386 -y
-        $SUDO apt install nasm -y
-        $SUDO apt install binutils -y
-        $SUDO apt install bc -y
-        $SUDO apt install cargo -y
-        $SUDO apt install pandoc -y
-        $SUDO apt install nodejs -y
-        $SUDO apt install npm -y
-        $SUDO apt install ninja-build -y
-        $SUDO apt install gettext -y
-        $SUDO apt install pipx && pipx ensurepath
-        $SUDO apt install lua5.3 -y
-        $SUDO apt install jq -y
-        $SUDO apt install python3-pygments -y
-        $SUDO apt install bash -y
-        $SUDO apt install gawk -y
+        command -v python3 >/dev/null 2>&1 || $SUDO apt install python3 -y
+        command -v perl >/dev/null 2>&1 || $SUDO apt install perl -y
+        command -v make >/dev/null 2>&1 || $SUDO apt install make -y
+        command -v gcc >/dev/null 2>&1 || $SUDO apt install gcc -y
+        command -v git-all >/dev/null 2>&1 || $SUDO apt install git-all -y
+        command -v cmake >/dev/null 2>&1 || $SUDO apt install cmake -y
+        command -v libstdc++6 >/dev/null 2>&1 || $SUDO apt install libstdc++6 -y
+        command -v libc6-dev >/dev/null 2>&1 || $SUDO apt install libc6-dev -y
+        command -v libc6-dev-i386 >/dev/null 2>&1 || $SUDO apt install libc6-dev-i386 -y
+        command -v nasm >/dev/null 2>&1 || $SUDO apt install nasm -y
+        command -v binutils >/dev/null 2>&1 || $SUDO apt install binutils -y
+        command -v bc >/dev/null 2>&1 || $SUDO apt install bc -y
+        command -v cargo >/dev/null 2>&1 || $SUDO apt install cargo -y
+        command -v pandoc >/dev/null 2>&1 || $SUDO apt install pandoc -y
+        command -v nodejs >/dev/null 2>&1 || $SUDO apt install nodejs -y
+        command -v npm >/dev/null 2>&1 || $SUDO apt install npm -y
+        command -v ninja-build >/dev/null 2>&1 || $SUDO apt install ninja-build -y
+        command -v gettext >/dev/null 2>&1 || $SUDO apt install gettext -y
+        command -v lua5.3 >/dev/null 2>&1 || $SUDO apt install lua5.3 -y
+        command -v jq >/dev/null 2>&1 || $SUDO apt install jq -y
+        command -v python3-pygments >/dev/null 2>&1 || $SUDO apt install python3-pygments -y
+        command -v bash >/dev/null 2>&1 || $SUDO apt install bash -y
+        command -v gawk >/dev/null 2>&1 || $SUDO apt install gawk -y
+        command -v pipx >/dev/null 2>&1 || $SUDO apt install pipx -y
+        pipx ensurepath
         
         echo "[+] Installing terminal/workflow extras..."
-        $SUDO apt install zsh -y
-        $SUDO apt install tmux -y
-        $SUDO apt install sshfs -y
-        $SUDO apt install sshpass -y
-        $SUDO apt install xsel -y
-        $SUDO apt install tree -y
-        $SUDO apt install fonts-powerline -y
-        $SUDO apt install pkg-config -y
-        $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
-        $SUDO apt install font-manager -y # GUI
-        $SUDO apt install direnv -y
-        $SUDO apt install clang -y
+        command -v zsh >/dev/null 2>&1 || $SUDO apt install zsh -y
+        command -v tmux >/dev/null 2>&1 || $SUDO apt install tmux -y
+        command -v sshfs >/dev/null 2>&1 || $SUDO apt install sshfs -y
+        command -v sshpass >/dev/null 2>&1 || $SUDO apt install sshpass -y
+        command -v xsel >/dev/null 2>&1 || $SUDO apt install xsel -y
+        command -v tree >/dev/null 2>&1 || $SUDO apt install tree -y
+        command -v fonts-powerline >/dev/null 2>&1 || $SUDO apt install fonts-powerline -y
+        command -v pkg-config >/dev/null 2>&1 || $SUDO apt install pkg-config -y
+        command -v mssql-tools --ignore-missing >/dev/null 2>&1 || $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
+        command -v font-manager >/dev/null 2>&1 || $SUDO apt install font-manager -y # GUI
+        command -v direnv >/dev/null 2>&1 || $SUDO apt install direnv -y
+        command -v clang >/dev/null 2>&1 || $SUDO apt install clang -y
         
         echo "[+] Installing misc tools..."
         # Fastfetch
         $SUDO add-apt-repository ppa:zhangsongcui3371/fastfetch
         $SUDO apt update
-        $SUDO apt install fastfetch -y
+        command -v fastfetch >/dev/null 2>&1 || $SUDO apt install fastfetch -y
 
-        $SUDO apt install htop -y
+        command -v htop >/dev/null 2>&1 || $SUDO apt install htop -y
 
         echo "[+] Installing various dependencies..."
-        $SUDO apt install pkg-config -y
-        $SUDO apt install libssl-dev -y
-        $SUDO apt install libxcb1-dev -y
-        $SUDO apt install libxcb-render0-dev -y
-        $SUDO apt install libxcb-shape0-dev -y
-        $SUDO apt install libxcb-xfixes0-dev -y
-        $SUDO apt install crossbuild-essential-arm64 -y
+        command -v pkg-config >/dev/null 2>&1 || $SUDO apt install pkg-config -y
+        command -v libssl-dev >/dev/null 2>&1 || $SUDO apt install libssl-dev -y
+        command -v libxcb1-dev >/dev/null 2>&1 || $SUDO apt install libxcb1-dev -y
+        command -v libxcb-render0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-render0-dev -y
+        command -v libxcb-shape0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-shape0-dev -y
+        command -v libxcb-xfixes0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-xfixes0-dev -y
+        # command -v crossbuild-essential-arm64 >/dev/null 2>&1 || $SUDO apt install crossbuild-essential-arm64 -y
 
         echo "[+] Installing various dependencies (fragile)..." # Packages which may not be found in older package repos
-        $SUDO apt install fzf -y
-        $SUDO apt install ripgrep -y
-        $SUDO apt install unixodbc-dev -y
-        $SUDO apt install docker.io -y
-        $SUDO apt install docker-compose-plugin -y
+        command -v fzf >/dev/null 2>&1 || $SUDO apt install fzf -y
+        command -v ripgrep >/dev/null 2>&1 || $SUDO apt install ripgrep -y
+        command -v unixodbc-dev >/dev/null 2>&1 || $SUDO apt install unixodbc-dev -y
+        command -v docker.io >/dev/null 2>&1 || $SUDO apt install docker.io -y
+        command -v docker-compose-plugin >/dev/null 2>&1 || $SUDO apt install docker-compose-plugin -y
         
         echo "[+] Installing various sound-related dependencies..."
         $SUDO add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
-        $SUDO apt install playerctl -y
-        $SUDO apt install libasound2-dev -y
-        $SUDO apt install ffmpeg -y
-        $SUDO apt install libass9 -y
-        $SUDO apt install libbluray2 -y
-        $SUDO apt install libcaca0 -y
-        $SUDO apt install libcdio-cdda2 -y
-        $SUDO apt install libcdio-paranoia2 -y
-        $SUDO apt install libcdio19 -y
-        $SUDO apt install librubberband2 -y
-        $SUDO apt install libzimg2 -y
-        $SUDO apt install libdbus-1-dev -y
-        $SUDO apt install libncursesw5-dev -y
-        $SUDO apt install libpulse-dev -y
-        $SUDO apt install libssl-dev -y
-        $SUDO apt install libxcb1-dev -y
-        $SUDO apt install libxcb-render0-dev -y
-        $SUDO apt install libxcb-shape0-dev -y
-        $SUDO apt install libxcb-xfixes0-dev -y
+        command -v playerctl >/dev/null 2>&1 || $SUDO apt install playerctl -y
+        command -v libasound2-dev >/dev/null 2>&1 || $SUDO apt install libasound2-dev -y
+        command -v ffmpeg >/dev/null 2>&1 || $SUDO apt install ffmpeg -y
+        command -v libass9 >/dev/null 2>&1 || $SUDO apt install libass9 -y
+        command -v libbluray2 >/dev/null 2>&1 || $SUDO apt install libbluray2 -y
+        command -v libcaca0 >/dev/null 2>&1 || $SUDO apt install libcaca0 -y
+        command -v libcdio-cdda2 >/dev/null 2>&1 || $SUDO apt install libcdio-cdda2 -y
+        command -v libcdio-paranoia2 >/dev/null 2>&1 || $SUDO apt install libcdio-paranoia2 -y
+        command -v libcdio19 >/dev/null 2>&1 || $SUDO apt install libcdio19 -y
+        command -v librubberband2 >/dev/null 2>&1 || $SUDO apt install librubberband2 -y
+        command -v libzimg2 >/dev/null 2>&1 || $SUDO apt install libzimg2 -y
+        command -v libdbus-1-dev >/dev/null 2>&1 || $SUDO apt install libdbus-1-dev -y
+        command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
+        command -v libpulse-dev >/dev/null 2>&1 || $SUDO apt install libpulse-dev -y
+        command -v libssl-dev >/dev/null 2>&1 || $SUDO apt install libssl-dev -y
+        command -v libxcb1-dev >/dev/null 2>&1 || $SUDO apt install libxcb1-dev -y
+        command -v libxcb-render0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-render0-dev -y
+        command -v libxcb-shape0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-shape0-dev -y
+        command -v libxcb-xfixes0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-xfixes0-dev -y
 
         if systemctl --user is-active pipewire >/dev/null; then
             echo "Using PipeWire, installing specific dependencies..."
-            $SUDO apt install libpipewire-0.3-0  -y
+            command -v libpipewire-0.3-0  >/dev/null 2>&1 || $SUDO apt install libpipewire-0.3-0  -y
         fi
 
         echo "[+] (optional) installing vulkan graphics drivers..."
-        $SUDO apt install mesa-utils vulkan-tools -y
+        command -v vulkan-tools >/dev/null 2>&1 || $SUDO apt install vulkan-tools -y
+        command -v mesa-utils >/dev/null 2>&1 || $SUDO apt install mesa-utils -y
 
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
@@ -371,7 +374,7 @@ if [ "$1" != "configonly" ]; then
         # ADDITION="deb http://apt.fruit.je/ubuntu $(lsb_release -cs) mpv"
 # echo $ADDITION | $SUDO  tee -a /etc/apt/sources.list.d/fruit.list
         # $SUDO  apt update
-        # $SUDO  apt install mpv -y
+        # command -v mpv >/dev/null 2>&1 || $SUDO apt install mpv -y
         
         echo "[+] Installing llvm and related tools (clangd, cmake, etc)..."
         wget https://apt.llvm.org/llvm.sh
@@ -381,11 +384,11 @@ if [ "$1" != "configonly" ]; then
         # sudo ./llvm.sh all
         
         echo "[+] Installing various tools..."
-        $SUDO  apt install 7zip  -y
-        $SUDO  apt install poppler-utils  -y
-        $SUDO  apt install zoxide  -y
-        $SUDO  apt install imagemagick -y
-        # $SUDO  apt install fd-find  -y  # Installed with cargo above
+        command -v 7zip  >/dev/null 2>&1 || $SUDO apt install 7zip  -y
+        command -v poppler-utils  >/dev/null 2>&1 || $SUDO apt install poppler-utils  -y
+        command -v imagemagick >/dev/null 2>&1 || $SUDO apt install imagemagick -y
+        # command -v zoxide  >/dev/null 2>&1 || $SUDO apt install zoxide  -y
+        # command -v fd-find  >/dev/null 2>&1 || $SUDO apt install fd-find  -y  # Installed with cargo above
         
         echo "[+] Installing Yazi..."
         git clone https://github.com/sxyazi/yazi.git
@@ -398,10 +401,10 @@ if [ "$1" != "configonly" ]; then
         echo "[+] Installing Latest Tmux..."    
         $SUDO apt-get install autotools-dev -y
         $SUDO apt-get install automake -y
-        $SUDO apt install libevent-dev -y
-        $SUDO apt install bison -y
+        command -v libevent-dev >/dev/null 2>&1 || $SUDO apt install libevent-dev -y
+        command -v bison >/dev/null 2>&1 || $SUDO apt install bison -y
         $SUDO apt install libncurses5-dev 
-        $SUDO apt install libncursesw5-dev -y
+        command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
 
         git clone https://github.com/tmux/tmux.git
         cd tmux
@@ -412,11 +415,11 @@ if [ "$1" != "configonly" ]; then
 
         echo "[+] Installing Spotify Player..."    
         $SUDO apt-get install autotools-dev -y
-        $SUDO apt install pulseaudio -y
-        $SUDO apt install pulseaudio-module-bluetooth -y
-        $SUDO apt install pulseaudio-utils -y
-        $SUDO apt install pavucontrol -y
-        $SUDO apt install libsixel-bin -y  # sixel encoder/decoder
+        command -v pulseaudio >/dev/null 2>&1 || $SUDO apt install pulseaudio -y
+        command -v pulseaudio-module-bluetooth >/dev/null 2>&1 || $SUDO apt install pulseaudio-module-bluetooth -y
+        command -v pulseaudio-utils >/dev/null 2>&1 || $SUDO apt install pulseaudio-utils -y
+        command -v pavucontrol >/dev/null 2>&1 || $SUDO apt install pavucontrol -y
+        command -v libsixel-bin >/dev/null 2>&1 || $SUDO apt install libsixel-bin -y  # sixel encoder/decoder
         cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
 
 

@@ -2,6 +2,11 @@
 
 UTILS_LOADED=1
 
+# Source util files
+# [[ ! -s ~/.fzf-key-bindings.zsh ]] && wget -q https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/key-bindings.zsh -O ~/.fzf-key-bindings.zsh && chmod +x ~/.fzf-key-bindings.zsh 
+# [[ -s ~/.fzf-key-bindings.zsh ]] && source ~/.fzf-key-bindings.zsh
+#
+# Main util functions
 
 local_config_update_and_nvim_update(){
     local_config_update 'update-nvim'
