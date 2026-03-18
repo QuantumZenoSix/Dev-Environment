@@ -1,7 +1,7 @@
 #!/bin/sh
 # Installation of packages and copying of config files
 
-set -euo pipefail  # safer bash scripting
+# set -euo pipefail  # safer bash scripting
 
 CALLING_USER=$(whoami)
 
