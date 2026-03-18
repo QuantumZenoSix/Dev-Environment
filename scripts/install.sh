@@ -284,6 +284,7 @@ if [ "$1" != "configonly" ]; then
         command -v p7zip >/dev/null 2>&1 || yes | $SUDO pacman -S p7zip  # p7zip-full: 7zip compression 
         command -v vim >/dev/null 2>&1 || yes | $SUDO pacman -S vim  # vim-gtk3: GUI vim with GTK/X11 
         command -v zsh >/dev/null 2>&1 || yes | $SUDO pacman -S zsh 
+        command -v direnv >/dev/null 2>&1 || yes | $SUDO pacman -S direnv 
         # command -v gvim >/dev/null 2>&1 || yes | $SUDO pacman -S gvim  # vim-gtk3: GUI vim with GTK/X11 
         yay -S  mlocate  # locate: File indexer, system db 
         # Focus: System-level packages via pacman for Arch Linux hybrid setup (Nix for non-system-level packages).
