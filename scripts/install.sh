@@ -247,263 +247,135 @@ if [ "$1" != "configonly" ]; then
         $SUDO rm -f /var/lib/dpkg/lock
 
 
-    elif [ "$DISTRO_FAMILY" = "fedora" ]; then
+        # ────────────────────────────────────────────────
+        #         Distro-agnostic tool installs
+        # ──────────────────────────────────────────────── 
 
-        echo "TBD"
+        echo "# ────────────────────────────────────────────────"
+        echo "#        PACKAGE INSTALLATION (Part II: Distro-agnostic Tools not via package manager)"
+        echo "# ────────────────────────────────────────────────"
 
-    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
-        # Why pacman: Fundamental system utils; already base or ensure kernel/driver compatibility.
-        
-        
-        # Update system
-        #
-        yes | $SUDO pacman -Syu 
+        # Software that isn't installed via a distro's package manager (may contain fixed versions). The order below is important.
+        echo "[+] Installing prerequisites!"
 
-        echo "ensure your user has sudo prvileges (member of wheel group)"
-
-        # Essentials
-        $SUDO pacman -S --needed base-devel  # build-essential: GCC/make/etc for system builds/AUR 
-        command -v git >/dev/null 2>&1 || yes | $SUDO pacman -S git
-
-        # Yay installation (for AUR)
-        command -v go >/dev/null 2>&1 || yes | $SUDO pacman -S go --needed
-        git clone https://aur.archlinux.org/yay.git
-        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay cd yay && makepkg -si 
+        echo "[+] Enabling docker service..."
+        $SUDO  systemctl enable docker
+        $SUDO  systemctl start docker
         
-        echo "[+] Installing core tools..."
-        command -v curl >/dev/null 2>&1 || yes | $SUDO pacman -S curl  # curl: Network downloader, system scripts rely on it 
-        command -v wget >/dev/null 2>&1 || yes | $SUDO pacman -S wget  # wget: Downloader, core for scripts 
-        command -v tar >/dev/null 2>&1 || yes | $SUDO pacman -S tar  # tar: Archiver, base system 
-        command -v less >/dev/null 2>&1 || yes | $SUDO pacman -S less  # tar: Archiver, base system 
-        command -v which >/dev/null 2>&1 || yes | $SUDO pacman -S which
-        command -v unzip >/dev/null 2>&1 || yes | $SUDO pacman -S unzip  # unzip: Zip handler, base 
-        command -v xclip >/dev/null 2>&1 || yes | $SUDO pacman -S xclip  # xclip: Clipboard, X11 integration 
-        command -v sed >/dev/null 2>&1 || yes | $SUDO pacman -S sed  # sed: Text processor, base 
-        command -v coreutils >/dev/null 2>&1 || yes | $SUDO pacman -S coreutils  # coreutils: GNU utils, base 
-        command -v glibc >/dev/null 2>&1 || yes | $SUDO pacman -S glibc  # libc6: Core C lib 
-        command -v p7zip >/dev/null 2>&1 || yes | $SUDO pacman -S p7zip  # p7zip-full: 7zip compression 
-        command -v vim >/dev/null 2>&1 || yes | $SUDO pacman -S vim  # vim-gtk3: GUI vim with GTK/X11 
-        command -v zsh >/dev/null 2>&1 || yes | $SUDO pacman -S zsh 
-        command -v direnv >/dev/null 2>&1 || yes | $SUDO pacman -S direnv 
-        # command -v gvim >/dev/null 2>&1 || yes | $SUDO pacman -S gvim  # vim-gtk3: GUI vim with GTK/X11 
-        yay -S  mlocate  # locate: File indexer, system db 
-        # Focus: System-level packages via pacman for Arch Linux hybrid setup (Nix for non-system-level packages).
+        echo "[+] Installing Rust (rustup)..."
+        if ! command -v rustup >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            # shellcheck disable=SC1091
+            . "$HOME/.cargo/env"
+        fi
+        rustup update
         
-        echo "[+] Installing dev tools..."
-        # System dev/build tools (from original dev section, lines 123-147; only system-critical)
-        # Why pacman: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
-        command -v make >/dev/null 2>&1 || yes | $SUDO pacman -S make  # make: Builder, base-devel 
-        command -v gcc >/dev/null 2>&1 || yes | $SUDO pacman -S gcc  # gcc: Compiler, base-devel 
-        command -v lib32-glibc >/dev/null 2>&1 || yes | $SUDO pacman -S lib32-glibc  # libc6-dev-i386: 32-bit libc dev 
-        command -v binutils >/dev/null 2>&1 || yes | $SUDO pacman -S binutils  # binutils: Assembler/linker, base-devel 
-        command -v bc >/dev/null 2>&1 || yes | $SUDO pacman -S bc  # bc: Calculator, base 
-        command -v gettext >/dev/null 2>&1 || yes | $SUDO pacman -S gettext  # gettext: Localization, system 
-        command -v bash >/dev/null 2>&1 || yes | $SUDO pacman -S bash  # bash: Shell, base 
-        command -v gawk >/dev/null 2>&1 || yes | $SUDO pacman -S gawk  # gawk: AWK, base 
-        command -v ufw >/dev/null 2>&1 || yes | $SUDO pacman -S ufw  # gawk: AWK, base 
-        
-        echo "[+] Installing  system/misc tools..."
-        # Terminal/system extras (from original extras, lines 150-161)
-        # Why pacman: System integration like fonts/GUI/audio mounts.
-        command -v sshfs >/dev/null 2>&1 || yes | $SUDO pacman -S sshfs  # sshfs: FUSE mount, system fs 
-        command -v sshpass >/dev/null 2>&1 || yes | $SUDO pacman -S sshpass  # sshpass: SSH passwords, utils 
-        command -v xsel >/dev/null 2>&1 || yes | $SUDO pacman -S xsel  # xsel: Clipboard, X11 
-        command -v powerline-fonts >/dev/null 2>&1 || yes | $SUDO pacman -S powerline-fonts  # fonts-powerline: Fonts for terminals 
-        command -v pkgconf >/dev/null 2>&1 || yes | $SUDO pacman -S pkgconf  # pkg-config: Build helper (original line 157; duplicate in deps)
-        # yay -S  mssql-tools  # mssql-tools: MS SQL tools, AUR 
-        $SUDO pacman -S  font-manager  # font-manager: GUI fonts 
-        
-        echo "[+] Installing others..."
-        # Misc tools (from original misc, lines 165-173)
-        # Why pacman: System info/process viewers.
-        command -v fastfetch >/dev/null 2>&1 || yes | $SUDO pacman -S fastfetch  # fastfetch: System info (original line 171; no PPA needed on Arch)
-        command -v htop >/dev/null 2>&1 || yes | $SUDO pacman -S htop  # htop: Process viewer 
-        
-        # Various dependencies (from original deps, lines 176-183)
-        # Why pacman: Core libs for system builds/graphics.
-        command -v openssl >/dev/null 2>&1 || yes | $SUDO pacman -S openssl  # libssl-dev: Crypto (original line 177; duplicate in sound)
-        command -v libxcb >/dev/null 2>&1 || yes | $SUDO pacman -S libxcb  # libxcb1-dev: XCB (original line 178; duplicate)
-          # libxcb-render0-dev: XCB render 
-          # libxcb-shape0-dev: XCB shape 
-          # libxcb-xfixes0-dev: XCB fixes (original line 181; duplicate)
-        # yay -S  aarch64-linux-gnu-gcc  # crossbuild-essential-arm64: ARM cross-compiler, AUR 
-        
-        # Fragile deps (from original fragile, lines 186-191)
-        # Why pacman: System services like Docker, DB connectivity.
-        command -v unixodbc >/dev/null 2>&1 || yes | $SUDO pacman -S unixodbc  # unixodbc-dev: ODBC 
-        command -v docker >/dev/null 2>&1 || yes | $SUDO pacman -S docker  # docker.io: Containers, system service 
-        command -v docker-compose >/dev/null 2>&1 || yes | $SUDO pacman -S docker-compose  # docker-compose-plugin: Docker compose 
-        
-        # Sound-related (from original sound, lines 195-217)
-        # Why pacman: Audio libs/hardware accel integration.
-        command -v playerctl >/dev/null 2>&1 || yes | $SUDO pacman -S playerctl  # playerctl: Media control 
-        $SUDO pacman -S  alsa-lib  # libasound2-dev: ALSA 
-        command -v ffmpeg >/dev/null 2>&1 || yes | $SUDO pacman -S ffmpeg  # ffmpeg: Multimedia (original line 199; no PPA on Arch)
-        command -v libass >/dev/null 2>&1 || yes | $SUDO pacman -S libass  # libass9: Subtitles 
-        command -v libbluray >/dev/null 2>&1 || yes | $SUDO pacman -S libbluray  # libbluray2: Blu-ray 
-        command -v libcaca >/dev/null 2>&1 || yes | $SUDO pacman -S libcaca  # libcaca0: Graphics 
-        command -v libcdio >/dev/null 2>&1 || yes | $SUDO pacman -S libcdio  # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO (original lines 203-206)
-        command -v rubberband >/dev/null 2>&1 || yes | $SUDO pacman -S rubberband  # librubberband2: Audio stretch 
-        command -v dbus >/dev/null 2>&1 || yes | $SUDO pacman -S dbus  # libdbus-1-dev: Bus 
-        command -v ncurses >/dev/null 2>&1 || yes | $SUDO pacman -S ncurses  # libncursesw5-dev: Curses wide 
-        command -v pulseaudio >/dev/null 2>&1 || yes | $SUDO pacman -S pulseaudio  # libpulse-dev: Pulse (original line 211; assume Pulse, adjust if PipeWire)
-        yay -S  zimg  # libzimg2: Image scaling 
-        # yay -S  tufw  # GUI for ufw
-
-        # PipeWire check (original lines 219-222)
-        if systemctl --user is-active pipewire >/dev/null; then
-            command -v pipewire >/dev/null 2>&1 || yes | $SUDO pacman -S pipewire  # libpipewire-0.3-0: PipeWire lib 
+        echo "[+] Installing uv python package manager..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+          
+        echo "[+] Installing Go (if needed)..."
+        if ! command -v go >/dev/null 2>&1 || ! go version | grep -qE 'go1.2[2-9]'; then
+            $SUDO rm -rf /usr/local/go
+            wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
+            tar -xvf go1.24.4.linux-amd64.tar.gz
+            $SUDO mv go /usr/local/
+            rm -f go*.tar.gz
+            export PATH="$PATH:$HOME/go/bin"
         fi
         
-        # Vulkan/graphics 
-        # Why pacman: GPU driver integration.
-        command -v mesa-utils >/dev/null 2>&1 || yes | $SUDO pacman -S mesa-utils vulkan-tools  # mesa-utils vulkan-tools: Graphics tools 
+
+        echo "[+] Installing jless (json viewer)"
+        if ! command -v jless --verion >/dev/null 2>&1 ; then
+            cargo install jless
+        fi
+
+        echo "[+] Installing entr (if needed for tmux auto-reload)..."
+        if ! command -v entr >/dev/null 2>&1; then
+            git clone https://github.com/eradman/entr.git
+            cd entr
+            ./configure
+            sudo make test
+            sudo make install
+            cd ../
+            rm -rf entr
+        fi
+
+        echo "[+] Installing nvm..."
+        wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash # Install nvm version 0.40.3
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        if command -v nvm >/dev/null; then
+            echo "nvm installation suceeded. installing version."
+            echo -e "\t[!] Available nvm versions:"
+            nvm list-remote       # avaiable versions
+            echo -e "\t[+] Installing node v22..."
+            nvm install v22.17.0  # install a version
+            echo -e "\t[+] Installed versions:"
+            nvm list              # View installed versions
+            echo -e "\t[+] Selecting v22.17"
+            nvm use v22.17.0 
+        fi
         
-        # Docker service (from original agnostic, line 262)
-        # Why pacman: System service.
-        sudo systemctl enable docker
-        sudo systemctl start docker
+        echo "[+] Done installing prerequisites!"
         
-        echo "Pacman installations complete."
+        printf "\n\n---------------------------------------------------\n\n"
+        
+        # MAIN INSTALLATIONS
+        
+        # Cargo ____________________________________
+        echo "[+] Installing csvlens"
+        cargo install csvlens
+        
+        echo "[+] Installing Dust..."
+        cargo install du-dust
+        
+        echo "[+] Installing TPM (tmux plugin manager)..."
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-    fi
+        echo "[+] Installing fd..."
+        cargo install fd-find
 
-
-    # ────────────────────────────────────────────────
-    #         Distro-agnostic tool installs
-    # ──────────────────────────────────────────────── 
-
-    echo "# ────────────────────────────────────────────────"
-    echo "#        PACKAGE INSTALLATION (Part II: Distro-agnostic Tools not via package manager)"
-    echo "# ────────────────────────────────────────────────"
-
-    # Software that isn't installed via a distro's package manager (may contain fixed versions). The order below is important.
-    echo "[+] Installing prerequisites!"
-
-    echo "[+] Enabling docker service..."
-    $SUDO  systemctl enable docker
-    $SUDO  systemctl start docker
-    
-    echo "[+] Installing Rust (rustup)..."
-    if ! command -v rustup >/dev/null 2>&1; then
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        # shellcheck disable=SC1091
-        . "$HOME/.cargo/env"
-    fi
-    rustup update
-    
-    echo "[+] Installing uv python package manager..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-      
-    echo "[+] Installing Go (if needed)..."
-    if ! command -v go >/dev/null 2>&1 || ! go version | grep -qE 'go1.2[2-9]'; then
-        $SUDO rm -rf /usr/local/go
-        wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
-        tar -xvf go1.24.4.linux-amd64.tar.gz
-        $SUDO mv go /usr/local/
-        rm -f go*.tar.gz
-        export PATH="$PATH:$HOME/go/bin"
-    fi
-    
-
-    echo "[+] Installing jless (json viewer)"
-    if ! command -v jless --verion >/dev/null 2>&1 ; then
-        cargo install jless
-    fi
-
-    echo "[+] Installing entr (if needed for tmux auto-reload)..."
-    if ! command -v entr >/dev/null 2>&1; then
-        git clone https://github.com/eradman/entr.git
-        cd entr
-        ./configure
-        sudo make test
-        sudo make install
-        cd ../
-        rm -rf entr
-    fi
-
-    echo "[+] Installing nvm..."
-    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash # Install nvm version 0.40.3
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    if command -v nvm >/dev/null; then
-        echo "nvm installation suceeded. installing version."
-        echo -e "\t[!] Available nvm versions:"
-        nvm list-remote       # avaiable versions
-        echo -e "\t[+] Installing node v22..."
-        nvm install v22.17.0  # install a version
-        echo -e "\t[+] Installed versions:"
-        nvm list              # View installed versions
-        echo -e "\t[+] Selecting v22.17"
-        nvm use v22.17.0 
-    fi
-    
-    echo "[+] Done installing prerequisites!"
-    
-    printf "\n\n---------------------------------------------------\n\n"
-    
-    # MAIN INSTALLATIONS
-    
-    # Cargo ____________________________________
-    echo "[+] Installing csvlens"
-    cargo install csvlens
-    
-    echo "[+] Installing Dust..."
-    cargo install du-dust
-    
-    echo "[+] Installing TPM (tmux plugin manager)..."
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-    echo "[+] Installing fd..."
-    cargo install fd-find
-
-    echo "[+] Installing Yazi..."
-    git clone https://github.com/sxyazi/yazi.git
-    cd yazi
-    cargo build --release --locked
-    $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
-    cd ..
-    rm -rf yazi    
+        echo "[+] Installing Yazi..."
+        git clone https://github.com/sxyazi/yazi.git
+        cd yazi
+        cargo build --release --locked
+        $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
+        cd ..
+        rm -rf yazi    
 
 
 
-    # Go _______________________________________
-    echo "[+] Installing lazysql..."
-    go install github.com/jorgerojas26/lazysql@latest
-    
-    echo "[+] Installing eget..."
-    go install github.com/zyedidia/eget@latest
-    
-    echo "[+] Installing lazygit..."
-    go install github.com/jesseduffield/lazygit@latest
+        # Go _______________________________________
+        echo "[+] Installing lazysql..."
+        go install github.com/jorgerojas26/lazysql@latest
+        
+        echo "[+] Installing eget..."
+        go install github.com/zyedidia/eget@latest
+        
+        echo "[+] Installing lazygit..."
+        go install github.com/jesseduffield/lazygit@latest
 
-    echo "[+] Installing glow..."
-    go install github.com/charmbracelet/glow/v2@latest
-
-
-
-    # Other ___________________________________
-    echo "[+] Installing ggh ssh manager..."
-    curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
-    
-    echo "[+] Installing lazydocker..."
-    curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-    
-    echo "[+] Installing Posting via uv..."
-    uv tool install --python 3.13 posting
-
-    echo "[+] Installing YouTube-downloader..."
-    $SUDO  wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/local/bin/yt-dlp; $SUDO chmod +x /usr/local/bin/yt-dlp
-
-    # echo "[+] Installing zioxide..."
-    # curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+        echo "[+] Installing glow..."
+        go install github.com/charmbracelet/glow/v2@latest
 
 
 
-    echo "# ────────────────────────────────────────────────"
-    echo "#        PACKAGE INSTALLATION (Part III: Additional install from package manager)"
-    echo "# ────────────────────────────────────────────────"
-    # This third step must remain here as some of the programs in step 2 are required for this step
+        # Other ___________________________________
+        echo "[+] Installing ggh ssh manager..."
+        curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
+        
+        echo "[+] Installing lazydocker..."
+        curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+        
+        echo "[+] Installing Posting via uv..."
+        uv tool install --python 3.13 posting
+
+        echo "[+] Installing YouTube-downloader..."
+        $SUDO  wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/local/bin/yt-dlp; $SUDO chmod +x /usr/local/bin/yt-dlp
+
+        # echo "[+] Installing zioxide..."
+        # curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
 
         echo "[+] Installing llvm and related tools (clangd, cmake, etc)..."
         wget https://apt.llvm.org/llvm.sh
@@ -511,8 +383,6 @@ if [ "$1" != "configonly" ]; then
         $SUDO  ./llvm.sh 20 all
         # or for latest stable release...
         # sudo ./llvm.sh all
-
-    if [ "$DISTRO_FAMILY" = "debian" ]; then
 
         echo "[+] Installing Spotify Player..."    
         $SUDO apt-get install autotools-dev -y
@@ -555,37 +425,127 @@ if [ "$1" != "configonly" ]; then
         # command -v mpv >/dev/null 2>&1 || $SUDO apt install mpv -y
 
 
+
+
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
         echo "TBD"
 
-    elif [ "$DISTRO_FAMILY" = "arch" ]; then
+    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
+
+        AUR="yay -S --needed" 
+        PACMAN="$SUDO pacman -S --needed"
+
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+        echo "#        PACKAGE INSTALLATION | Part I: System update and setting up access to AUR"
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+
+        # Update system
+        yes | $SUDO pacman -Syu 
+
+        # Essentials
+        $PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
+        yes | $PACMAN git 
+        yes | $PACMAN go 
+        yes | $PACMAN rustup  && rustup update
+
+        # Yay installation (for AUR) (needs go)
+        echo "[+] Installing yay..."
+        git clone https://aur.archlinux.org/yay.git
+        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay cd yay && makepkg -si  && cd ../
+
+
+        # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
+        #
+        echo "[+] Installing core tools..."
+        yes | $PACMAN curl  			# curl: Network downloader, system scripts rely on it 
+        yes | $PACMAN wget  			# wget: Downloader, core for scripts 
+        yes | $PACMAN tar    			# tar: Archiver, base system 
+        yes | $PACMAN less  			# tar: Archiver, base system 
+        yes | $PACMAN which 
+        yes | $PACMAN xclip  			# xclip: Clipboard, X11 integration 
+        yes | $PACMAN sed    			# sed: Text processor, base 
+        yes | $PACMAN coreutils  		# coreutils: GNU utils, base 
+        yes | $PACMAN glibc  			# libc6: Core C lib 
+        yes | $PACMAN vim   			# vim-gtk3: GUI vim with GTK/X11 
+        yes | $PACMAN zsh 
+        yes | $PACMAN direnv 
+        yes | $PACMAN unzip  			# unzip: Zip handler, base 
+        yes | $PACMAN p7zip  			# p7zip-full: 7zip compression 
+        # yes | $PACMAN 7zip
+        
+        echo "[+] Installing dev tools..."
+        # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
+        yes | $PACMAN make  			# make: Builder, base-devel 
+        yes | $PACMAN gcc  			# gcc: Compiler, base-devel 
+        yes | $PACMAN lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
+        yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
+        yes | $PACMAN bc  		    # bc: Calculator, base 
+        yes | $PACMAN gettext  		# gettext: Localization, system 
+        yes | $PACMAN bash  			# bash: Shell, base 
+        yes | $PACMAN gawk  			# gawk: AWK, base 
+        yes | $PACMAN llvm  
+        yes | $PACMAN ufw  			# gawk: AWK, base 
+        yes | $PACMAN uv  			# uv - python
+        
+        echo "[+] Installing  system/misc tools..."
+        # Terminal/system extras: System integration like fonts/GUI/audio mounts.
+        yes | $PACMAN sshfs  			# sshfs: FUSE mount, system fs 
+        yes | $PACMAN sshpass  		# sshpass: SSH passwords, utils 
+        yes | $PACMAN xsel  			# xsel: Clipboard, X11 
+        yes | $PACMAN powerline-fonts	# fonts-powerline: Fonts for terminals 
+        yes | $PACMAN pkgconf  		# pkg-config: Build helper
+        $PACMAN  font-manager   		# font-manager: GUI fonts 
+
+        
+        echo "[+] Installing misc. tools..."
+        # Misc tools: System info/process viewers.
+        yes | $PACMAN fastfetch         # fastfetch: System info
+        yes | $PACMAN htop              # htop: Process viewer 
+        yes | $PACMAN openssl           # libssl-dev: Crypto
+        yes | $PACMAN libxcb            # libxcb1-dev: XCB render, shape, etc
+        yes | $PACMAN unixodbc          # unixodbc-dev: ODBC 
+        yes | $PACMAN docker            # docker.io: Containers, system service 
+        yes | $PACMAN docker-compose    # docker-compose-plugin: Docker compose 
+        yes | $PACMAN entr              # entr ─ super useful file watcher
+        yes | $PACMAN glow              # Markdown reader
+        yes | $PACMAN fd                # → fd
+        yes | $PACMAN yt-dlp            # YouTube downloader
+        
+        echo "[+] Installing media/sound-related pkgs..."
+        # Sound-related: Audio libs/hardware accel integration.
+        $PACMAN  alsa-lib --neded       # libasound2-dev: ALSA 
+        $PACMAN ffmpeg                  # ffmpeg: Multimedia 
+        yes | $PACMAN playerctl         # playerctl: Media control 
+        yes | $PACMAN libass            # libass9: Subtitles 
+        yes | $PACMAN libbluray         # libbluray2: Blu-ray 
+        yes | $PACMAN libcaca           # libcaca0: Graphics 
+        yes | $PACMAN libcdio           # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO        
+        yes | $PACMAN rubberband        # librubberband2: Audio stretch 
+        yes | $PACMAN dbus              # libdbus-1-dev: Bus 
+        yes | $PACMAN ncurses           # libncursesw5-dev: Curses wide 
+        yes | $PACMAN poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
+        yes | $PACMAN imagemagick
+
 
         echo "[+] Installing Spotify Player dependencies..."
 
-        # PulseAudio related packages
-        $SUDO pacman -S --needed pulseaudio pulseaudio-bluetooth pulseaudio-utils pavucontrol
 
-        # libsixel (provides img2sixel + libsixel binaries & libs)
-        $SUDO pacman -S --needed libsixel
+        # 1. Modern / recommended (PipeWire + official package)
+        $PACMAN libsixel spotify-player pavucontrol   # pavucontrol still works via pipewire-pulse
 
-        # Install spotify_player from crates.io with the features you want
-        # (pulseaudio-backend + media-control + sixel)
-        cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
+        # ────────────────────────────────────────────────
+        # 2. OR if you insist on PulseAudio backend:
+        # sudo pacman -S --needed pulseaudio pulseaudio-bluetooth pavucontrol libsixel
 
-        echo "[+] Installing various tools..."
+        # Then (if not using the official package):
+        # cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel --force
 
-        # 7zip (the modern package; command is usually 7zz)
-        $SUDO pacman -S --needed 7zip
-
-        # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
-        $SUDO pacman -S --needed poppler
-
-        # imagemagick
-        $SUDO pacman -S --needed imagemagick
-
+        # 3. Or if you prefer building from source with your chosen features:
+        #    (most common choice today = gstreamer backend = native PipeWire support)
+        # cargo install spotify_player --no-default-features --features "gstreamer-backend,media-control,sixel,image,notify,lyric-finder"
+        # ────────────────────────────────────────────────
         echo "[+] Done!"
-
         echo ""
         echo "Notes:"
         echo "  • spotify_player should now be in ~/.cargo/bin/spotify_player"
@@ -595,18 +555,86 @@ if [ "$1" != "configonly" ]; then
         echo "    and possibly pipewire-alsa pipewire-jack instead of pure pulseaudio packages."
 
 
+        # PipeWire check        
+        if systemctl --user is-active pipewire >/dev/null; then
+            yes | $PACMAN pipewire      # libpipewire-0.3-0: PipeWire lib 
+        fi
+        
+        echo "[+] Installing graphics-related pkgs..."
+        # Vulkan/graphics: GPU driver integration.
+        yes | $PACMAN mesa-utils        # mesa-utils vulkan-tools: Graphics tools 
+        
+
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+        echo "#        PACKAGE INSTALLATION | Part II: Installing AUR pkgs (or potential AUR pkgs)"
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+
+        echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
+        $AUR  zimg                      # libzimg2: Image scaling 
+        $AUR  mlocate                   # locate: File indexer, system db 
+        $AUR  jless                     # json viewer
+
+        # Cargo-based tools ─ many have AUR packages (faster, no need to keep cargo cache)
+        $PACMAN csvlens        || $AUR csvlens      # very popular
+        $PACMAN dust           || $AUR du-dust      # → dust
+        $PACMAN yazi           || $AUR yazi         # excellent file manager, now in community/extra in recent years
+
+        # Go-based tools ─ most in AUR or official repos
+        $PACMAN lazygit        || $AUR lazygit              # official repo now
+        $AUR lazysql           # almost always AUR
+        $AUR eget              # usually AUR
+        $AUR ggh               # SSH session manager – AUR
+
+        # lazydocker → usually AUR or curl script still works
+        $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+        # posting (HTTP client – python) – now has AUR package
+        $AUR posting           || uv tool install --python 3.13 posting   # fallback
+
+        # node version manager
+        $AUR  nvim                         
+
+        # Source and install node version
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+        if command -v nvm >/dev/null; then
+            echo "nvm installation suceeded. installing version."
+            # echo -e "\t[!] Available nvm versions:"
+            # nvm list-remote       # avaiable versions
+            echo -e "\t[+] Installing node v22..."
+            nvm install v22.17.0  # install a version
+            echo -e "\t[+] Installed versions:"
+            nvm list              # View installed versions
+            echo -e "\t[+] Selecting v22.17"
+            nvm use v22.17.0 
+        fi
+
+        # NOT USING AT THE MOMENT
+        # $AUR  mssql-tools  # mssql-tools: MS SQL tools, AUR 
+        # $AUR  aarch64-linux-gnu-gcc  # crossbuild-essential-arm64: ARM cross-compiler, AUR 
+        # $AUR  tufw  # GUI for ufw
+        # yes | $PACMAN gvim  # vim-gtk3: GUI vim with GTK/X11 
+        # $PACMAN zoxide         || $AUR zoxide
+        
+        echo "Pacman installations complete."
+        $SUDO  systemctl enable docker
+        $SUDO  systemctl start docker
+
+
     fi
+
 
     printf "\n\n\n"
 
-    echo "# ────────────────────────────────────────────────"
-    echo "#        PACKAGE INSTALLATION (Part IV: Workflow setup)"
-    echo "# ────────────────────────────────────────────────"
+    echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+    echo "#        PACKAGE INSTALLATION | Part III: Installing personal bins and running checks"
+    echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
     echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
     $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
     
-    echo "[+] Installing any missing packages..."
+    echo "[+] Manually Installing any missing packages..."
     
     if ! command -v nvim >/dev/null 2>&1; then
         printf "[+] Installing latest neovim stable release...\n\n"
