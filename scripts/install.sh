@@ -105,14 +105,13 @@ fi
 # Unless we're explicitly calling to only copy the configs, then let's start installing
 if [ "$1" != "configonly" ]; then
 
-    printf "\n\n"
-    echo "# ────────────────────────────────────────────────────────────────────────"
-    echo "#        PACKAGE INSTALLATION (Part I: Core install from package manager)"
-    echo "# ────────────────────────────────────────────────────────────────────────"
-    printf "\n\n"
-
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
+        printf "\n\n"
+        echo "# ────────────────────────────────────────────────────────────────────────"
+        echo "#        PACKAGE INSTALLATION (Part I: Core install from package manager)"
+        echo "# ────────────────────────────────────────────────────────────────────────"
+        printf "\n\n"
 
         if ! command -v apt >/dev/null || ! grep -qi ubuntu /etc/os-release; then
             echo "This script requires an Ubuntu-based system"
@@ -452,7 +451,7 @@ if [ "$1" != "configonly" ]; then
         # Yay installation (for AUR) (needs go)
         echo "[+] Installing yay..."
         git clone https://aur.archlinux.org/yay.git
-        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay cd yay && makepkg -si  && cd ../
+        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay && cd yay && makepkg -si  && cd ../
 
 
         # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
