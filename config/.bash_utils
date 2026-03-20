@@ -118,10 +118,6 @@ local_config_save(){
     # cp -v -r ~/.config/  $DEST
     #    cp -v -r ~/.local/share/nvim/dadbod_ui/  $DEST
 
-    DEST=$LOCAL_REPO/
-    cp -v -r ~/posting/  $DEST
-
-
     # NEW - Copy custom files from /usr/local/bin/
     DEST=$LOCAL_REPO/config/usr_local_bin/
     # cp /usr/local/bin/* $DEST
