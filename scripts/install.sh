@@ -868,6 +868,8 @@ if [ "${2}" == "os-pop" ]; then
     echo "# ────────────────────────────────────────────────"
     printf "\n\n"
         
+    cd $(dirname "$0") && pwd || exit
+
     echo "Running dry run first..."
     bash ../setups/pop_os_setup/core.sh 1   
 
@@ -876,10 +878,10 @@ if [ "${2}" == "os-pop" ]; then
     bash ../setups/pop_os_setup/core.sh 1
     
     echo "[+] Installing additional packages for gaming/graphics updates"
-    # bash ./setup/pop_os_setup/gaming.sh
+    # bash ./setups/pop_os_setup/gaming.sh
 
     echo "[+] Running housekeeping tasks"
-    # bash ./setup/pop_os_setup/housekeeping.sh
+    # bash ./setups/pop_os_setup/housekeeping.sh
 
 fi
 
