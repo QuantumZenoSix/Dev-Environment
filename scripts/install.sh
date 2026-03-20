@@ -3,6 +3,10 @@
 
 # set -euo pipefail  # safer bash scripting
 
+INSTALL_TYPE=$1
+INSTALL_SUBTYPE=$2
+OPTION=$3
+
 CALLING_USER=$(whoami)
 
 # Maintain user's home (even if calling with sudo)
@@ -441,6 +445,30 @@ install_debian_pkgs(){
         fi
 
 
+        if [ "${INSTALL_SUBTYPE}" = "os-pop" ]; then
+
+            printf "\n\n"
+            echo "# ────────────────────────────────────────────────"
+            echo "#        POP! OS | Installing Desktop Packages "
+            echo "# ────────────────────────────────────────────────"
+            printf "\n\n"
+                
+            cd $(dirname "$0") && pwd || exit
+
+            echo "Running dry run first..."
+            bash ../setups/pop_os_setup/core.sh 1   
+
+            printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
+            sleep 20
+            bash ../setups/pop_os_setup/core.sh 0
+            
+            echo "[+] Installing additional packages for gaming/graphics updates"
+            bash ../setups/pop_os_setup/gaming.sh
+
+            echo "[+] Running housekeeping tasks"
+            bash ../setups/pop_os_setup/housekeeping.sh
+
+        fi
 
 }
 
@@ -554,7 +582,7 @@ install_arch_pkgs(){
 
 
 
-        # TO NIXIFY
+        # TODO: NIXIFY
 
         echo "[+] Installing programming languages and tools..."
         # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
@@ -613,25 +641,25 @@ install_arch_pkgs(){
         echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
         echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
-        $AUR  zimg                      # libzimg2: Image scaling 
-        $AUR  mlocate                   # locate: File indexer, system db 
+        yes | $AUR  zimg                      # libzimg2: Image scaling 
+        yes | $AUR  mlocate                   # locate: File indexer, system db 
 
         # Cargo-based tools ─ many have AUR packages (faster, no need to keep cargo cache)
-        $PACMAN csvlens        || $AUR csvlens      # very popular
-        $PACMAN dust           || $AUR du-dust      # → dust
-        $PACMAN yazi           || $AUR yazi         # excellent file manager, now in community/extra in recent years
+        yes | $PACMAN csvlens        || yes | $AUR csvlens      # very popular
+        yes | $PACMAN dust           || yes | $AUR du-dust      # → dust
+        yes | $PACMAN yazi           || yes | $AUR yazi         # excellent file manager, now in community/extra in recent years
 
         # Go-based tools ─ most in AUR or official repos
-        $PACMAN lazygit        || $AUR lazygit              # official repo now
-        $AUR lazysql           # almost always AUR
-        $AUR eget              # usually AUR
-        $AUR ggh               # SSH session manager – AUR
+        yes | $PACMAN lazygit        || yes | $AUR lazygit              # official repo now
+        yes | $AUR lazysql           # almost always AUR
+        yes | $AUR eget              # usually AUR
+        yes | $AUR ggh               # SSH session manager – AUR
 
         # lazydocker → usually AUR or curl script still works
-        $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+        yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 
         # posting (HTTP client – python) – now has AUR package
-        $AUR posting           || uv tool install --python 3.13 posting   # fallback
+        yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
 
         # Source and install node version
         export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -660,6 +688,57 @@ install_arch_pkgs(){
         $SUDO  systemctl enable docker
         $SUDO  systemctl start docker
 
+        # TODO: Cachy scripts
+        if [ "${INSTALL_SUBTYPE}" = "os-cachy" ]; then
+
+            printf "\n\n"
+            echo "# ────────────────────────────────────────────────"
+            echo "#        POP! OS | Installing Desktop Packages "
+            echo "# ────────────────────────────────────────────────"
+            printf "\n\n"
+                
+            cd $(dirname "$0") && pwd || exit
+
+            echo "Running dry run first..."
+            bash ../setups/pop_os_setup/core.sh 1   
+
+            printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
+            sleep 20
+            bash ../setups/pop_os_setup/core.sh 0
+            
+            echo "[+] Installing additional packages for gaming/graphics updates"
+            bash ../setups/pop_os_setup/gaming.sh
+
+            echo "[+] Running housekeeping tasks"
+            bash ../setups/pop_os_setup/housekeeping.sh
+
+        fi
+
+        if [ "${INSTALL_SUBTYPE}" = "os-cachy" ]; then
+
+            printf "\n\n"
+            echo "# ────────────────────────────────────────────────"
+            echo "#        POP! OS | Installing Desktop Packages "
+            echo "# ────────────────────────────────────────────────"
+            printf "\n\n"
+                
+            cd $(dirname "$0") && pwd || exit
+
+            echo "Running dry run first..."
+            bash ../setups/pop_os_setup/core.sh 1   
+
+            printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
+            sleep 20
+            bash ../setups/pop_os_setup/core.sh 0
+            
+            echo "[+] Installing additional packages for gaming/graphics updates"
+            bash ../setups/pop_os_setup/gaming.sh
+
+            echo "[+] Running housekeeping tasks"
+            bash ../setups/pop_os_setup/housekeeping.sh
+
+        fi
+
 
 }
 
@@ -671,59 +750,7 @@ install_fedora_pkgs(){
 
 }
 
-
-
-###########
-# START   #
-###########
-
-
-# ────────────────────────────────────────────────
-#             NVIM-ONLY MODE (distro agnostic)
-# ────────────────────────────────────────────────
-if [ "$1" = "nvimonly" ]; then
-
-    sync_nvim_files
-    exit 0
-
-fi
-
-
-
-
-# ────────────────────────────────────────────────
-#        PACKAGE INSTALLATION (skip if configonly)
-# ────────────────────────────────────────────────
-# Unless we're explicitly calling to only copy the configs, then let's start installing (modes: full, installonly)
-if [ "$1" != "configonly" ]; then
-
-    if [ "$DISTRO_FAMILY" = "debian" ]; then
-
-        install_debian_pkgs
-
-    elif [ "$DISTRO_FAMILY" = "fedora" ]; then
-
-        install_fedora_pkgs 
-
-    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
-
-        install_arch_pkgs
-
-    fi
-
-    echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
-    $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
-
-fi
-
-
-
-
-# ────────────────────────────────────────────────
-#             CONFIG COPY (distro agnostic)
-# ────────────────────────────────────────────────
-
-if [ "$1" = "full" -o "$1" = "configonly" ]; then
+apply_config(){
 
     echo "# ────────────────────────────────────────────────"
     echo "#        CONFIG INSTALLATION "
@@ -780,7 +807,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
 
 
     # 'noshellswitch' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
-    if [ "$2" != "noshellswitch" ]; then
+    if [ "${INSTALL_SUBTYPE}" != "noshellswitch" ]; then
 
         # Install fonts
         printf "[+] Installing fonts..."
@@ -842,38 +869,71 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
         cp -v ./config/.zshrc  $HOME/
 
         # Don't open new zsh shell
-        # if [ "$2" != "noshellswitch" -a "$2" != "os-pop" ]; then
+        # if [ "${INSTALL_SUBTYPE}" != "noshellswitch" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then
         #     zsh
         # fi
 
     fi
 
-fi
 
-if [ "$2" = "os-pop" ]; then
 
-    printf "\n\n"
-    echo "# ────────────────────────────────────────────────"
-    echo "#        POP! OS | Installing Desktop Packages "
-    echo "# ────────────────────────────────────────────────"
-    printf "\n\n"
-        
-    cd $(dirname "$0") && pwd || exit
+}
 
-    echo "Running dry run first..."
-    bash ../setups/pop_os_setup/core.sh 1   
+###########
+# START   #
+###########
 
-    printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
-    sleep 20
-    bash ../setups/pop_os_setup/core.sh 0
-    
-    echo "[+] Installing additional packages for gaming/graphics updates"
-    bash ../setups/pop_os_setup/gaming.sh
 
-    echo "[+] Running housekeeping tasks"
-    bash ../setups/pop_os_setup/housekeeping.sh
+# ────────────────────────────────────────────────
+#             NVIM-ONLY MODE (distro agnostic)
+# ────────────────────────────────────────────────
+if [ "${INSTALL_TYPE}" = "nvimonly" ]; then
+
+    sync_nvim_files
+    exit 0
 
 fi
+
+
+
+
+# ────────────────────────────────────────────────
+#        PACKAGE INSTALLATION (skip if configonly)
+# ────────────────────────────────────────────────
+# Unless we're explicitly calling to only copy the configs, then let's start installing (modes: full, installonly)
+if [ "${INSTALL_TYPE}" != "configonly" ]; then
+
+    if [ "$DISTRO_FAMILY" = "debian" ]; then
+
+        install_debian_pkgs
+
+    elif [ "$DISTRO_FAMILY" = "fedora" ]; then
+
+        install_fedora_pkgs 
+
+    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
+
+        install_arch_pkgs
+
+    fi
+
+    echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
+    $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
+
+fi
+
+
+
+
+# ────────────────────────────────────────────────
+#             CONFIG COPY (distro agnostic)
+# ────────────────────────────────────────────────
+
+if [ "${INSTALL_TYPE}" = "full" -o "${INSTALL_TYPE}" = "configonly" ]; then
+
+    apply_config 
+fi
+
 
 printf "\n\n\n"
 echo "# ────────────────────────────────────────────────"
