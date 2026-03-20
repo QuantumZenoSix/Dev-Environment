@@ -83,11 +83,11 @@ sync_nvim_files(){
     echo "[+] Nvim files copied!"
 
     # Vim
-    cp -f -v ./config/config/.vimrc  $HOME/
+    cp -f -v ./config/.vimrc  $HOME/
     if [ -d $HOME/.vim/ ]; then
-        mkdir -p $HOME/.vim
+        mkdir -p $HOME/.vim/colors
     fi
-    cp -f -v -r ./config/nvim/colors  $HOME/.vim/
+    cp -f -v -r ./config/.vim/colors  $HOME/.vim/
 
     echo "[+] Vim files copied!"
 
@@ -470,8 +470,14 @@ install_arch_pkgs(){
 
         # Yay installation (for AUR) (needs go)
         echo "[+] Installing yay..."
-        git clone https://aur.archlinux.org/yay.git
-        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay && cd yay && makepkg -si  && cd ../
+        if [ "$(id -u)" -ne 0 ]; then
+            git clone https://aur.archlinux.org/yay.git
+            $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay && cd yay && makepkg -si  && cd ../
+        else
+            printf "[+] Running as root, cannot install yay ['makepkg' command must not be run as root. Skipping AUR packages.]\n"
+            AUR="echo Cannot install (yay not installed). Skipping "
+        fi
+
 
 
         # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
