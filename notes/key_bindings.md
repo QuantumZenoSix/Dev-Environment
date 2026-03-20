@@ -39,7 +39,7 @@ This means window management is verly similar - <C-W> for window actions in Wezt
 `dirsync` - [custom] Directory synchronizer (sync files between directories)  
 `docx_to_md` - [custom] self-explanatory  
 `docker_force_old_version` - [custom] Set Docker version environment variable to 1.43  
-`dockbuntu` - [custom] Spin up quick ubuntu container (with sudo, vim, git, curl, and wget`)  
+`dockbuntu` - [custom] Spin up quick ubuntu container (with sudo, vim, git, curl, and wget)  
 `mp3_dl` - [custom] Download MP3 audio from youtube URL  
 `egrep` - egrep --color=auto (grep -E)  
 `eget` - Easy binary downloader from GitHub releases  
@@ -381,7 +381,8 @@ set wrap! (toggle on of off)
 
 ### Managing Windows
 - `<C-w> q` or `:clo` - Close current window  
-- `<C-w> <up>` - Put cursor in top window (works for any direction)  
+- `<C-w> <up>` - Put cursor in top window (works for any direction)
+- `<C-w> w` - Focus on next window  
 - `<C-w> w` - Switch to next window  
 - `<C-w> H` - Make Leftmost full  vertical window  
 - `<C-w> L` - Make Rightmost full  vertical window  
@@ -556,7 +557,7 @@ _Note: '^J' in a register will be changed to a newline when pasting._
 - `J` - Merge lines: Apend line below to the end of the current line.  
 - `cc` - change entire line.  
 - `dt/<searchterm>` - Delete text up until search term  
-- `:sort` - Sort selected lines  
+- `:sort` - Sort selected lines (`!sort` for reverse order)  
 - `:norm I#` - Insert a '#' at the start of each selected line  
 - `:norm A;` - Append a ';' to the end of each highlited line  
 - `:norm I/* A */` - Insert '/*' at the start of each selected line and append '*/' at the end of each selected line  
