@@ -10,7 +10,9 @@ Instead of re-configuring everything all over from scrath on a new system, I've 
 
 <br />
 
-# Installing
+# Slim install
+Install packages and copy files as needed with one command.  
+
 
 __Full Installation__: Install all in ubuntu system _(installs packages and copies config files)_
 ```bash
@@ -44,7 +46,20 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 ```
 <br />
 
+
 <br />
+
+
+## Full install
+
+
+__Pop! OS Desktop installation__: Install packages and copies config files in ubuntu system.  
+Additionally install preferred desktop applications, create .desktop images for AppImages, install and updates drives and gaming add-ons, perform updates and system cleanup.  
+```bash
+bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_os_pop.sh -O -)"
+```
+<br />
+
 
 
 <!--
