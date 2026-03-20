@@ -14,7 +14,7 @@ YELLOW="\033[1;33m"
 NC="\033[0m"
 
 # DRY_RUN: Set to 1 to avoid actually installing anything - just see what would get installed
-DRY_RUN=1
+DRY_RUN=${1}
 
 # -----------------------------
 # Applications List

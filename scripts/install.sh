@@ -856,6 +856,28 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
 
 fi
 
+if [ "${2}" == "os-pop" ]; then
+
+    printf "\n\n"
+    echo "# ────────────────────────────────────────────────"
+    echo "#        POP! OS | Installing Desktop Packages "
+    echo "# ────────────────────────────────────────────────"
+    printf "\n\n"
+        
+    echo "Running dry run first..."
+    bash ../setups/pop_os_setup/core.sh 1   
+
+    echo -e "[+] Dry run complete! Review results. \nLive run will execut in 20s if this script isn't aborted with Ctrl+c"
+    sleep 20
+    bash ../setups/pop_os_setup/core.sh 0
+    
+    echo "[+] Installing additional packages for gaming/graphics updates"
+    bash ./setup/pop_os_setup/gaming.sh
+
+    echo "[+] Running housekeeping tasks"
+    bash ./setup/pop_os_setup/housekeeping.sh
+
+fi
 
 printf "\n\n\n"
 echo "# ────────────────────────────────────────────────"
