@@ -703,9 +703,11 @@ if [ "$1" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        if [ "$2" == "os-pop" ]; then
+        if [ "$2" = "os-pop" ]; then
             echo "'running' pop install.. beeep boop...'"
         else
+            echo "really ....running pop install.. beeep boop..."
+            sleep 10
             install_debian_pkgs
         fi
 
@@ -860,7 +862,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
 
 fi
 
-if [ "${2}" == "os-pop" ]; then
+if [ "$2" = "os-pop" ]; then
 
     printf "\n\n"
     echo "# ────────────────────────────────────────────────"
