@@ -605,6 +605,7 @@ install_arch_pkgs(){
         echo "[+] Installing workflow and cli tools..."
         yes | $AUR  jless                     # json viewer
         yes | $PACMAN bc  		    # bc: Calculator, base 
+        yes | $PACMAN tmux
         yes | $PACMAN entr
         yes | $PACMAN fzf 
         yes | $PACMAN python-pygments 
