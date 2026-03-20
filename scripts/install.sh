@@ -703,13 +703,7 @@ if [ "$1" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        if [ "$2" = "os-pop" ]; then
-            echo "'running' pop install.. beeep boop...'"
-        else
-            echo "really ....running pop install.. beeep boop..."
-            sleep 10
-            install_debian_pkgs
-        fi
+        install_debian_pkgs
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
@@ -723,7 +717,6 @@ if [ "$1" != "configonly" ]; then
 
     echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
     $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
-    
 
 fi
 
@@ -851,12 +844,10 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
         esac
 
         cp -v ./config/.zshrc  $HOME/
-        echo "→ You may need to log out/in or run: source ~/.zshrc (or ~/.bashrc)"
-        echo "→ Some tools require fonts (Nerd Fonts) or extra setup"
 
-        if [ "$2" != "noshellswitch" ]; then
-            zsh
-        fi
+        # if [ "$2" != "noshellswitch" -a "$2" != "os-pop" ]; then
+        #     zsh
+        # fi
 
     fi
 
@@ -875,15 +866,15 @@ if [ "$2" = "os-pop" ]; then
     echo "Running dry run first..."
     bash ../setups/pop_os_setup/core.sh 1   
 
-    echo -e "[+] Dry run complete! Review results. \nLive run will execut in 20s if this script isn't aborted with Ctrl+c"
+    printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
     sleep 20
-    bash ../setups/pop_os_setup/core.sh 1
+    bash ../setups/pop_os_setup/core.sh 0
     
     echo "[+] Installing additional packages for gaming/graphics updates"
-    # bash ./setups/pop_os_setup/gaming.sh
+    bash ../setups/pop_os_setup/gaming.sh
 
     echo "[+] Running housekeeping tasks"
-    # bash ./setups/pop_os_setup/housekeeping.sh
+    bash ../setups/pop_os_setup/housekeeping.sh
 
 fi
 
@@ -892,6 +883,8 @@ echo "# ────────────────────────
 echo "#        FINISHED! "
 echo "# ────────────────────────────────────────────────"
 printf "\n\n\n"
+echo "→ You may need to log out/in or run: source ~/.zshrc (or ~/.bashrc), or simply run 'zsh'"
+echo "→ Some tools require fonts (Nerd Fonts) or extra setup"
 
 
 
