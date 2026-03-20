@@ -14,7 +14,7 @@ Instead of re-configuring everything all over from scrath on a new system, I've 
 
 __Full Installation__: Install all in ubuntu system _(installs packages and copies config files)_
 ```bash
-bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init.sh -O -)"
+bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_full.sh -O -)"
 ```
 
 <br />

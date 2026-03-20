@@ -94,27 +94,8 @@ sync_nvim_files(){
 }
 
 
+install_debian_pkgs(){
 
-# ────────────────────────────────────────────────
-#             NVIM-ONLY MODE (distro agnostic)
-# ────────────────────────────────────────────────
-
-if [ "$1" = "nvimonly" ]; then
-
-    sync_nvim_files
-    exit 0
-
-fi
-
-# ────────────────────────────────────────────────
-#        PACKAGE INSTALLATION (skip if configonly)
-# ────────────────────────────────────────────────
-
-# ------------------------------------------------------------------------
-# Unless we're explicitly calling to only copy the configs, then let's start installing
-if [ "$1" != "configonly" ]; then
-
-    if [ "$DISTRO_FAMILY" = "debian" ]; then
 
         printf "\n\n"
         echo "# ────────────────────────────────────────────────────────────────────────"
@@ -432,14 +413,44 @@ if [ "$1" != "configonly" ]; then
         # $SUDO  apt update
         # command -v mpv >/dev/null 2>&1 || $SUDO apt install mpv -y
 
+        printf "\n\n\n"
+
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+        echo "#        PACKAGE INSTALLATION | Part III: Installing personal bins and running checks"
+        echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+
+        # Note: Not doing this for Arch becase on debian I don't care where the package lives, I just need neovim and lazygit so a manual install is fine. But on Arch, I do care - I'm using pacman and nix there so how it installs is important and don't want to have a manual build if I can avoid it
+        echo "[+] Manually Installing any missing packages..."
+        
+        if ! command -v nvim >/dev/null 2>&1; then
+            printf "[+] Installing latest neovim stable release...\n\n"
+            curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+            $SUDO rm -rf /opt/nvim
+            $SUDO tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+            # echo "→ Consider adding /opt/nvim-linux-x86_64/bin to your PATH"
+            # echo 'export PATH="/opt/nvim-linux-x86_64/bin:$PATH"' >> $HOME/.zshrc
+            # rm nvim-linux-x86_64.tar.gz
+            # Already aadded to PTH in .zshrc - just export for now so we can use it now
+            export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
+        fi
+
+        # Download and install lazygit
+        if ! command -v lazygit >/dev/null 2>&1; then
+            printf "[+] Installing lazygit...\n\n"
+            LAZYGIT_VERSION='0.40.2'
+            curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
+            && tar xf lazygit.tar.gz lazygit \
+            && $SUDO mv -f lazygit /usr/local/bin/ \
+            && rm lazygit.tar.gz
+        fi
 
 
 
-    elif [ "$DISTRO_FAMILY" = "fedora" ]; then
+}
 
-        echo "TBD"
 
-    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
+install_arch_pkgs(){
+
 
         AUR="yay -S --needed" 
         PACMAN="$SUDO pacman -S --needed"
@@ -654,44 +665,62 @@ if [ "$1" != "configonly" ]; then
         $SUDO  systemctl start docker
 
 
+}
+
+
+install_fedora_pkgs(){
+
+    # TBD
+    echo "Yeah...about.. that..."
+
+}
+
+
+
+###########
+# START   #
+###########
+
+
+# ────────────────────────────────────────────────
+#             NVIM-ONLY MODE (distro agnostic)
+# ────────────────────────────────────────────────
+if [ "$1" = "nvimonly" ]; then
+
+    sync_nvim_files
+    exit 0
+
+fi
+
+
+
+
+# ────────────────────────────────────────────────
+#        PACKAGE INSTALLATION (skip if configonly)
+# ────────────────────────────────────────────────
+# Unless we're explicitly calling to only copy the configs, then let's start installing (modes: full, installonly)
+if [ "$1" != "configonly" ]; then
+
+    if [ "$DISTRO_FAMILY" = "debian" ]; then
+
+        install_debian_pkgs
+
+    elif [ "$DISTRO_FAMILY" = "fedora" ]; then
+
+        install_fedora_pkgs 
+
+    elif [ "$DISTRO_FAMILY" = "arch" ]; then  
+
+        install_arch_pkgs
+
     fi
-
-
-    printf "\n\n\n"
-
-    echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-    echo "#        PACKAGE INSTALLATION | Part III: Installing personal bins and running checks"
-    echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
     echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
     $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
     
-    echo "[+] Manually Installing any missing packages..."
-    
-    if ! command -v nvim >/dev/null 2>&1; then
-        printf "[+] Installing latest neovim stable release...\n\n"
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-        $SUDO rm -rf /opt/nvim
-        $SUDO tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-        # echo "→ Consider adding /opt/nvim-linux-x86_64/bin to your PATH"
-        # echo 'export PATH="/opt/nvim-linux-x86_64/bin:$PATH"' >> $HOME/.zshrc
-        # rm nvim-linux-x86_64.tar.gz
-        # Already aadded to PTH in .zshrc - just export for now so we can use it now
-        export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
-    fi
-
-    # Download and install lazygit
-    if ! command -v lazygit >/dev/null 2>&1; then
-        printf "[+] Installing lazygit...\n\n"
-        LAZYGIT_VERSION='0.40.2'
-        curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
-        && tar xf lazygit.tar.gz lazygit \
-        && $SUDO mv -f lazygit /usr/local/bin/ \
-        && rm lazygit.tar.gz
-    fi
-    
 
 fi
+
 
 
 
