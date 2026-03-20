@@ -131,7 +131,12 @@ configure_ohmyzsh
 
 
 
-
+# ────────────────────────────────────────────────
+# NIX PKG MANAGER BIN PATH
+# ────────────────────────────────────────────────
+# Nix bin paths should not preceed the default pkg manager's location of a pkg
+# This needs to stay near the bottom to ensure PATH has latest updates and I can append nix path 
+export PATH="$PATH:${HOME}/.nix-profile/bin"
 
 
 

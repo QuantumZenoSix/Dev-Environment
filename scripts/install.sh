@@ -84,7 +84,7 @@ sync_nvim_files(){
 
     # Vim
     cp -f -v ./config/.vimrc  $HOME/
-    if [ -d $HOME/.vim/ ]; then
+    if [ -d $HOME/.vim/colors/ ]; then
         mkdir -p $HOME/.vim/colors
     fi
     cp -f -v -r ./config/.vim/colors  $HOME/.vim/
@@ -514,8 +514,8 @@ install_arch_pkgs(){
 
         echo "[+] Installing media/sound-related pkgs..."
         # Sound-related: Audio libs/hardware accel integration.
-        $PACMAN  alsa-lib --neded       # libasound2-dev: ALSA 
-        $PACMAN ffmpeg                  # ffmpeg: Multimedia 
+        $PACMAN  alsa-lib --noconfirm    # libasound2-dev: ALSA 
+        $PACMAN ffmpeg    --noconfirm    # ffmpeg: Multimedia 
         yes | $PACMAN dbus              # libdbus-1-dev: Bus 
         yes | $PACMAN imagemagick
         yes | $PACMAN libass            # libass9: Subtitles 
@@ -531,7 +531,7 @@ install_arch_pkgs(){
         echo "[+] Installing Spotify Player dependencies..."
 
         # 1. Modern / recommended (PipeWire + official package)
-        $PACMAN libsixel spotify-player pavucontrol   # pavucontrol still works via pipewire-pulse
+        $PACMAN libsixel spotify-player pavucontrol --noconfirm   # pavucontrol still works via pipewire-pulse
 
         # ────────────────────────────────────────────────
         # 2. OR if you insist on PulseAudio backend:
@@ -703,7 +703,11 @@ if [ "$1" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        install_debian_pkgs
+        if [ "$2" == "os-pop" ]; then
+            echo "'running' pop install.. beeep boop...'"
+        else
+            install_debian_pkgs
+        fi
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
@@ -869,7 +873,7 @@ if [ "${2}" == "os-pop" ]; then
 
     echo -e "[+] Dry run complete! Review results. \nLive run will execut in 20s if this script isn't aborted with Ctrl+c"
     sleep 20
-    bash ../setups/pop_os_setup/core.sh 0
+    bash ../setups/pop_os_setup/core.sh 1
     
     echo "[+] Installing additional packages for gaming/graphics updates"
     bash ./setup/pop_os_setup/gaming.sh

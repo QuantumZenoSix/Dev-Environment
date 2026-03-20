@@ -256,6 +256,32 @@ update_lazy(){
     sudo make install
 }
 
+detect_distro_type(){
+    # returns debian|fedora|arch|null
+    if [ -f /etc/os-release ]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+    else
+        return "null"
+        # echo "Error: /etc/os-release not found — cannot reliably detect distribution"
+    fi
+
+    ID_LIKE="${ID_LIKE:-$ID}"
+    ID_LIKE=$(echo "$ID_LIKE" | tr '[:upper:]' '[:lower:]')
+
+    if echo "$ID_LIKE" | grep -q -E 'debian|ubuntu|pop|linuxmint|zorin'; then
+        DISTRO_FAMILY="debian"
+    elif echo "$ID" "$ID_LIKE" | grep -q -E 'fedora|nobara|rhel|centos|rocky|almalinux'; then
+        DISTRO_FAMILY="fedora"
+    elif echo "$ID" "$ID_LIKE" | grep -q -E 'arch|cachy'; then
+        DISTRO_FAMILY="arch"
+    else
+        DISTRO_FAMILY="null"
+    fi
+
+    return "${DISTRO_FAMILY}"
+}
+
 create_and_assume_user() {
     if [[ -z "$1" ]]; then
         echo "[!] Usage: create_and_assume_user <username>"
@@ -265,11 +291,18 @@ create_and_assume_user() {
 
     local user="$1"
 
+    local distro_family=$(detect_distro_type)
+    local super_group="sudo"
+
+    if [[ "$distro_family" == "arch" || "$distro_family" == "fedora" ]]; then
+        super_group="wheel"
+    fi
+
     # Decide whether we need sudo or not
     if [[ "$EUID" -eq 0 ]]; then
         # Already root → no sudo needed
         useradd -m "$user" &&
-        usermod -aG sudo "$user" &&
+        usermod -aG ${super_group} "$user" &&
         passwd "$user" &&
         su - "$user"
     else
