@@ -59,16 +59,8 @@ else
     exit 1
 fi
 
+function sync_nvim_files(){
 
-
-
-
-# ────────────────────────────────────────────────
-#             NVIM-ONLY MODE (distro agnostic)
-# ────────────────────────────────────────────────
-
-if [ "$1" = "nvimonly" ]; then
-    # __________ NVIM __________
     if [ -d $HOME/.config/nvim/ ]; then
         mkdir -p $HOME/.config/nvim
     fi
@@ -77,10 +69,14 @@ if [ "$1" = "nvimonly" ]; then
     if [ -d $HOME/.config/nvim-backup ]; then
         rm -rf $HOME/.config/nvim-backup
     fi
+
+    # Save copt of any existing nvim files in case we need to restore
     [ -d "$HOME/.config/nvim" ] && mv "$HOME/.config/nvim" "$HOME/.config/nvim-backup"
+
+    # Copy nvim files
     cp -v -r ./config/.config/nvim  $HOME/.config/
 
-    # [.local] If backup folder exists remove it so we can overwrite it
+    # [.local files (nvim cache) ] If backup folder exists move it so we can restore if needed and so that it leaves the .local dir empty to empty the cache
     [ -d "$HOME/.local/share/nvim-backup" ] && rm -rf "$HOME/.local/share/nvim-backup"
     [ -d "$HOME/.local/share/nvim" ] && mv "$HOME/.local/share/nvim" "$HOME/.local/share/nvim-backup"
 
@@ -92,9 +88,22 @@ if [ "$1" = "nvimonly" ]; then
         mkdir -p $HOME/.vim
     fi
     cp -f -v -r ./config/nvim/colors  $HOME/.vim/
+
     echo "[+] Vim files copied!"
 
+}
+
+
+
+# ────────────────────────────────────────────────
+#             NVIM-ONLY MODE (distro agnostic)
+# ────────────────────────────────────────────────
+
+if [ "$1" = "nvimonly" ]; then
+
+    sync_nvim_files
     exit 0
+
 fi
 
 # ────────────────────────────────────────────────
@@ -455,62 +464,37 @@ if [ "$1" != "configonly" ]; then
 
 
         # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
-        #
-        echo "[+] Installing core tools..."
+        echo "[+] Installing system-level tools (drivers, graphics, audio, compiler dependencies, os tools, etc)..."
+        yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
+        yes | $PACMAN bzip2  			# p7zip-full: 7zip compression 
+        yes | $PACMAN clang 
+        yes | $PACMAN cmake 
+        yes | $PACMAN coreutils  		# coreutils: GNU utils, base 
         yes | $PACMAN curl  			# curl: Network downloader, system scripts rely on it 
-        yes | $PACMAN wget  			# wget: Downloader, core for scripts 
+        yes | $PACMAN gawk  			# gawk: AWK, base 
+        yes | $PACMAN gcc  			# gcc: Compiler, base-devel 
+        yes | $PACMAN glibc  			# libc6: Core C lib 
+        yes | $PACMAN lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
+        yes | $PACMAN llvm  
+        yes | $PACMAN make  			# make: Builder, base-devel 
+        yes | $PACMAN nasm 
+        yes | $PACMAN ninja 
+        yes | $PACMAN p7zip  			# p7zip-full: 7zip compression 
+        yes | $PACMAN sed    			# sed: Text processor, base 
         yes | $PACMAN tar    			# tar: Archiver, base system 
-        yes | $PACMAN less  			# tar: Archiver, base system 
+        yes | $PACMAN unzip  			# unzip: Zip handler, base 
+        yes | $PACMAN wget  			# wget: Downloader, core for scripts 
         yes | $PACMAN which 
         yes | $PACMAN xclip  			# xclip: Clipboard, X11 integration 
-        yes | $PACMAN sed    			# sed: Text processor, base 
-        yes | $PACMAN coreutils  		# coreutils: GNU utils, base 
-        yes | $PACMAN glibc  			# libc6: Core C lib 
-        yes | $PACMAN vim   			# vim-gtk3: GUI vim with GTK/X11 
-        yes | $PACMAN zsh 
-        yes | $PACMAN direnv 
-        yes | $PACMAN unzip  			# unzip: Zip handler, base 
-        yes | $PACMAN p7zip  			# p7zip-full: 7zip compression 
         # yes | $PACMAN 7zip
-        
-        echo "[+] Installing dev tools..."
-        # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
-        yes | $PACMAN make  			# make: Builder, base-devel 
-        yes | $PACMAN gcc  			# gcc: Compiler, base-devel 
-        yes | $PACMAN lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
-        yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
-        yes | $PACMAN bc  		    # bc: Calculator, base 
-        yes | $PACMAN gettext  		# gettext: Localization, system 
-        yes | $PACMAN bash  			# bash: Shell, base 
-        yes | $PACMAN gawk  			# gawk: AWK, base 
-        yes | $PACMAN llvm  
-        yes | $PACMAN ufw  			# gawk: AWK, base 
-        yes | $PACMAN uv  			# uv - python
-        
-        echo "[+] Installing  system/misc tools..."
-        # Terminal/system extras: System integration like fonts/GUI/audio mounts.
-        yes | $PACMAN sshfs  			# sshfs: FUSE mount, system fs 
-        yes | $PACMAN sshpass  		# sshpass: SSH passwords, utils 
-        yes | $PACMAN xsel  			# xsel: Clipboard, X11 
-        yes | $PACMAN powerline-fonts	# fonts-powerline: Fonts for terminals 
+        yes | $PACMAN perl 
         yes | $PACMAN pkgconf  		# pkg-config: Build helper
+        yes | $PACMAN xsel  			# xsel: Clipboard, X11 
         $PACMAN  font-manager   		# font-manager: GUI fonts 
-
-        
-        echo "[+] Installing misc. tools..."
-        # Misc tools: System info/process viewers.
-        yes | $PACMAN fastfetch         # fastfetch: System info
-        yes | $PACMAN htop              # htop: Process viewer 
-        yes | $PACMAN openssl           # libssl-dev: Crypto
         yes | $PACMAN libxcb            # libxcb1-dev: XCB render, shape, etc
-        yes | $PACMAN unixodbc          # unixodbc-dev: ODBC 
-        yes | $PACMAN docker            # docker.io: Containers, system service 
-        yes | $PACMAN docker-compose    # docker-compose-plugin: Docker compose 
-        yes | $PACMAN entr              # entr ─ super useful file watcher
-        yes | $PACMAN glow              # Markdown reader
-        yes | $PACMAN fd                # → fd
-        yes | $PACMAN yt-dlp            # YouTube downloader
+        yes | $PACMAN openssl           # libssl-dev: Crypto
         
+
         echo "[+] Installing media/sound-related pkgs..."
         # Sound-related: Audio libs/hardware accel integration.
         $PACMAN  alsa-lib --neded       # libasound2-dev: ALSA 
@@ -543,15 +527,6 @@ if [ "$1" != "configonly" ]; then
         # 3. Or if you prefer building from source with your chosen features:
         #    (most common choice today = gstreamer backend = native PipeWire support)
         # cargo install spotify_player --no-default-features --features "gstreamer-backend,media-control,sixel,image,notify,lyric-finder"
-        # ────────────────────────────────────────────────
-        echo "[+] Done!"
-        echo ""
-        echo "Notes:"
-        echo "  • spotify_player should now be in ~/.cargo/bin/spotify_player"
-        echo "  • Make sure ~/.cargo/bin is in your PATH"
-        echo "  • PulseAudio should be running (usually started automatically via pipewire-pulse or systemd)"
-        echo "  • If you use PipeWire instead of PulseAudio, you may want the pipewire-pulse + wireplumber stack"
-        echo "    and possibly pipewire-alsa pipewire-jack instead of pure pulseaudio packages."
 
 
         # PipeWire check        
@@ -562,6 +537,68 @@ if [ "$1" != "configonly" ]; then
         echo "[+] Installing graphics-related pkgs..."
         # Vulkan/graphics: GPU driver integration.
         yes | $PACMAN mesa-utils        # mesa-utils vulkan-tools: Graphics tools 
+
+
+
+
+
+
+
+
+
+
+
+
+        echo "[+] Installing programming languages and tools..."
+        # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
+        yes | $PACMAN tree  			
+        yes | $PACMAN less  			# tar: Archiver, base system 
+        yes | $PACMAN direnv 
+        yes | $PACMAN bash  			# bash: Shell, base 
+        yes | $PACMAN gettext  		# gettext: Localization, system 
+        yes | $PACMAN jq
+        yes | $PACMAN lua 
+        yes | $PACMAN nvm 
+        yes | $PACMAN pipx 
+        yes | $PACMAN neovim 
+        yes | $PACMAN python 
+        yes | $PACMAN ufw  			# gawk: AWK, base 
+        yes | $PACMAN uv || yes | $AUR uv
+        yes | $PACMAN nodejs-lts-jod
+
+
+        echo "[+] Installing workflow and cli tools..."
+        yes | $AUR  jless                     # json viewer
+        yes | $PACMAN bc  		    # bc: Calculator, base 
+        yes | $PACMAN entr
+        yes | $PACMAN fzf 
+        yes | $PACMAN python-pygments 
+        yes | $PACMAN ripgrep 
+        yes | $PACMAN tmux 
+        yes | $PACMAN vim   			# vim-gtk3: GUI vim with GTK/X11 
+        yes | $PACMAN zsh 
+
+
+
+        echo "[+] Installing  system/misc tools..."
+        # Terminal/system extras: System integration like fonts/GUI/audio mounts.
+        yes | $PACMAN powerline-fonts	# fonts-powerline: Fonts for terminals 
+        yes | $PACMAN sshfs  			# sshfs: FUSE mount, system fs 
+        yes | $PACMAN sshpass  		# sshpass: SSH passwords, utils 
+        
+        echo "[+] Installing misc. tools..."
+        # Misc tools: System info/process viewers.
+        yes | $PACMAN docker            # docker.io: Containers, system service 
+        yes | $PACMAN docker-compose    # docker-compose-plugin: Docker compose 
+        yes | $PACMAN entr              # entr ─ super useful file watcher (needed for tmux autoreload)
+        yes | $PACMAN fastfetch         # fastfetch: System info
+        yes | $PACMAN fd                # → fd
+        yes | $PACMAN glow              # Markdown reader
+        yes | $PACMAN htop              # htop: Process viewer 
+        yes | $PACMAN pandoc  
+        yes | $PACMAN unixodbc          # unixodbc-dev: ODBC 
+        yes | $PACMAN yt-dlp            # YouTube downloader
+        
         
 
         echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
@@ -571,7 +608,6 @@ if [ "$1" != "configonly" ]; then
         echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
         $AUR  zimg                      # libzimg2: Image scaling 
         $AUR  mlocate                   # locate: File indexer, system db 
-        $AUR  jless                     # json viewer
 
         # Cargo-based tools ─ many have AUR packages (faster, no need to keep cargo cache)
         $PACMAN csvlens        || $AUR csvlens      # very popular
@@ -589,9 +625,6 @@ if [ "$1" != "configonly" ]; then
 
         # posting (HTTP client – python) – now has AUR package
         $AUR posting           || uv tool install --python 3.13 posting   # fallback
-
-        # node version manager
-        $AUR  nvim                         
 
         # Source and install node version
         export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -698,29 +731,8 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
     cp -f -v ./config/.tmux_init.sh  $HOME/
     cp -f -v ./config/.wezterm.lua  $HOME/
 
-    # __________ NVIM __________
-    if [ -d $HOME/.config/nvim/ ]; then
-        mkdir -p $HOME/.config/nvim
-    fi
-
-    # [.config] If backup folder exists remove it so we can overwrite it
-    if [ -d $HOME/.config/nvim-backup ]; then
-        rm -rf $HOME/.config/nvim-backup
-    fi
-    mv $HOME/.config/nvim $HOME/.config/nvim-backup	    
-    cp -v -r ./config/.config/nvim  $HOME/.config/
-
-    # [.local] If backup folder exists remove it so we can overwrite it
-    if [ -d ~/.local/share/nvim-backup ]; then
-        rm -rf ~/.local/share/nvim-backup
-    fi
-    mv ~/.local/share/nvim ~/.local/share/nvim-backup
-
-    # Vim
-    if [ -d $HOME/.vim/ ]; then
-        mkdir -p $HOME/.vim
-    fi
-    cp -f -v -r ./config/.config/nvim/colors  $HOME/.vim/
+    # Nvim sync
+    sync_nvim_files
 
 
     # __________ Spotify-player ___________

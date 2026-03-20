@@ -1,5 +1,6 @@
 # Setup
 
+
 ## Install Core Packages and cli/shell tools
 ```bash
 sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init.sh -O -)"
@@ -9,21 +10,29 @@ sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/r
 
 ## Install core desktop packages
 ```bash
-bash ./scripts/core.sh
+bash ./setups/pop_os_setup/core.sh
 ```
 
 <br />
 
 ## Installing gaming apps and dependencies
 ```bash
-bash ./scripts/gaming.sh
+bash ./setups/pop_os_setup/gaming.sh
 ```
 
 <br />
 
+## OS housekeeping
+```bash
+bash ./setups/pop_os_setup/housekeeping.sh
+```
+
+<br />
 
 ## Brightness Issues  
-See `./scripts/pop-os-brightness-fix.sh`
+See `./setups/pop_os_setup/pop-os-brightness-fix.sh`
+
+<br />
 
 # Troubleshooting and configuration
 
