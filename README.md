@@ -10,14 +10,32 @@ Instead of re-configuring everything all over from scrath on a new system, I've 
 
 <br />
 
-# Slim install
-Install packages and copy files as needed with one command.  
+# CLI installation
+One command to install packages and copy dotfiles.  
+Everything you need to get going in a cli.  
 Perfect for a quick install to get my main pkgs, prompt/shell customizations, and full neovim setup.  
 Works for debian-based and arch-based distros. Haven't got to fedora update yet.  
 <br />
 
 
-__Full Installation__: Install all in ubuntu system _(installs packages and copies config files)_
+
+Start Script
+```bash
+bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/start.sh -O -)"
+```
+
+What would you like to download?
+1. Everything (Packages, config files, customized shell/prompt, and Neovim configuration)
+2. Packages
+3. Config files
+4. Neovim configuration
+5. Arch-Nix hybrid (everything included in #1 but system-level packages are managed through Pacman and all other packages are managed via Nix using Home-Manager and Flakes)
+
+
+
+## Full Installation  
+Install all in ubuntu system _(installs packages and copies config files)  
+
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_full.sh -O -)"
 ```
@@ -26,7 +44,9 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 
 <br />
 
-__Package Installation__: Install programs in ubuntu system _(installs packages only)_
+## Package Installation
+Install programs in ubuntu system _(installs packages only)  
+
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_installonly.sh -O -)"
 ```
@@ -35,7 +55,8 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 
 <br />
 
-__Config installation__: Install config files in ubuntu system _(config files only - includes nvim)_
+## Config installation  
+Install config files in ubuntu system _(config files only - includes nvim)  
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_configonly.sh -O -)"
 ```
@@ -43,7 +64,9 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 
 <br />
 
-__Nvim-only installation__: Install config files in ubuntu system _(nvim files only)_
+## Nvim-only installation_
+Install config files in ubuntu system _(nvim files only)_
+
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_nvimonly.sh -O -)"
 ```
@@ -88,7 +111,7 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 Having ohmyzsh as my shell environment, I've added bash functions to allow the changing between three prompt customizers: powerline10k, starship, and ohmyposh.  
 Each can be further configured manually or using any of their respective presets.  
 
-![Prompt Switching](./images/prompt_changer.gif)
+![Prompt Switching](./assets/prompt_changer.gif)
 
 <br />
 
@@ -105,3 +128,23 @@ Each can be further configured manually or using any of their respective presets
 <br />
 
 `init.sh` - Clones repo and runs `install.sh` (installing both packages and config files)  
+
+<br />
+
+# Notes about setup  
+
+Local git repo: `~/Documents/Repos/Dev-Environment/`
+
+## Important Keybinds  
+
+<br />
+
+
+| Key    | Description |
+| --- |--|  
+| `lcs`  | __Local config save__<br />Copy local config files on host system to local git repo and push changes up to GitHub. <br />_(Can also use `local_config_save` command)_              |  
+| `lcu`  | __Local config update__<br />Pull latest changes down from GitHub to local git repo and update config files on host system. <br />_(Can also use `local_config_update` command)_   |
+
+
+
+
