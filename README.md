@@ -12,6 +12,9 @@ Instead of re-configuring everything all over from scrath on a new system, I've 
 
 # Slim install
 Install packages and copy files as needed with one command.  
+Perfect for a quick install to get my main pkgs, prompt/shell customizations, and full neovim setup.  
+Works for debian-based and arch-based distros. Haven't got to fedora update yet.  
+<br />
 
 
 __Full Installation__: Install all in ubuntu system _(installs packages and copies config files)_
@@ -50,10 +53,11 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 <br />
 
 
-## Full install
+# Full install
 
 
-__Pop! OS Desktop installation__: Install packages and copies config files in ubuntu system.  
+## Pop! OS Desktop installation  
+Install packages and copies config files in ubuntu system.  
 Additionally install preferred desktop applications, create .desktop images for AppImages, install and updates drives and gaming add-ons, perform updates and system cleanup.  
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_os_pop.sh -O -)"
@@ -62,6 +66,17 @@ bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment
 
 
 
+## Arch Linux and Arch-based installation  
+Install packages and copies config files.  
+Additionally install preferred desktop applications, create .desktop images for AppImages, install and updates drives and gaming add-ons, perform updates and system cleanup.  
+
+__Dual Package managers__  
+Uses pacman for system-level and os-level packages (drivers, sound/graphics, etc) and Nix for just about everything else.  
+Config updates powered via Nix Home Manager + flake.  
+```bash
+bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/init_os_arch_nix.sh -O -)"
+```
+<br />
 <!--
 __Docker VM__:Create a Docker container running Ubuntu Jammy jellyfish (v22)  
 ```bash
