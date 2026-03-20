@@ -728,7 +728,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
     echo "#        CONFIG INSTALLATION "
     echo "# ────────────────────────────────────────────────"
 
-    printf "[+] Home: $HOME\n"
+    printf "[+] Home: $HOME | PWD: $PWD\n"
     
     # Execute from the dir the script is in
     cd $(dirname "$0") && cd ../ && pwd || exit
