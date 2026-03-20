@@ -476,6 +476,8 @@ install_arch_pkgs(){
 
         # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
         echo "[+] Installing system-level tools (drivers, graphics, audio, compiler dependencies, os tools, etc)..."
+        # yes | $PACMAN 7zip
+        $PACMAN  font-manager   		# font-manager: GUI fonts 
         yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
         yes | $PACMAN bzip2  			# p7zip-full: 7zip compression 
         yes | $PACMAN clang 
@@ -486,44 +488,41 @@ install_arch_pkgs(){
         yes | $PACMAN gcc  			# gcc: Compiler, base-devel 
         yes | $PACMAN glibc  			# libc6: Core C lib 
         yes | $PACMAN lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
+        yes | $PACMAN libxcb            # libxcb1-dev: XCB render, shape, etc
         yes | $PACMAN llvm  
         yes | $PACMAN make  			# make: Builder, base-devel 
         yes | $PACMAN nasm 
         yes | $PACMAN ninja 
+        yes | $PACMAN openssl           # libssl-dev: Crypto
         yes | $PACMAN p7zip  			# p7zip-full: 7zip compression 
+        yes | $PACMAN perl 
+        yes | $PACMAN pkgconf  		# pkg-config: Build helper
         yes | $PACMAN sed    			# sed: Text processor, base 
         yes | $PACMAN tar    			# tar: Archiver, base system 
         yes | $PACMAN unzip  			# unzip: Zip handler, base 
         yes | $PACMAN wget  			# wget: Downloader, core for scripts 
         yes | $PACMAN which 
         yes | $PACMAN xclip  			# xclip: Clipboard, X11 integration 
-        # yes | $PACMAN 7zip
-        yes | $PACMAN perl 
-        yes | $PACMAN pkgconf  		# pkg-config: Build helper
         yes | $PACMAN xsel  			# xsel: Clipboard, X11 
-        $PACMAN  font-manager   		# font-manager: GUI fonts 
-        yes | $PACMAN libxcb            # libxcb1-dev: XCB render, shape, etc
-        yes | $PACMAN openssl           # libssl-dev: Crypto
         
 
         echo "[+] Installing media/sound-related pkgs..."
         # Sound-related: Audio libs/hardware accel integration.
         $PACMAN  alsa-lib --neded       # libasound2-dev: ALSA 
         $PACMAN ffmpeg                  # ffmpeg: Multimedia 
-        yes | $PACMAN playerctl         # playerctl: Media control 
+        yes | $PACMAN dbus              # libdbus-1-dev: Bus 
+        yes | $PACMAN imagemagick
         yes | $PACMAN libass            # libass9: Subtitles 
         yes | $PACMAN libbluray         # libbluray2: Blu-ray 
         yes | $PACMAN libcaca           # libcaca0: Graphics 
         yes | $PACMAN libcdio           # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO        
-        yes | $PACMAN rubberband        # librubberband2: Audio stretch 
-        yes | $PACMAN dbus              # libdbus-1-dev: Bus 
         yes | $PACMAN ncurses           # libncursesw5-dev: Curses wide 
+        yes | $PACMAN playerctl         # playerctl: Media control 
         yes | $PACMAN poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
-        yes | $PACMAN imagemagick
+        yes | $PACMAN rubberband        # librubberband2: Audio stretch 
 
 
         echo "[+] Installing Spotify Player dependencies..."
-
 
         # 1. Modern / recommended (PipeWire + official package)
         $PACMAN libsixel spotify-player pavucontrol   # pavucontrol still works via pipewire-pulse
@@ -553,12 +552,7 @@ install_arch_pkgs(){
 
 
 
-
-
-
-
-
-
+        # TO NIXIFY
 
         echo "[+] Installing programming languages and tools..."
         # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
