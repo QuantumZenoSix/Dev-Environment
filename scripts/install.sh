@@ -84,10 +84,6 @@ sync_nvim_files(){
 
     # Vim
     cp -f -v ./config/.vimrc  $HOME/
-    if [ -d $HOME/.vim/colors/ ]; then
-        mkdir -p $HOME/.vim/colors
-    fi
-    cp -f -v -r ./config/.vim/colors  $HOME/.vim/
 
     echo "[+] Vim files copied!"
 
