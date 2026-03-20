@@ -12,16 +12,13 @@ local_config_update_and_nvim_update(){
     local_config_update 'update-nvim'
 }
 local_config_update(){
+
     # Gets latest config files in repo (which has been cloned) and updates local files
 
-    LOCAL_REPO=~/my_repos/Dev-Environment
+    LOCAL_REPO=~/Documents/Repos/Dev-Environment
 
     if [[ ! -d $LOCAL_REPO/ ]]; then
-        LOCAL_REPO=~/Documents/Repos/Dev-Environment
-    fi
-
-    if [[ ! -d $LOCAL_REPO/ ]]; then
-        echo "[!] Repo does not exist! Cloning and updating..."
+        echo "[!] Repo does not exist locally! Cloning and updating..."
         cd $LOCAL_REPO/
         sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
     else
@@ -31,11 +28,22 @@ local_config_update(){
         fi
 
         cd $LOCAL_REPO
+        # by this point the git remote.origin.url must have had to be changed to ssh type now, so we can use our ssh key
+
+        # Should prob add a check for 'https' here and change if not 
+        git_url_type="$(git config --get remote.origin.url)"
+
+        if [[ "${git_url_type}" =~ https ]]; then
+            git config remote.origin.url git@github.com:QuantumZenoSix/Dev-Environment.git
+        fi
+
         # Save any unsaved changed and pull down the latest
         git stash save
+        #
+        # Add any ssh keys to ssh agent
+        ssh_keyupdate
         git pull
         ./scripts/install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
-
 
         # if [[ "$1" = "update-nvim" ]]; then
         #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
@@ -72,15 +80,22 @@ local_config_update(){
 }
 
 local_config_save(){
+    
     # Copies all of my main config files into my git dir so i can push them up later as needed
-    LOCAL_REPO=~/my_repos/Dev-Environment
+    LOCAL_REPO=~/Documents/Repos/Dev-Environment
 
-    # Sync local config files with cloned repo so i can push up my changes
-    if [[ ! -d $LOCAL_REPO/config/ ]]; then
+    if [[ ! -d $LOCAL_REPO/ ]]; then
 
-        LOCAL_REPO=~/Documents/Repos/Dev-Environment
-        mkdir -p $LOCAL_REPO/config/ 2> /dev/null
+        echo "[!] Path does not exist: $LOCAL_REPO "
+        echo "[+] Cloning repo locally..."
+
+        # Ensure base path exists
+        mkdir -p ~/Documents/Repos/ 2> /dev/null
+        cd ~/Documents/Repos/
+        git clone git@github.com:QuantumZenoSix/Dev-Environment.git && cd Dev-Environment
+
     fi
+
     DEST=$LOCAL_REPO/config/
 
     # Ensure $DEST is set and is a valid directory

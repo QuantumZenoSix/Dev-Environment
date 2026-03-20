@@ -119,8 +119,8 @@ vim.g.airline_right_alt_sep = ''
 -- vim.opt.syntax = "on"
 
 -- Colorscheme (load after syntax and filetype)
--- vim.cmd.colorscheme 'gothic-cyberpunk'
-vim.cmd.colorscheme 'kyotonight'
+vim.cmd.colorscheme 'gothic-cyberpunk'
+-- vim.cmd.colorscheme 'kyotonight'
 vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
   pattern = {
     "*.pl", "*.pm",        -- Perl files

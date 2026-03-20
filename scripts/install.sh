@@ -685,6 +685,8 @@ install_arch_pkgs(){
         # $PACMAN zoxide         || $AUR zoxide
         
         echo "Pacman installations complete."
+
+        echo "[+] Enabling Docker service..."
         $SUDO  systemctl enable docker
         $SUDO  systemctl start docker
 
