@@ -262,7 +262,8 @@ detect_distro_type(){
         # shellcheck disable=SC1091
         . /etc/os-release
     else
-        return "null"
+        echo "null"
+        return
         # echo "Error: /etc/os-release not found — cannot reliably detect distribution"
     fi
 
@@ -279,7 +280,7 @@ detect_distro_type(){
         DISTRO_FAMILY="null"
     fi
 
-    return "${DISTRO_FAMILY}"
+    echo "${DISTRO_FAMILY}"
 }
 
 create_and_assume_user() {
