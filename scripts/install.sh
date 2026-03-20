@@ -845,6 +845,7 @@ if [ "$1" = "full" -o "$1" = "configonly" ]; then
 
         cp -v ./config/.zshrc  $HOME/
 
+        # Don't open new zsh shell
         # if [ "$2" != "noshellswitch" -a "$2" != "os-pop" ]; then
         #     zsh
         # fi
@@ -883,8 +884,7 @@ echo "# ────────────────────────
 echo "#        FINISHED! "
 echo "# ────────────────────────────────────────────────"
 printf "\n\n\n"
-echo "→ You may need to log out/in or run: source ~/.zshrc (or ~/.bashrc), or simply run 'zsh'"
-echo "→ Some tools require fonts (Nerd Fonts) or extra setup"
+echo "→ You may need to log out/in or simply run 'zsh'"
 
 
 

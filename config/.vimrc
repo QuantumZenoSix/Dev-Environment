@@ -123,6 +123,8 @@ Plug 'metalelf0/base16-black-metal-scheme'
 "Plug 'ntk148v/komau.vim'
 "Plug 'smallwat3r/vim-simplicity'
 
+" My custom theme
+Plug 'QuantumZenoSix/gothic-cyberpunk.vim'
 
 
 " _______________________ AIRLINE __________________________
@@ -395,7 +397,7 @@ call plug#end()
 set cursorline
 set background=dark
 " colorscheme cyberpunk
- colorscheme gothic-cyberpunk
+colorscheme gothic-cyberpunk
 let g:cyberpunk_cursorline="black"
 let g:airline_theme='monochrome'
 let g:airline_theme='lucius'

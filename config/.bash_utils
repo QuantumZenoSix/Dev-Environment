@@ -446,7 +446,7 @@ dockbuntu(){
 }
 
 dockarch(){
-    sudo docker run -it --rm archlinux bash -c "pacman -Syu && yes | pacman -S sudo wget git curl which vim && exec bash"
+    sudo docker run -it --rm archlinux bash -c "yes | pacman -Syu && yes | pacman -S sudo wget git curl which vim && export EDITOR=vim &&  exec bash"
 }
 
 # fedora_container(){
