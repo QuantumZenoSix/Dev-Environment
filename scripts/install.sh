@@ -59,7 +59,7 @@ else
     exit 1
 fi
 
-function sync_nvim_files(){
+sync_nvim_files(){
 
     if [ -d $HOME/.config/nvim/ ]; then
         mkdir -p $HOME/.config/nvim
