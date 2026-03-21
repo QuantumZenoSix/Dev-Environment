@@ -37,9 +37,9 @@ declare -A apps=(
     ["Docker|docker"]="script|placeholder"
     ["Telegram|Telegram"]="flatpak|flatpak install flathub org.telegram.desktop -y"
     ["Spotify|spotify"]="flatpak|flatpak install flathub com.spotify.Client -y"
-
                             
 )
+
 # I've choosen specific installtion methods for each app that's optimal. 
 # Here are some reasons:
     # Brave     - apt | gets updates somewhat frequently
