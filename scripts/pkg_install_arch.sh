@@ -53,7 +53,7 @@ echo "[+] Updating system packages..."
 yes | $SUDO pacman -Syu 
 
 # Some pkgs can't have 'yes' piped to them as they require user input. Skip 'yes' on those
-interactive_pkgs=("htop" "tester" "anothe")
+interactive_pkgs=("htop" "tester" "anothe" "fzf")
 
 # Essentials
 $PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
@@ -88,14 +88,15 @@ for pkg in "${packages[@]}"; do
 
     pkg_mgr=$PACMAN
 
-    if [[ " ${interactive_pkgs[@]} " =~ "$pkg" ]]; then
-        echo "Interactive pack found! No skip "
+    if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
+        printf "\n\n\n\t======== Interactive pack found! No skip ========\n\n\n"
         $PACMAN "$pkg"
     else
         echo "Installing with yes..."
         yes | $PACMAN "$pkg"
     fi
 
+    printf "\n\n"
 
 done
 

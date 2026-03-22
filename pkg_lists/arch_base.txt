@@ -2,3 +2,4 @@ htop
 bmon
 cmatrix
 cowsay
+fzf
