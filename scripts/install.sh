@@ -99,6 +99,15 @@ sync_nvim_files(){
 # START   #
 ###########
 
+# ────────────────────────────────────────────────
+#             NVIM-ONLY MODE (distro agnostic)
+# ────────────────────────────────────────────────
+if [ "${INSTALL_TYPE}" = "nvimonly" ]; then
+
+    sync_nvim_files
+    exit 0
+
+fi
 
 # ────────────────────────────────────────────────
 #        PACKAGE INSTALLATION (skip if configonly)
@@ -108,7 +117,7 @@ if [ "${INSTALL_TYPE}" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        . ./scripts//pkg_install_debian.sh.sh
+        . ./scripts/pkg_install_debian.sh.sh
 
     elif [ "$DISTRO_FAMILY" = "arch" ]; then  
 

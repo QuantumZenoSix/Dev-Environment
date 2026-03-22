@@ -44,19 +44,19 @@ select choice in "${options[@]}"; do
     4)
       echo ""
       echo "→ Selected: Neovim configuration only"
-      bash ./scripts/install.sh nvimonly
+      . ./scripts/install.sh nvimonly
       break
       ;;
     5)
       echo ""
       echo "→ Selected: Arch-Nix hybrid setup"
-      bash ./scripts/install.sh full arch nix
+      . ./scripts/install.sh full arch nix
       break
       ;;
     6)
       echo ""
       echo "→ Selected: [desktop] Everything+ (Pop! OS)"
-      bash ./scripts/install.sh full os-pop
+      . ./scripts/install.sh full os-pop
       break
       ;;
     7)
