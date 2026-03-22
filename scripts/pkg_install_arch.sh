@@ -1,30 +1,28 @@
 #!/usr/bin/env bash
 
 
-AUR="yay -S --needed" 
-PACMAN="$SUDO pacman -S --needed"
-
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 echo "#        PACKAGE INSTALLATION | Part I: System update and setting up access to AUR"
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
+# GLOBALS
+AUR="yay -S --needed" 
+PACMAN="$SUDO pacman -S --needed"
+FILE="./pkg_lists/arch_base.txt"
 
 
 
-# ===========================================================================
-set -u   # treat unset variables as error
-
-file="./pkg_lists/arch_base.txt"
-
-if [[ ! -f "$file" ]]; then
-    echo "Error: File '$file' not found"
+# Verify file exists
+if [[ ! -f "$FILE" ]]; then
+    echo "Error: File '$FILE' not found"
     exit 1
 fi
 
-echo "Reading packages from: $file"
+echo "Reading packages from: $FILE"
 echo "----------------------------------------"
 
-mapfile -t packages < "$file"
+# Populate 'packages' array
+mapfile -t packages < "$FILE"
 
 # Remove empty lines and comments, keep only real package names
 packages=("${packages[@]//[[:space:]]/}")          # trim whitespace
@@ -50,14 +48,52 @@ if [[ ! "$answer" =~ ^[Yy]$ ]]; then
 fi
 
 # Update system
+echo "[+] Updating system packages..."
 yes | $SUDO pacman -Syu 
+
+# Some pkgs can't have 'yes' piped to them as they require user input. Skip 'yes' on those
+interactive_pkgs=("htop" "tester" "anothe")
+
+# Essentials
+$PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
+yes | $PACMAN git 
+yes | $PACMAN go 
+yes | $PACMAN rustup  && rustup update
+
+
+# Install yay if needed
+if [[ ! command -v yay >/dev/null 2>&1 ]]; then
+
+    # Yay installation (for AUR) (needs go)
+    echo "[+] Installing yay..."
+    if [ "$(id -u)" -ne 0 ]; then
+        git clone https://aur.archlinux.org/yay.git
+        $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay && cd yay && makepkg -si  && cd ../
+    else
+        printf "[+] Running as root, cannot install yay ['makepkg' command must not be run as root. Skipping AUR packages.]\n"
+        AUR="echo Cannot install (yay not installed). Skipping "
+    fi
+
+fi
 
 echo
 
+
+# Main PKG installation loop
 for pkg in "${packages[@]}"; do
+
     echo "→ Installing $pkg"
     # sudo apt install -y "$pkg" || echo "  └─ failed"
-    yes | $PACMAN "$pkg"
+
+    if [[ " ${interactive_pkgs[@]} " =~ "$pkg" ]]; then
+        echo "Interactive pack found! No skip "
+        $PACMAN "$pkg"
+    else
+        echo "Installing with yes..."
+        yes | $PACMAN "$pkg"
+    fi
+
+
 done
 
 echo
@@ -68,29 +104,13 @@ exit
 
 
 
-# Essentials
-$PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
-yes | $PACMAN git 
-yes | $PACMAN go 
-yes | $PACMAN rustup  && rustup update
-
-# Yay installation (for AUR) (needs go)
-echo "[+] Installing yay..."
-if [ "$(id -u)" -ne 0 ]; then
-    git clone https://aur.archlinux.org/yay.git
-    $SUDO chown -R ${CALLING_USER}:${CALLING_USER} yay && cd yay && makepkg -si  && cd ../
-else
-    printf "[+] Running as root, cannot install yay ['makepkg' command must not be run as root. Skipping AUR packages.]\n"
-    AUR="echo Cannot install (yay not installed). Skipping "
-fi
-
 
 
 # Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
 echo "[+] Installing system-level tools (drivers, graphics, audio, compiler dependencies, os tools, etc)..."
 # yes | $PACMAN 7zip
-$PACMAN  font-manager   		# font-manager: GUI fonts 
 yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
+$PACMAN  font-manager   		# font-manager: GUI fonts 
 yes | $PACMAN bzip2  			# p7zip-full: 7zip compression 
 yes | $PACMAN clang 
 yes | $PACMAN cmake 
