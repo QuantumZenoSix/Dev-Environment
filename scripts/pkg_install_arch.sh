@@ -14,7 +14,7 @@ echo "# ────────────────────────
 # ===========================================================================
 set -u   # treat unset variables as error
 
-file="./scripts/pkg_lists/arch_base.txt"
+file="./pkg_lists/arch_base.txt"
 
 if [[ ! -f "$file" ]]; then
     echo "Error: File '$file' not found"
