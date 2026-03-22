@@ -60,7 +60,6 @@ entr
 fzf 
 python-pygments 
 ripgrep 
-tmux-plugin-manager 
 vim   			# vim-gtk3: GUI vim with GTK/X11 
 zsh 
 
@@ -104,6 +103,7 @@ rubberband        # librubberband2: Audio stretch
 
 
 NOTE-AUR: Processing AUR pkgs from this point on
+tmux-plugin-manager 
 zimg                      # libzimg2: Image scaling 
 mlocate                   # locate: File indexer, system db 
 jless                     # json viewer
