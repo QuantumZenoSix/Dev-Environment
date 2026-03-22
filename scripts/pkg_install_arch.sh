@@ -121,7 +121,7 @@ for pkg in "${packages[@]}"; do
 
     else
 
-        # Try with pacman in case it's now available
+        # Try with pacman in case it's now available but will likely work with yay
         if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
             $PACMAN  $pkg || $AUR $pkg 
         else
@@ -167,11 +167,7 @@ fi
 
 
 
-
-
-
-
-
+echo "[+] Handling packages/tasks that cannot be directly handles with package manager alone"
 yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
 
@@ -197,6 +193,9 @@ fi
 # $AUR  tufw  # GUI for ufw
 # yes | $PACMAN gvim  # vim-gtk3: GUI vim with GTK/X11 
 # $PACMAN zoxide         || $AUR zoxide
+
+
+
 
 echo "Pacman installations complete."
 
