@@ -112,7 +112,7 @@ if [ "${INSTALL_TYPE}" != "configonly" ]; then
 
     elif [ "$DISTRO_FAMILY" = "arch" ]; then  
 
-        . ./pkg_install_arch.sh.sh
+        . ./pkg_install_arch.sh
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
