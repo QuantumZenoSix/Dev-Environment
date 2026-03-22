@@ -64,7 +64,7 @@ yes | $SUDO pacman -Syu
 
 
 # Essentials
-$PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
+$PACMAN  base-devel --noconfirm           # build-essential: GCC/make/etc for system builds/AUR 
 yes | $PACMAN git 
 yes | $PACMAN go 
 yes | $PACMAN rustup  && rustup update
@@ -135,10 +135,6 @@ for pkg in "${packages[@]}"; do
 done
 
 echo
-echo "Installation finished."
-
-# ===========================================================================
-
 
 echo "[+] Installing Spotify Player dependencies..."
 

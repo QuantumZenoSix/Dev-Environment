@@ -134,7 +134,7 @@ fi
 
 if [ "${INSTALL_TYPE}" = "full" -o "${INSTALL_TYPE}" = "configonly" ]; then
 
-    ./config_copy.sh
+    ./scripts/config_copy.sh
 fi
 
 

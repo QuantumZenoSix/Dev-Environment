@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# PWD - Dev-Environment
 
-#!/usr/bin/env bash
+cd $(dirname "$0") && cd ../ && pwd || exit
 
 echo "What would you like to install/configure?"
 echo ""
@@ -27,19 +26,19 @@ select choice in "${options[@]}"; do
     1)
       echo ""
       echo "→ Selected: Everything (full setup)"
-      bash ./scripts/install.sh full
+      . ./install.sh full
       break
       ;;
     2)
       echo ""
       echo "→ Selected: Packages only"
-      bash ./scripts/install.sh
+      . ./install.sh
       break
       ;;
     3)
       echo ""
       echo "→ Selected: Config files only"
-      bash ./scripts/install.sh configonly
+      . ./config_copy.sh
       break
       ;;
     4)
