@@ -171,17 +171,8 @@ fi
 
 
 
-echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
-yes | $PACMAN uv             || yes | $AUR uv      # very popular
-yes | $PACMAN csvlens        || yes | $AUR csvlens      # very popular
-yes | $PACMAN dust           || yes | $AUR du-dust      # → dust
-yes | $PACMAN yazi           || yes | $AUR yazi         # now in community/extra in recent years
-yes | $PACMAN lazygit        || yes | $AUR lazygit              # official repo now
 
-# lazydocker → usually AUR or curl script still works
 yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-
-# posting (HTTP client – python) – now has AUR package
 yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
 
 # Source and install node version

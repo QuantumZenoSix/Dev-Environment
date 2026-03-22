@@ -110,7 +110,11 @@ jless                     # json viewer
 lazysql           # almost always AUR
 eget              # usually AUR
 ggh               # SSH session manager – AUR
-
+uv
+csvlens
+dust
+yazi
+lazygit
 
 
 
