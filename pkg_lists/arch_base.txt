@@ -103,6 +103,21 @@ rubberband        # librubberband2: Audio stretch
 
 
 
+NOTE-AUR: Processing AUR pkgs from this point on
+zimg                      # libzimg2: Image scaling 
+mlocate                   # locate: File indexer, system db 
+jless                     # json viewer
+lazysql           # almost always AUR
+eget              # usually AUR
+ggh               # SSH session manager – AUR
+
+
+
+
+
+
+
+
 
 
 

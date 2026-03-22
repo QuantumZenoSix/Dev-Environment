@@ -88,25 +88,46 @@ fi
 
 echo
 
+
+using_pacman=1
+
 # Main PKG installation loop
 for pkg in "${packages[@]}"; do
 
     # Check if this is a NOTE
-    
     if [[ "${pkg}" =~ NOTE ]];
+
+        if [[ "${pkg}" -eq 1 ]]; then
+            using_pacman=0
+        fi
+
         print "\n\n$pkg"
         continue
+
     fi
+
 
     echo "→ Installing $pkg"
 
-    pkg_mgr=$PACMAN
+    # Pacman vs yay
+    if [[ $using_pacman -eq 1 ]]; then
 
-    if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
-        $PACMAN "$pkg" --noconfirm
+        if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
+            $PACMAN "$pkg" --noconfirm
+        else
+            yes | $PACMAN "$pkg"
+        fi
+
+
     else
-        echo "Installing with yes..."
-        yes | $PACMAN "$pkg"
+
+        # Try with pacman in case it's now available
+        if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
+            $PACMAN  $pkg || $AUR $pkg 
+        else
+            yes | $PACMAN  $pkg || yes | $AUR $pkg 
+        fi
+
     fi
 
     printf "\n\n"
@@ -151,12 +172,6 @@ fi
 
 
 echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
-yes | $AUR  zimg                      # libzimg2: Image scaling 
-yes | $AUR  mlocate                   # locate: File indexer, system db 
-yes | $AUR  jless                     # json viewer
-yes | $AUR lazysql           # almost always AUR
-yes | $AUR eget              # usually AUR
-yes | $AUR ggh               # SSH session manager – AUR
 yes | $PACMAN uv             || yes | $AUR uv      # very popular
 yes | $PACMAN csvlens        || yes | $AUR csvlens      # very popular
 yes | $PACMAN dust           || yes | $AUR du-dust      # → dust
