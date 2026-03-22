@@ -6,15 +6,18 @@ echo "#        PACKAGE INSTALLATION | Part I: System update and setting up acces
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
 # GLOBALS
-AUR="yay -S --needed" 
-PACMAN="$SUDO pacman -S --needed"
+AUR="yay -S --needed " 
+PACMAN="$SUDO pacman -S --needed "
 FILE="./pkg_lists/arch_base.txt"
 
 
-# Some pkgs can't have 'yes' piped to them as they require user input. Skip 'yes' on those
+# Some pkgs can't have 'yes' piped to them as they require user input. 
+# Use --noconfirm for these to accept default
 interactive_pkgs=(
     "base-devel"
     "font-manager"
+    "alsa-lib"
+    "ffmpeg"
 )
 
 
@@ -82,20 +85,25 @@ if ! command -v yay >/dev/null 2>&1 ; then
 
 fi
 
-echo
 
+echo
 
 # Main PKG installation loop
 for pkg in "${packages[@]}"; do
 
+    # Check if this is a NOTE
+    
+    if [[ "${pkg}" =~ NOTE ]];
+        print "\n\n$pkg"
+        continue
+    fi
+
     echo "→ Installing $pkg"
-    # sudo apt install -y "$pkg" || echo "  └─ failed"
 
     pkg_mgr=$PACMAN
 
     if [[ "${interactive_pkgs[@]}" =~ "$pkg" ]]; then
-        printf "\n\n\n\t======== Interactive pack found! No skip ========\n\n\n"
-        $PACMAN "$pkg"
+        $PACMAN "$pkg" --noconfirm
     else
         echo "Installing with yes..."
         yes | $PACMAN "$pkg"
@@ -110,27 +118,6 @@ echo "Installation finished."
 
 exit
 # ===========================================================================
-
-
-
-
-
-
-
-echo "[+] Installing media/sound-related pkgs..."
-# Sound-related: Audio libs/hardware accel integration.
-$PACMAN  alsa-lib --noconfirm    # libasound2-dev: ALSA 
-$PACMAN ffmpeg    --noconfirm    # ffmpeg: Multimedia 
-yes | $PACMAN dbus              # libdbus-1-dev: Bus 
-yes | $PACMAN imagemagick
-yes | $PACMAN libass            # libass9: Subtitles 
-yes | $PACMAN libbluray         # libbluray2: Blu-ray 
-yes | $PACMAN libcaca           # libcaca0: Graphics 
-yes | $PACMAN libcdio           # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO        
-yes | $PACMAN ncurses           # libncursesw5-dev: Curses wide 
-yes | $PACMAN playerctl         # playerctl: Media control 
-yes | $PACMAN poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
-yes | $PACMAN rubberband        # librubberband2: Audio stretch 
 
 
 echo "[+] Installing Spotify Player dependencies..."
@@ -155,87 +142,26 @@ if systemctl --user is-active pipewire >/dev/null; then
     yes | $PACMAN pipewire      # libpipewire-0.3-0: PipeWire lib 
 fi
 
-echo "[+] Installing graphics-related pkgs..."
-# Vulkan/graphics: GPU driver integration.
-yes | $PACMAN mesa-utils        # mesa-utils vulkan-tools: Graphics tools 
 
 
 
 
 
-# TODO: NIXIFY
-
-echo "[+] Installing programming languages and tools..."
-# System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
-yes | $PACMAN tree  			
-yes | $PACMAN less  			# tar: Archiver, base system 
-yes | $PACMAN direnv 
-yes | $PACMAN bash  			# bash: Shell, base 
-yes | $PACMAN gettext  		# gettext: Localization, system 
-yes | $PACMAN jq
-yes | $PACMAN lua 
-yes | $PACMAN nvm 
-yes | $PACMAN pipx 
-yes | $PACMAN neovim 
-yes | $PACMAN python 
-yes | $PACMAN ufw  			# gawk: AWK, base 
-yes | $PACMAN uv || yes | $AUR uv
-yes | $PACMAN nodejs-lts-jod
 
 
-echo "[+] Installing workflow and cli tools..."
-yes | $AUR  jless                     # json viewer
-yes | $PACMAN bc  		    # bc: Calculator, base 
-yes | $PACMAN tmux
-yes | $PACMAN entr
-yes | $PACMAN fzf 
-yes | $PACMAN python-pygments 
-yes | $PACMAN ripgrep 
-yes | $PACMAN tmux 
-yes | $PACMAN vim   			# vim-gtk3: GUI vim with GTK/X11 
-yes | $PACMAN zsh 
-
-
-
-echo "[+] Installing  system/misc tools..."
-# Terminal/system extras: System integration like fonts/GUI/audio mounts.
-yes | $PACMAN powerline-fonts	# fonts-powerline: Fonts for terminals 
-yes | $PACMAN sshfs  			# sshfs: FUSE mount, system fs 
-yes | $PACMAN sshpass  		# sshpass: SSH passwords, utils 
-
-echo "[+] Installing misc. tools..."
-# Misc tools: System info/process viewers.
-yes | $PACMAN docker            # docker.io: Containers, system service 
-yes | $PACMAN docker-compose    # docker-compose-plugin: Docker compose 
-yes | $PACMAN entr              # entr ─ super useful file watcher (needed for tmux autoreload)
-yes | $PACMAN fastfetch         # fastfetch: System info
-yes | $PACMAN fd                # → fd
-yes | $PACMAN glow              # Markdown reader
-yes | $PACMAN htop              # htop: Process viewer 
-yes | $PACMAN pandoc  
-yes | $PACMAN unixodbc          # unixodbc-dev: ODBC 
-yes | $PACMAN yt-dlp            # YouTube downloader
-
-
-
-echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-echo "#        PACKAGE INSTALLATION | Part II: Installing AUR pkgs (or potential AUR pkgs)"
-echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
 echo "[+] Installing AUR pkgs (or potential AUR pkgs)..."
 yes | $AUR  zimg                      # libzimg2: Image scaling 
 yes | $AUR  mlocate                   # locate: File indexer, system db 
-
-# Cargo-based tools ─ many have AUR packages (faster, no need to keep cargo cache)
-yes | $PACMAN csvlens        || yes | $AUR csvlens      # very popular
-yes | $PACMAN dust           || yes | $AUR du-dust      # → dust
-yes | $PACMAN yazi           || yes | $AUR yazi         # excellent file manager, now in community/extra in recent years
-
-# Go-based tools ─ most in AUR or official repos
-yes | $PACMAN lazygit        || yes | $AUR lazygit              # official repo now
+yes | $AUR  jless                     # json viewer
 yes | $AUR lazysql           # almost always AUR
 yes | $AUR eget              # usually AUR
 yes | $AUR ggh               # SSH session manager – AUR
+yes | $PACMAN uv             || yes | $AUR uv      # very popular
+yes | $PACMAN csvlens        || yes | $AUR csvlens      # very popular
+yes | $PACMAN dust           || yes | $AUR du-dust      # → dust
+yes | $PACMAN yazi           || yes | $AUR yazi         # now in community/extra in recent years
+yes | $PACMAN lazygit        || yes | $AUR lazygit              # official repo now
 
 # lazydocker → usually AUR or curl script still works
 yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
@@ -298,6 +224,10 @@ if [ "${INSTALL_SUBTYPE}" = "os-cachy" ]; then
 
     echo "[+] Running housekeeping tasks"
     # bash ../setups/pop_os_setup/housekeeping.sh
+
+    echo "[+] Installing graphics-related pkgs..."
+    # Vulkan/graphics: GPU driver integration.
+    yes | $PACMAN mesa-utils        # mesa-utils vulkan-tools: Graphics tools 
 
 fi
 
