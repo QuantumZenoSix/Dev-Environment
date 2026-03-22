@@ -11,12 +11,19 @@ PACMAN="$SUDO pacman -S --needed"
 FILE="./pkg_lists/arch_base.txt"
 
 
+# Some pkgs can't have 'yes' piped to them as they require user input. Skip 'yes' on those
+interactive_pkgs=(
+    "base-devel"
+    "font-manager"
+)
+
 
 # Verify file exists
 if [[ ! -f "$FILE" ]]; then
     echo "Error: File '$FILE' not found"
     exit 1
 fi
+
 
 echo
 echo "Reading packages from: $FILE"
@@ -52,8 +59,6 @@ fi
 echo "[+] Updating system packages..."
 yes | $SUDO pacman -Syu 
 
-# Some pkgs can't have 'yes' piped to them as they require user input. Skip 'yes' on those
-interactive_pkgs=("htop" "tester" "anothe" "fzf")
 
 # Essentials
 $PACMAN  base-devel           # build-essential: GCC/make/etc for system builds/AUR 
@@ -110,36 +115,6 @@ exit
 
 
 
-# Note: Ones  I didn't add 'yes' to are usually interactive and expect a choice to be made
-echo "[+] Installing system-level tools (drivers, graphics, audio, compiler dependencies, os tools, etc)..."
-# yes | $PACMAN 7zip
-yes | $PACMAN binutils  		# binutils: Assembler/linker, base-devel 
-$PACMAN  font-manager   		# font-manager: GUI fonts 
-yes | $PACMAN bzip2  			# p7zip-full: 7zip compression 
-yes | $PACMAN clang 
-yes | $PACMAN cmake 
-yes | $PACMAN coreutils  		# coreutils: GNU utils, base 
-yes | $PACMAN curl  			# curl: Network downloader, system scripts rely on it 
-yes | $PACMAN gawk  			# gawk: AWK, base 
-yes | $PACMAN gcc  			# gcc: Compiler, base-devel 
-yes | $PACMAN glibc  			# libc6: Core C lib 
-yes | $PACMAN lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
-yes | $PACMAN libxcb            # libxcb1-dev: XCB render, shape, etc
-yes | $PACMAN llvm  
-yes | $PACMAN make  			# make: Builder, base-devel 
-yes | $PACMAN nasm 
-yes | $PACMAN ninja 
-yes | $PACMAN openssl           # libssl-dev: Crypto
-yes | $PACMAN p7zip  			# p7zip-full: 7zip compression 
-yes | $PACMAN perl 
-yes | $PACMAN pkgconf  		# pkg-config: Build helper
-yes | $PACMAN sed    			# sed: Text processor, base 
-yes | $PACMAN tar    			# tar: Archiver, base system 
-yes | $PACMAN unzip  			# unzip: Zip handler, base 
-yes | $PACMAN wget  			# wget: Downloader, core for scripts 
-yes | $PACMAN which 
-yes | $PACMAN xclip  			# xclip: Clipboard, X11 integration 
-yes | $PACMAN xsel  			# xsel: Clipboard, X11 
 
 
 echo "[+] Installing media/sound-related pkgs..."

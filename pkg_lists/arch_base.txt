@@ -1,5 +1,48 @@
-htop
-bmon
-cmatrix
-cowsay
-fzf
+MSG"[+] Installing system-level tools (drivers, graphics, audio, compiler dependencies, os tools, etc)..."
+base-devel
+binutils
+font-manager
+bzip2  			# p7zip-full: 7zip compression 
+clang 
+cmake 
+coreutils  		# coreutils: GNU utils, base 
+curl  			# curl: Network downloader, system scripts rely on it 
+gawk  			# gawk: AWK, base 
+gcc  			# gcc: Compiler, base-devel 
+glibc  			# libc6: Core C lib 
+lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
+libxcb            # libxcb1-dev: XCB render, shape, etc
+llvm  
+make  			# make: Builder, base-devel 
+nasm 
+ninja 
+openssl           # libssl-dev: Crypto
+p7zip  			# p7zip-full: 7zip compression 
+perl 
+pkgconf  		# pkg-config: Build helper
+sed    			# sed: Text processor, base 
+tar    			# tar: Archiver, base system 
+unzip  			# unzip: Zip handler, base 
+wget  			# wget: Downloader, core for scripts 
+which 
+xclip  			# xclip: Clipboard, X11 integration 
+xsel  			# xsel: Clipboard, X11 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
