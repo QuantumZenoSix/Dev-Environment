@@ -101,7 +101,7 @@ for pkg in "${packages[@]}"; do
             using_pacman=0
         fi
 
-        print "\n\n$pkg"
+        printf "\n\n$pkg"
         continue
 
     fi
@@ -137,7 +137,6 @@ done
 echo
 echo "Installation finished."
 
-exit
 # ===========================================================================
 
 
