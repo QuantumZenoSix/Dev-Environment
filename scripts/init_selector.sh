@@ -2,7 +2,7 @@
 
 
 cd $(dirname "$0") && cd ../ && pwd || exit
-
+pwd
 echo "What would you like to install/configure?"
 echo ""
 
@@ -26,19 +26,19 @@ select choice in "${options[@]}"; do
     1)
       echo ""
       echo "→ Selected: Everything (full setup)"
-      . ./install.sh full
+      . ./scripts/install.sh full
       break
       ;;
     2)
       echo ""
       echo "→ Selected: Packages only"
-      . ./install.sh
+      . ./scripts/install.sh
       break
       ;;
     3)
       echo ""
       echo "→ Selected: Config files only"
-      . ./config_copy.sh
+      . ./scripts/config_copy.sh
       break
       ;;
     4)
