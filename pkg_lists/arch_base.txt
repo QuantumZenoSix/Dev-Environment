@@ -60,7 +60,7 @@ entr
 fzf 
 python-pygments 
 ripgrep 
-tmux 
+tmux-plugin-manager 
 vim   			# vim-gtk3: GUI vim with GTK/X11 
 zsh 
 
