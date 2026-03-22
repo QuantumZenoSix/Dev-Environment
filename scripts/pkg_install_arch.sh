@@ -63,7 +63,7 @@ yes | $PACMAN rustup  && rustup update
 
 
 # Install yay if needed
-if [[ ! command -v yay >/dev/null 2>&1 ]]; then
+if ! command -v yay >/dev/null 2>&1 ; then
 
     # Yay installation (for AUR) (needs go)
     echo "[+] Installing yay..."
