@@ -18,6 +18,7 @@ if [[ ! -f "$FILE" ]]; then
     exit 1
 fi
 
+echo
 echo "Reading packages from: $FILE"
 echo "----------------------------------------"
 
@@ -62,7 +63,7 @@ yes | $PACMAN rustup  && rustup update
 
 
 # Install yay if needed
-if [[ ! command -v yay >/dev/null 2>&1 ]]; then
+if [[ ! command yay >/dev/null 2>&1 ]]; then
 
     # Yay installation (for AUR) (needs go)
     echo "[+] Installing yay..."
@@ -84,6 +85,8 @@ for pkg in "${packages[@]}"; do
 
     echo "→ Installing $pkg"
     # sudo apt install -y "$pkg" || echo "  └─ failed"
+
+    pkg_mgr=$PACMAN
 
     if [[ " ${interactive_pkgs[@]} " =~ "$pkg" ]]; then
         echo "Interactive pack found! No skip "
