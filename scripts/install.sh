@@ -108,11 +108,11 @@ if [ "${INSTALL_TYPE}" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        . ./pkg_install_debian.sh.sh
+        . ./scripts//pkg_install_debian.sh.sh
 
     elif [ "$DISTRO_FAMILY" = "arch" ]; then  
 
-        . ./pkg_install_arch.sh
+        . ./scripts/pkg_install_arch.sh
 
     elif [ "$DISTRO_FAMILY" = "fedora" ]; then
 
