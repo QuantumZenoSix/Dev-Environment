@@ -10,27 +10,27 @@ sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/r
 
 ## Install core desktop packages
 ```bash
-bash ./setups/pop_os_setup/core.sh
+bash ./pop_os_setup/core.sh
 ```
 
 <br />
 
 ## Installing gaming apps and dependencies
 ```bash
-bash ./setups/pop_os_setup/gaming.sh
+bash ./pop_os_setup/gaming.sh
 ```
 
 <br />
 
 ## OS housekeeping
 ```bash
-bash ./setups/pop_os_setup/housekeeping.sh
+bash ./pop_os_setup/housekeeping.sh
 ```
 
 <br />
 
 ## Brightness Issues  
-See `./setups/pop_os_setup/pop-os-brightness-fix.sh`
+See `./pop_os_setup/pop-os-brightness-fix.sh`
 
 <br />
 

@@ -101,19 +101,6 @@ sync_nvim_files(){
 
 
 # ────────────────────────────────────────────────
-#             NVIM-ONLY MODE (distro agnostic)
-# ────────────────────────────────────────────────
-if [ "${INSTALL_TYPE}" = "nvimonly" ]; then
-
-    sync_nvim_files
-    exit 0
-
-fi
-
-
-
-
-# ────────────────────────────────────────────────
 #        PACKAGE INSTALLATION (skip if configonly)
 # ────────────────────────────────────────────────
 # Unless we're explicitly calling to only copy the configs, then let's start installing (modes: full, installonly)

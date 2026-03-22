@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+
+
 AUR="yay -S --needed" 
 PACMAN="$SUDO pacman -S --needed"
 
@@ -5,8 +8,63 @@ echo "# ────────────────────────
 echo "#        PACKAGE INSTALLATION | Part I: System update and setting up access to AUR"
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
+
+
+
+# ===========================================================================
+set -u   # treat unset variables as error
+
+file="../pkg_lists/arch_base.text"
+
+if [[ ! -f "$file" ]]; then
+    echo "Error: File '$file' not found"
+    exit 1
+fi
+
+echo "Reading packages from: $file"
+echo "----------------------------------------"
+
+mapfile -t packages < "$file"
+
+# Remove empty lines and comments, keep only real package names
+packages=("${packages[@]//[[:space:]]/}")          # trim whitespace
+packages=("${packages[@]%%#*}")                    # remove inline comments
+packages=("${packages[@]/#/}")                     # remove lines starting with #
+
+# Filter out empty entries
+packages=($(printf '%s\n' "${packages[@]}" | grep -v '^$'))
+
+if (( ${#packages[@]} == 0 )); then
+    echo "No valid packages found in the file."
+    exit 1
+fi
+
+echo "Found ${#packages[@]} packages to install:"
+printf '  - %s\n' "${packages[@]}"
+echo
+
+read -p "Continue with installation? (y/N) " answer
+if [[ ! "$answer" =~ ^[Yy]$ ]]; then
+    echo "Installation cancelled."
+    exit 0
+fi
+
 # Update system
 yes | $SUDO pacman -Syu 
+
+echo
+
+for pkg in "${packages[@]}"; do
+    echo "→ Installing $pkg"
+    # sudo apt install -y "$pkg" || echo "  └─ failed"
+    yes | $PACMAN "$pkg"
+done
+
+echo
+echo "Installation finished."
+
+exit
+# ===========================================================================
 
 
 

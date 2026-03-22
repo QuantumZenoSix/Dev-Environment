@@ -19,19 +19,33 @@ Works for debian-based and arch-based distros. Haven't got to fedora update yet.
 
 
 
-Start Script
+Start Script (with selector)
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/start.sh -O -)"
 ```
 
+Selector preview  
+```sh
 What would you like to download?
 1. Everything (Packages, config files, customized shell/prompt, and Neovim configuration)
 2. Packages
 3. Config files
 4. Neovim configuration
 5. Arch-Nix hybrid (everything included in #1 but system-level packages are managed through Pacman and all other packages are managed via Nix using Home-Manager and Flakes)
+```
 
 
+
+
+
+<!-- Or, if you don't want the selector, call the script with yout predefined options.   -->
+<!-- Replace `<type>` with the number of one of the options above.     -->
+<!---->
+<!-- ```bash -->
+<!-- bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/start.sh <type> -O -)" -->
+<!-- ``` -->
+
+---  
 
 ## Full Installation  
 Install all in ubuntu system _(installs packages and copies config files)  
