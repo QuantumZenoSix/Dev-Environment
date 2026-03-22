@@ -97,7 +97,7 @@ for pkg in "${packages[@]}"; do
     # Check if this is a NOTE
     if [[ "${pkg}" =~ NOTE ]]; then
 
-        if [[ "${pkg}" -eq 1 ]]; then
+        if [[ "${pkg}" =~ NOTE-AUR ]]; then
             using_pacman=0
         fi
 
