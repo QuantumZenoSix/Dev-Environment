@@ -47,7 +47,6 @@ jq
 lua 
 nvm 
 pipx 
-neovim 
 python 
 ufw  			# gawk: AWK, base 
 nodejs-lts-jod
@@ -60,8 +59,10 @@ entr
 fzf 
 python-pygments 
 ripgrep 
+neovim 
 vim   			# vim-gtk3: GUI vim with GTK/X11 
 zsh 
+bat
 
 
 
