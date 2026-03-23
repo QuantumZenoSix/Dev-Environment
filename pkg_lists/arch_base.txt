@@ -103,7 +103,7 @@ rubberband        # librubberband2: Audio stretch
 
 
 NOTE-AUR: Processing AUR pkgs from this point on
-tmux-plugin-manager 
+#tmux-plugin-manager 
 zimg                      # libzimg2: Image scaling 
 mlocate                   # locate: File indexer, system db 
 jless                     # json viewer

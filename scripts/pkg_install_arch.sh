@@ -2,7 +2,7 @@
 
 
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-echo "#        PACKAGE INSTALLATION | Part I: System update and setting up access to AUR"
+echo "#        PACKAGE INSTALLATION | System update and setting up access to AUR"
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
 # Set pwd to root
@@ -139,6 +139,22 @@ done
 
 echo
 
+
+
+
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+echo "#        PACKAGE INSTALLATION (manual) | Installing packages not in pacman/yay
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+
+echo "[+] Handling packages/tasks that cannot be directly handles with package manager alone"
+yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
+
+
+echo "[+] Installing TPM (tmux plugin manager)..."
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
 echo "[+] Installing Spotify Player dependencies..."
 
 # 1. Modern / recommended (PipeWire + official package)
@@ -162,12 +178,7 @@ if systemctl --user is-active pipewire >/dev/null; then
 fi
 
 
-
-
-
-echo "[+] Handling packages/tasks that cannot be directly handles with package manager alone"
-yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
+echo "[+] Setting default nodejs version to use via npm"
 
 # Source and install node version
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -192,13 +203,11 @@ fi
 # yes | $PACMAN gvim  # vim-gtk3: GUI vim with GTK/X11 
 # $PACMAN zoxide         || $AUR zoxide
 
-
-
-
-echo "Pacman installations complete."
-
 echo "[+] Enabling Docker service..."
 $SUDO  systemctl enable docker
 $SUDO  systemctl start docker
 
 
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+echo "#        PACKAGE INSTALLATION COMPLETE!
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
