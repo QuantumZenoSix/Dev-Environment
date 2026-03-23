@@ -101,14 +101,18 @@ sync_nvim_files(){
 ###########
 # START   #
 ###########
+#
+# INSTALL_TYPE      =   full | configonly | nvimonly | pkgsonly
+# INSTALL_SUBTYPE   =   desktop
+# OPTION            =   pop | cachy
+
 
 # ────────────────────────────────────────────────
 #             NVIM-ONLY MODE (distro agnostic)
 # ────────────────────────────────────────────────
-if [ "${INSTALL_TYPE}" = "nvimonly" ]; then
+if [ "${INSTALL_TYPE}" = "nvimonly" ] || [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ] ; then
 
     sync_nvim_files
-    exit 0
 
 fi
 
@@ -116,7 +120,7 @@ fi
 #        PACKAGE INSTALLATION (skip if configonly)
 # ────────────────────────────────────────────────
 # Unless we're explicitly calling to only copy the configs, then let's start installing (modes: full, installonly)
-if [ "${INSTALL_TYPE}" != "configonly" ]; then
+if [ "${INSTALL_TYPE}" == "full" ] || [  "${INSTALL_TYPE}" == "pkgsonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
@@ -147,6 +151,7 @@ fi
 if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
 
     ./scripts/utils/config_copy.sh
+    sync_nvim_files
 
     # TBD: NIX HOME MANAGER!
 
@@ -162,7 +167,7 @@ fi
 
 if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
 
-    if [ "${INSTALL_SUBTYPE}" = "pop" ]; then
+    if [ "${OPTION}" = "pop" ]; then
 
         echo "Running dry run first..."
         . ./scripts/pop_os_setup/desktop-apps.sh 1   
@@ -178,7 +183,7 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         . .scripts./pop_os_setup/housekeeping.sh
 
 
-    elif [ "${INSTALL_SUBTYPE}" = "cachy" ]; then
+    elif [ "${OPTION}" = "cachy" ]; then
 
 
         echo TBD

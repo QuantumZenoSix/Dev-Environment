@@ -29,10 +29,6 @@ cp -f -v ./config/.zsh_customizations  $HOME/
 cp -f -v ./config/.tmux_init.sh  $HOME/
 cp -f -v ./config/.wezterm.lua  $HOME/
 
-# Nvim sync
-sync_nvim_files
-
-
 # __________ Spotify-player ___________
 if [ ! -d $HOME/.config/spotify-player/ ]; then
     mkdir -p $HOME/.config/spotify-player

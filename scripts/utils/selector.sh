@@ -32,7 +32,7 @@ select choice in "${options[@]}"; do
     2)
       echo ""
       echo "→ Selected: Packages only"
-      . ./scripts/utils/controller.sh
+      . ./scripts/utils/controller.sh pkgsonly
       break
       ;;
     3)
