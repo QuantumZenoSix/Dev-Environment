@@ -68,6 +68,7 @@ fi
 
 sync_nvim_files(){
 
+    echo "[+] Copying Vim/Neovim files..."
     if [ -d $HOME/.config/nvim/ ]; then
         mkdir -p $HOME/.config/nvim
     fi
@@ -93,6 +94,7 @@ sync_nvim_files(){
     cp -f -v ./config/.vimrc  $HOME/
 
     echo "[+] Vim files copied!"
+    echo
 
 }
 

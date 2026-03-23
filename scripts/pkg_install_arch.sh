@@ -104,7 +104,7 @@ for pkg in "${packages[@]}"; do
             using_pacman=0
         fi
 
-        printf "\n\n$pkg"
+        printf "\n\n$pkg\n"
         continue
 
     fi
@@ -143,7 +143,7 @@ echo
 
 
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-echo "#        PACKAGE INSTALLATION (manual) | Installing packages not in pacman/yay
+echo "#        PACKAGE INSTALLATION (manual) | Installing packages not in pacman/yay "
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
 echo "[+] Handling packages/tasks that cannot be directly handles with package manager alone"
