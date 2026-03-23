@@ -46,7 +46,7 @@ gettext  		# gettext: Localization, system
 jq
 lua 
 nvm 
-pipx 
+python-pipx 
 python 
 ufw  			# gawk: AWK, base 
 nodejs-lts-jod

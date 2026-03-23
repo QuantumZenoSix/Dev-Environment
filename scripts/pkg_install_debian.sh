@@ -226,6 +226,9 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo "[+] Installing fd..."
 cargo install fd-find
 
+echo "[+] Installing tree-sitter-cli..."
+cargo install --locked tree-sitter-cli
+
 echo "[+] Installing Yazi..."
 git clone https://github.com/sxyazi/yazi.git
 cd yazi

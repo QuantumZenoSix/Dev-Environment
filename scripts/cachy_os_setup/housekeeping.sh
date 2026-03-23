@@ -3,7 +3,7 @@
 # Run as normal user; uses sudo when needed
 # Focuses on updates, cleanup, firmware, TRIM, etc.
 # No forced reboots or recovery partition stuff
-set -euo pipefail  # Exit on errors, unset vars, pipe failures
+# set -euo pipefail  # Exit on errors, unset vars, pipe failures
 
 echo "=== CachyOS Housekeeping Script ==="
 echo "Handles updates (pacman + AUR via paru), cleanup, firmware, TRIM, codecs, etc."

@@ -154,6 +154,8 @@ yes | $AUR posting           || uv tool install --python 3.13 posting   # fallba
 echo "[+] Installing TPM (tmux plugin manager)..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
+echo "[+] Installing tree-sitter-cli..."
+cargo install --locked tree-sitter-cli
 
 echo "[+] Installing Spotify Player dependencies..."
 
