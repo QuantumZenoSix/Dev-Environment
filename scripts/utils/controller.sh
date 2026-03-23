@@ -97,8 +97,44 @@ sync_nvim_files(){
     echo
 
 }
+set_login_shell_zsh(){
 
+    current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
 
+    case "$current_shell" in
+        *zsh)
+            echo "→ Login shell is already zsh – no change needed"
+            ;;
+        *)
+            echo "[+] Current login shell: ${current_shell:-not found}"
+            echo "[+] Changing login shell to zsh... (may prompt for password)"
+            
+            if chsh -s "$(command -v zsh)"; then
+                echo "→ Login shell updated (takes effect in new sessions)"
+            else
+                echo "→ chsh failed – try running it manually"
+            fi
+            ;;
+    esac
+
+}
+
+setup_nix(){
+
+    # This installs Nix in multi-user mode (recommended for security and reproducibility) and runs non-interactively
+    curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
+
+    # Enable experimental features (user-level)
+    mkdir -p ~/.config/nix
+
+    if ! grep -q '^experimental-features' ~/.config/nix/nix.conf 2>/dev/null ; then
+        echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
+    fi
+
+    sudo systemctl restart nix-daemon
+
+    CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#{CALLING_USER}'"
+}
 
 ###########
 # START   #
@@ -152,10 +188,22 @@ fi
 
 if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
 
-    ./scripts/utils/config_copy.sh
-    sync_nvim_files
+    # ./scripts/utils/config_copy.sh
+    # sync_nvim_files
 
-    # TBD: NIX HOME MANAGER!
+
+    # if [ ! -d $HOME/.config/ ]; then
+    #     mkdir -p $HOME/.config/
+    # fi
+    #
+    #
+    # if [ ! -d $HOME/.config/spotify-player/ ]; then
+    #     mkdir -p $HOME/.config/spotify-player
+    # fi
+
+    # NEW TESTING
+    set_login_shell_zsh
+    setup_nix
 
 fi
 
@@ -204,7 +252,6 @@ echo "#        FINISHED! "
 echo "# ────────────────────────────────────────────────"
 printf "\n\n\n"
 echo "→ You may need to log out/in or simply run 'zsh'"
-
-
+echo "$CONF_MSG"
 
 
