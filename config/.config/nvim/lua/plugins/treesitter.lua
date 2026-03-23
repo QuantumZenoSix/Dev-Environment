@@ -6,7 +6,10 @@ return {
     config = function()
         -- Ensure nvim-treesitter install dir is in runtimepath (fixes parsers not loading)
         vim.opt.runtimepath:prepend(vim.fn.stdpath('data') .. '/site')
-        require("nvim-treesitter.configs").setup({
+        require("nvim-treesitter.config").setup({
+            -- Install parsers into the plugin dir (lazy.nvim adds this to runtimepath automatically)
+            -- parser_install_dir = vim.fn.stdpath("data") .. "/lazy/nvim-treesitter/parser",
+
             ensure_installed = { "lua", "python", "javascript", "c", "cpp", "java", "html", "css", "perl" },
             sync_install = false,
             auto_install = true,
