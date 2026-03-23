@@ -43,7 +43,7 @@ local_config_update(){
         # Add any ssh keys to ssh agent
         ssh_keyupdate
         git pull
-        ./scripts/install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell and omit the below
+        ./scripts/utils/controller.sh configonly noupdateshellenv   
 
         # if [[ "$1" = "update-nvim" ]]; then
         #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell

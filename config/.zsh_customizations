@@ -24,8 +24,8 @@ function enable_starship_prompt(){
 
     # Install catppuccin-powerline mocha preset
     if [[ ! -s ~/.config/starship.toml ]]; then
-        starship preset tokyo-night -o ~/.config/starship.toml
-        # starship preset catppuccin-powerline -o ~/.config/starship.toml
+        # starship preset tokyo-night -o ~/.config/starship.toml
+        starship preset catppuccin-powerline -o ~/.config/starship.toml
     fi
 
     # May need to add more here later to enable a transient prompt
