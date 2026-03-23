@@ -209,5 +209,5 @@ $SUDO  systemctl start docker
 
 
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-echo "#        PACKAGE INSTALLATION COMPLETE!
+echo "#        PACKAGE INSTALLATION COMPLETE!"
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"

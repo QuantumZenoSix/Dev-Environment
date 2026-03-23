@@ -187,10 +187,8 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
 
     elif [ "${OPTION}" = "cachy" ]; then
 
-        . ./scripts/cahy_os_setup/desktop.sh
-        . ./scripts/cahy_os_setup/housekeeping.sh
-
-        echo TBD
+        . ./scripts/cachy_os_setup/desktop.sh
+        . ./scripts/cachy_os_setup/housekeeping.sh
 
     fi
 
