@@ -347,28 +347,3 @@ if ! command -v lazygit >/dev/null 2>&1; then
 fi
 
 
-if [ "${INSTALL_SUBTYPE}" = "os-pop" ]; then
-
-    printf "\n\n"
-    echo "# ────────────────────────────────────────────────"
-    echo "#        POP! OS | Installing Desktop Packages "
-    echo "# ────────────────────────────────────────────────"
-    printf "\n\n"
-        
-    cd $(dirname "$0") && pwd || exit
-
-    echo "Running dry run first..."
-    bash ./pop_os_setup/core.sh 1   
-
-    printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
-    sleep 20
-    bash ./pop_os_setup/core.sh 0
-    
-    echo "[+] Installing additional packages for gaming/graphics updates"
-    bash ./pop_os_setup/gaming.sh
-
-    echo "ing housekeeping tasks"
-    bash ./pop_os_setup/housekeeping.sh
-
-fi
-

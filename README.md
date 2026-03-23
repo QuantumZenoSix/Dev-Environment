@@ -21,7 +21,7 @@ Works for debian-based and arch-based distros. Haven't got to fedora update yet.
 
 Start Script (with selector)
 ```bash
-bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/start.sh -O -)"
+bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/utils/start.sh -O -)"
 ```
 
 Selector preview  
@@ -134,7 +134,7 @@ Each can be further configured manually or using any of their respective presets
 <br />
 
 ## Notes
-`install.sh` - Assumes the repo is cloned and installs packages. 
+`controller.sh` - Assumes the repo is cloned and installs packages. 
 - Run with no arguments to install packages
 - Run with "full" to install packages and copy the config files into the proper dirs.
 - Run with with "configonly" to skip packages installation step and only copy config files to $HOME.

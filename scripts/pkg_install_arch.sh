@@ -5,6 +5,9 @@ echo "# ────────────────────────
 echo "#        PACKAGE INSTALLATION | Part I: System update and setting up access to AUR"
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
+# Set pwd to root
+cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
+
 # GLOBALS
 AUR="yay -S --needed " 
 PACMAN="$SUDO pacman -S --needed "
@@ -198,36 +201,4 @@ echo "[+] Enabling Docker service..."
 $SUDO  systemctl enable docker
 $SUDO  systemctl start docker
 
-
-
-if [ "${INSTALL_SUBTYPE}" = "os-cachy" ]; then
-
-    printf "\n\n"
-    echo "# ────────────────────────────────────────────────"
-    echo "#        POP! OS | Installing Desktop Packages "
-    echo "# ────────────────────────────────────────────────"
-    printf "\n\n"
-        
-    cd $(dirname "$0") && pwd || exit
-
-    # TODO: Cachy scripts
-    #
-    echo "Running dry run first..."
-    # bash ../setups/pop_os_setup/core.sh 1   
-
-    printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
-    sleep 20
-    # bash ../setups/pop_os_setup/core.sh 0
-    
-    echo "[+] Installing additional packages for gaming/graphics updates"
-    # bash ../setups/pop_os_setup/gaming.sh
-
-    echo "[+] Running housekeeping tasks"
-    # bash ../setups/pop_os_setup/housekeeping.sh
-
-    echo "[+] Installing graphics-related pkgs..."
-    # Vulkan/graphics: GPU driver integration.
-    yes | $PACMAN mesa-utils        # mesa-utils vulkan-tools: Graphics tools 
-
-fi
 

@@ -22,6 +22,9 @@ else
     printf "[+] Running as root\n"
 fi
 
+# Set pwd to project root
+cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
+
 # Install latest
 if [ -d ./Dev-Environment/ ]; then
     echo "Found Dev-Environment. Re-cloning..."
@@ -117,7 +120,7 @@ if [ "${INSTALL_TYPE}" != "configonly" ]; then
 
     if [ "$DISTRO_FAMILY" = "debian" ]; then
 
-        . ./scripts/pkg_install_debian.sh.sh
+        . ./scripts/pkg_install_debian.sh
 
     elif [ "$DISTRO_FAMILY" = "arch" ]; then  
 
@@ -141,10 +144,50 @@ fi
 #             CONFIG COPY (distro agnostic)
 # ────────────────────────────────────────────────
 
-if [ "${INSTALL_TYPE}" = "full" -o "${INSTALL_TYPE}" = "configonly" ]; then
+if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
 
-    ./scripts/config_copy.sh
+    ./scripts/utils/config_copy.sh
+
+    # TBD: NIX HOME MANAGER!
+
 fi
+
+
+
+
+
+# ────────────────────────────────────────────────
+#             DESKTOP-RELATED PACKAAGES
+# ────────────────────────────────────────────────
+
+if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
+
+    if [ "${INSTALL_SUBTYPE}" = "pop" ]; then
+
+        echo "Running dry run first..."
+        . ./scripts/pop_os_setup/desktop-apps.sh 1   
+
+        printf "[+] Dry run complete! Review results. \n\nLive run will execute in 20s if this script isn't aborted with Ctrl+c\n\n"
+        sleep 20
+        . ./scrips/pop_os_setup/desktop-apps.sh 0
+
+        echo "[+] Installing additional packages for gaming/graphics updates"
+        . ./scripts/pop_os_setup/gaming.sh
+
+        echo "[+] Running housekeeping tasks"
+        . .scripts./pop_os_setup/housekeeping.sh
+
+
+    elif [ "${INSTALL_SUBTYPE}" = "cachy" ]; then
+
+
+
+    fi
+
+fi
+
+
+
 
 
 printf "\n\n\n"

@@ -40,6 +40,8 @@ declare -A apps=(
                             
 )
 
+
+
 # I've choosen specific installtion methods for each app that's optimal. 
 # Here are some reasons:
     # Brave     - apt | gets updates somewhat frequently

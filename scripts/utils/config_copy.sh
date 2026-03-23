@@ -5,8 +5,8 @@ echo "# ────────────────────────
 
 printf "[+] Home: $HOME | PWD: $PWD\n"
 
-# Execute from the dir the script is in
-cd $(dirname "$0") && cd ../ && pwd || exit
+# Set pwd to project root
+cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
 PWD=$(pwd)
 printf "[+] PWD: $PWD\n"
@@ -53,8 +53,8 @@ cp -v -f -r ./config/.config/yazi  $HOME/.config/
 sudo cp -v -f -r ./config/usr_local_bin/* /usr/local/bin/
 
 
-# 'noshellswitch' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
-if [ "${INSTALL_SUBTYPE}" != "noshellswitch" ]; then
+# 'noupdateshellenv' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
+if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" ]; then
 
     # Install fonts
     printf "[+] Installing fonts..."
@@ -91,7 +91,9 @@ echo "[+] Configuration files copied!"
 if which zsh >/dev/null 2>&1; then
 
     # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
-    cd $(dirname "$0") && cd ../ && pwd || exit
+
+    # Set pwd to project root
+    cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
     cp -v ./config/.zshrc   $HOME/
 
@@ -116,7 +118,7 @@ if which zsh >/dev/null 2>&1; then
     cp -v ./config/.zshrc  $HOME/
 
     # Don't open new zsh shell
-    # if [ "${INSTALL_SUBTYPE}" != "noshellswitch" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then
+    # if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then
     #     zsh
     # fi
 

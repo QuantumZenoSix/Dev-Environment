@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+# Go to project root
+cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
-cd $(dirname "$0") && cd ../ && pwd || exit
 pwd
 echo "What would you like to install/configure?"
 echo ""
@@ -12,7 +13,6 @@ options=(
   "Packages"
   "Config files"
   "Neovim configuration"
-  "Arch-Nix hybrid (everything in #1 but system packages via Pacman + user packages via Nix/Home-Manager/Flakes)"
   "[pop-os] Everything + applications optimized for pop! os (desktop apps, graphics drivers, gaming tools, and optimizations)"
   "[cachy] Everything + applications optimized for cachy os (desktop apps, graphics drivers, gaming tools, and optimizations)"
 )
@@ -26,48 +26,40 @@ select choice in "${options[@]}"; do
     1)
       echo ""
       echo "→ Selected: Everything (full setup)"
-      . ./scripts/install.sh full
+      . ./scripts/utils/controller.sh full
       break
       ;;
     2)
       echo ""
       echo "→ Selected: Packages only"
-      . ./scripts/install.sh
+      . ./scripts/utils/controller.sh
       break
       ;;
     3)
       echo ""
       echo "→ Selected: Config files only"
-      . ./scripts/config_copy.sh
+      . ./scripts/utils/controller.sh configonly
       break
       ;;
     4)
       echo ""
       echo "→ Selected: Neovim configuration only"
-      . ./scripts/install.sh nvimonly
+      . ./scripts/utils/controller.sh nvimonly
       break
       ;;
     5)
-      echo ""
-      echo "→ Selected: Arch-Nix hybrid setup"
-      . ./scripts/install.sh full arch nix
-      break
-      ;;
+        echo ""
+        echo "→ Selected: [desktop] Everything+ (Pop! OS)"
+        . ./scripts/utils/controller.sh full desktop pop
+        break
+        ;;
     6)
       echo ""
-      echo "→ Selected: [desktop] Everything+ (Pop! OS)"
-      . ./scripts/install.sh full os-pop
+      echo "→ Selected: [desktop] Everything+ (Cachy OS)"
+      . ./scripts/utils/controller.sh full desktop cachy
       break
       ;;
     7)
-      echo ""
-      echo "→ Selected: [desktop] Everything+ (Cachy OS)"
-      # Should there even be a Nix option? By default? Not at all?
-      # bash ./scripts/install.sh full os-cachy nix
-      # bash ./scripts/install.sh full os-cachy nix
-      break
-      ;;
-    8)
       echo "Goodbye."
       exit 0
       ;;
