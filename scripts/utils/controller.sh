@@ -293,6 +293,8 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # ./scripts/utils/config_copy.sh
     # sync_nvim_files
 
+    echo ""
+    echo ""
     read -p "Do you want nix to manage config files? (y/n) " yn
 
     use_home_manager=0

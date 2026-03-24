@@ -14,6 +14,8 @@ mv Dev-Environment home-manager
 cd home-manager
 
 pwd
+echo ""
+echo ""
 echo "What would you like to install/configure?"
 echo ""
 
