@@ -1,5 +1,0 @@
-return {
-  {
-    "YacineDo/mc.nvim",
-  },
-}
