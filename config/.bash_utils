@@ -326,6 +326,17 @@ create_and_assume_user() {
     fi
 }
 
+remove_nix_home_manager(){
+    nix profile remove home-manager-path
+    rm -rf ~/.local/state/nix/profiles/home-manager*
+    rm -rf ~/.cache/home-manager
+    rm -rf ~/.config/home-manager
+    rm -rf ~/home-manager
+    rm -rf ~/.config/nixpkgs
+    find ~ -maxdepth 2 -type l -lname '/nix/store/*' -exec rm -rf '{}' \;
+    nix-collect-garbage -d
+}
+
 edit_nvim_conf(){
     nvim ~/.config/nvim/lua/
 }
