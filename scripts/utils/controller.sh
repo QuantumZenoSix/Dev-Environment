@@ -172,7 +172,7 @@ copy_config_files(){
     cp -v -f -r ./dotfiles/.config/yazi  $HOME/.config/
 
     # Install custom shell scripts and exes
-    sudo cp -v -f -r ./dotfiles/usr_local_bin/* /usr/local/bin/
+    sudo cp -v -f -r ./usr_local_bin/* /usr/local/bin/
 
 
     # 'noupdateshellenv' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
@@ -208,7 +208,7 @@ copy_config_files(){
     fi
 
     # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
-    cp -v ./config/.zshrc   $HOME/
+    cp -v ./dotfiles/.zshrc   $HOME/
 
     echo "[+] Configuration files copied!"
 
@@ -278,8 +278,6 @@ if [ "${INSTALL_TYPE}" == "full" ] || [  "${INSTALL_TYPE}" == "pkgsonly" ]; then
 
     fi
 
-    echo "[+] Installing workflow-specific programs (from /usr/local/bin)"
-    $SUDO cp -f -v ./config/usr_local_bin/* /usr/local/bin/
 
 fi
 
@@ -306,7 +304,7 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
             use_home_manager=1
             ;;
         [Nn]* ) 
-            echo "Aborting..."
+            echo "Manually copying files..."
             ;;
         * ) 
             echo "Invalid input. Defaulting to 'n'."
