@@ -3,13 +3,15 @@
 # Setup
 mkdir -p ~/.config &> /dev/null
 cd ~/.config/
+
+if [ -f home-manager/home.nix ]; then
+    echo "'~/config/home-manager' not empty, please empty and try again"
+    exit
+fi
+
 git clone https://github.com/QuantumZenoSix/Dev-Environment.git
 mv Dev-Environment home-manager
 cd home-manager
-
-
-# Go to project root (should already be here - but in case)
-cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
 pwd
 echo "What would you like to install/configure?"
