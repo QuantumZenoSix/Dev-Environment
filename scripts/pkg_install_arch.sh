@@ -155,6 +155,7 @@ echo "[+] Installing TPM (tmux plugin manager)..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 echo "[+] Installing tree-sitter-cli..."
+rustup default stable
 cargo install --locked tree-sitter-cli
 
 echo "[+] Installing Spotify Player dependencies..."
