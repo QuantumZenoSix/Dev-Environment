@@ -25,6 +25,9 @@ fi
 # Set pwd to project root ($0)
 # cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
+# Set pwd to root
+cd ~/.config/home-manager
+
 # Install latest
 if [ -d ./Dev-Environment/ ]; then
     echo "Found Dev-Environment. Re-cloning..."

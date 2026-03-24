@@ -6,7 +6,8 @@ echo "#        PACKAGE INSTALLATION | System update and setting up access to AUR
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
 # Set pwd to root
-cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
+cd ~/.config/home-manager
+# cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
 # GLOBALS
 AUR="yay -S --needed " 

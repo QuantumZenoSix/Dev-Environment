@@ -6,6 +6,8 @@ echo "#        PACKAGE INSTALLATION (Part I: Core install from package manager)"
 echo "# ────────────────────────────────────────────────────────────────────────"
 printf "\n\n"
 
+cd ~/.config/home-manager
+
 if ! command -v apt >/dev/null || ! grep -qi ubuntu /etc/os-release; then
     echo "This script requires an Ubuntu-based system"
     exit 1
