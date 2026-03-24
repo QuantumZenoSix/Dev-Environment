@@ -7,7 +7,6 @@ echo "# ────────────────────────
 
 # Set pwd to root
 cd ~/.config/home-manager
-# cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
 # GLOBALS
 AUR="yay -S --needed " 

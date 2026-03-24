@@ -105,13 +105,6 @@ set_login_shell_zsh(){
 
     if which zsh >/dev/null 2>&1; then
 
-        # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
-
-        # Set pwd to project root
-        cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
-
-        # cp -v ./config/.zshrc   $HOME/
-
         current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
 
         case "$current_shell" in
@@ -130,8 +123,6 @@ set_login_shell_zsh(){
                 ;;
         esac
 
-        # cp -v ./config/.zshrc  $HOME/
-
         # Don't open new zsh shell
         # if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then
         #     zsh
@@ -147,14 +138,8 @@ copy_config_files(){
     echo "#        CONFIG INSTALLATION "
     echo "# ────────────────────────────────────────────────"
 
-    printf "[+] Home: $HOME | PWD: $PWD\n"
-
-    # Set pwd to project root
-    cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
-
     PWD=$(pwd)
-    printf "[+] PWD: $PWD\n"
-
+    printf "[+] Home: $HOME | PWD: $PWD\n"
 
     # # Sync local config files with cloned repo so i can push up my changes
     cp -f -v ./dotfiles/.bash_aliases  $HOME/
@@ -221,6 +206,9 @@ copy_config_files(){
         fi
 
     fi
+
+    # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
+    cp -v ./config/.zshrc   $HOME/
 
     echo "[+] Configuration files copied!"
 
