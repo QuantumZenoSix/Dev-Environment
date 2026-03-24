@@ -5,8 +5,8 @@
     # ────────────────────────────────────────────────────────────────
     #  Identity & State
     # ────────────────────────────────────────────────────────────────
-    home.username      = "zeno";                    # ← change this
-    home.homeDirectory = "/home/zeno";
+    home.username      = "REPLACETHISUSERNAME";                    # ← change this
+    home.homeDirectory = "/home/REPLACETHISUSERNAME";
     home.stateVersion  = "25.05";                    # ← use current or newer stable version
                                                    #    NEVER change this value after first activation!
 
@@ -15,7 +15,7 @@
     # ────────────────────────────────────────────────────────────────
     home.packages = with pkgs; [
         # CLI & tools almost everyone wants
-        helix               # lightweight modal editor alternative
+        # helix               # lightweight modal editor alternative
         killall            # convenience
 
         # Dev tools (add what you use)
@@ -25,15 +25,6 @@
 
     ];
 
-    # ────────────────────────────────────────────────────────────────
-    #  Fonts – the modern / recommended way
-    # ────────────────────────────────────────────────────────────────
-      fonts.fontconfig.enable = true;
-
-    # If you want nerd fonts, jetbrains, etc.
-    home.packages = with pkgs; [
-        (nerd-fonts.override { fonts = [ "JetBrainsMono" "FiraCode" "Hack" ]; })
-    ];
 
     # ────────────────────────────────────────────────────────────────
     #  Programs – declarative configuration of popular software
@@ -42,21 +33,17 @@
 
         home-manager.enable = true;   # required – lets home-manager manage itself
 
-        history = {
-            size = 20000;
-            path = "${config.xdg.dataHome}/zsh/history";
-        };
 
-        direnv = {
-            enable = true;
-            enableZshIntegration = true;
-            nix-direnv.enable = true;   # much faster than vanilla direnv + nix
-        };
+        # direnv = {
+        #     enable = true;
+        #     enableZshIntegration = true;
+        #     nix-direnv.enable = true;   # much faster than vanilla direnv + nix
+        # };
 
         bat.enable = true;
         eza.enable = true;
         eza.enableZshIntegration = true;
-        eza.icons = true;
+        eza.icons = "auto";
         eza.git = true;
 
         # neovim = {
@@ -109,19 +96,19 @@
         #     gc     = "git commit";
         #     gp     = "git push";
         #     gco    = "git checkout";
-        #     update = "home-manager switch --flake ~/nix-config#bobby";
+        #     update = "home-manager switch -b backup --flake ~/nix-config#zeno";
         #     rebuild = "update";
         #     flake-check = "nix flake check ~/nix-config";
         #   };
-        #
-        #   oh-my-zsh = {
-        #     enable = true;
-        #     theme = "agnoster";          # ← very popular, clean alternative to robbyrussell
-        #     plugins = [ "git" "docker" "docker-compose" "z" "fzf" ];
-        #   };
-        #
-        #   If you prefer pure zsh without oh-my-zsh → comment oh-my-zsh and use zsh plugins instead
-        #   zplug or zinit can also be used via programs.zsh.plugins
+
+          # oh-my-zsh = {
+          #   enable = true;
+            # theme = "agnoster";          # ← very popular, clean alternative to robbyrussell
+            # plugins = [ "git" "docker" "docker-compose" "z" "fzf" ];
+          #};
+
+          # If you prefer pure zsh without oh-my-zsh → comment oh-my-zsh and use zsh plugins instead
+          # zplug or zinit can also be used via programs.zsh.plugins
         # };
 
          # Modern alternative to zsh + oh-my-zsh (many people switch to this in 2025+)
@@ -174,54 +161,104 @@
     #  Session variables (exported to shell)
     # ────────────────────────────────────────────────────────────────
     home.sessionVariables = {
-    EDITOR     = "nvim";
-    VISUAL     = "nvim";
-    MANPAGER   = "sh -c 'col -bx | bat -l man -p'";
-    BAT_THEME  = "catppuccin-mocha";
-    # Add any other env vars you need globally
+        EDITOR     = "nvim";
+        VISUAL     = "nvim";
+        MANPAGER   = "sh -c 'col -bx | bat -l man -p'";
+        BAT_THEME  = "catppuccin-mocha";
+        # Add any other env vars you need globally
     };
 
     # ────────────────────────────────────────────────────────────────
     #  XDG user directories (optional but clean)
     # ────────────────────────────────────────────────────────────────
-    xdg = {
-        enable = true;
-        userDirs = {
-            enable = true;
-            createDirectories = true;
-        };
-    };
+    # xdg = {
+    #     enable = true;
+    #     userDirs = {
+    #         enable = true;
+    #         createDirectories = true;
+    #         setSessionVariables = false;
+    #     };
+    # };
+
 
 
     # ────────────────────────────────────────────────────────────────
     #  Manual dotfile symlinking (alternative / legacy style)
     # ────────────────────────────────────────────────────────────────
 
+    # home.file."Documents/Topics/".source = ./Science;
     home.file = {
-      # single files in $HOME
-      ".bashrc".source               = ./config/.bashrc;
-      ".zshrc".source                = ./config/.zshrc;
-      ".zsh_customizations".source   = ./config/.zsh_customizations;
-      ".p10k.zsh".source             = ./config/.p10k.zsh;
-      ".bash_aliases".source         = ./config/.bash_aliases;
-      ".bash_git".source             = ./config/.bash_git;
-      ".bash_pbx".source             = ./config/.bash_pbx;    
-      ".bash_utils".source           = ./config/.bash_utils;
-      ".tmux.conf".source            = ./config/.tmux.conf;
-      ".tmux_init.sh".source         = ./config/.tmux_init.sh;
-      ".vimrc".source                = ./config/.vimrc;
-      ".wezterm.lua".source          = ./config/.wezterm.lua;   
-      # ".config/starship.toml".source = ./config/starship.toml;   # ← no leading .config/
+        # ───────────────────────────────────────────────
+        # single files in $HOME
+        ".bashrc".source               = ./config/.bashrc;
+        ".zshrc".source                = ./config/.zshrc;
+        ".zsh_customizations".source   = ./config/.zsh_customizations;
+        ".p10k.zsh".source             = ./config/.p10k.zsh;
+        ".bash_aliases".source         = ./config/.bash_aliases;
+        ".bash_git".source             = ./config/.bash_git;
+        ".bash_pbx".source             = ./config/.bash_pbx;
+        ".bash_utils".source           = ./config/.bash_utils;
+        ".tmux.conf".source            = ./config/.tmux.conf;
+        ".vimrc".source                = ./config/.vimrc;
+        ".wezterm.lua".source          = ./config/.wezterm.lua;
+        ".config/starship.toml".source = ./config/.config/starship.toml;
+        ".tmux_init.sh" = {
+            source = ./config/.tmux_init.sh;
+            executable = true;   # only this one probably needs +x
+          };
 
-      # ───────────────────────────────────────────────
-      # Folders: programs inside ~/.config/<program>/
-      ".config/lazygit".source       = ./config/.config/lazygit;
-      ".config/nvim".source          = ./config/.config/nvim;
-      ".config/yazi".source          = ./config/.config/yazi;
-      ".config/spotify-player".source = ./config/.config/spotify-player;
+
+        # ───────────────────────────────────────────────
+        # Folders: programs inside ~/.config/<program>/
+        # recursive = true is usually better for .config/*
+        ".config/lazygit" = {
+          source = ./config/.config/lazygit;
+          recursive = true;
+        };
+
+        ".config/nvim" = {
+          source = ./config/.config/nvim;
+          recursive = true;
+        };
+
+        ".config/yazi" = {
+          source = ./config/.config/yazi;
+          recursive = true;
+        };
+
+        ".config/spotify-player" = {
+          source = ./config/.config/spotify-player;
+          recursive = true;
+        };
+
+
+        # Write to file
+        # ".config/git/ignore".text = ''
+        #   *.swp
+        #   .DS_Store
+        #   /node_modules/
+        # '';
+
 
         # sudo cp -v -f -r ./config/usr_local_bin/* /usr/local/bin/
     };
+
+
+
+    # ────────────────────────────────────────────────────────────────
+    #  Run ad-hoc shell cpmmands
+    # ────────────────────────────────────────────────────────────────
+	# home.activation = { 
+	# 	touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
+	# 	touch grass.txt # creates ~/grass.txt
+	# 	''; 
+	#
+	# 	# After git is set up..
+	# 	# home.activation.cloneRepo = lib.hm.dag.entryAfter ["writeBoundary" "installPackages" "git"] ''
+	# 	## ...
+	# };
+
+
 
 
     # ────────────────────────────────────────────────────────────────

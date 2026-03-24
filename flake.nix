@@ -39,10 +39,10 @@
     let
         system = "x86_64-linux"; # Adjust if using ARM
         pkgs = nixpkgs.legacyPackages.${system};
-
+        # lib = nixpkgs.lib;
 
     in {
-	      homeConfigurations."YOURUSERNAME" = home-manager.lib.homeManagerConfiguration {
+	      homeConfigurations."REPLACETHISUSERNAME" = home-manager.lib.homeManagerConfiguration {
 	        inherit pkgs;
 	        modules = [ ./home.nix ]; # Point to our detailed config
 	      };

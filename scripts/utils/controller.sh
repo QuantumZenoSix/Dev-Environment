@@ -99,23 +99,42 @@ sync_nvim_files(){
 }
 set_login_shell_zsh(){
 
-    current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
 
-    case "$current_shell" in
-        *zsh)
-            echo "→ Login shell is already zsh – no change needed"
-            ;;
-        *)
-            echo "[+] Current login shell: ${current_shell:-not found}"
-            echo "[+] Changing login shell to zsh... (may prompt for password)"
-            
-            if chsh -s "$(command -v zsh)"; then
-                echo "→ Login shell updated (takes effect in new sessions)"
-            else
-                echo "→ chsh failed – try running it manually"
-            fi
-            ;;
-    esac
+    if which zsh >/dev/null 2>&1; then
+
+        # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
+
+        # Set pwd to project root
+        cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
+
+        # cp -v ./config/.zshrc   $HOME/
+
+        current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
+
+        case "$current_shell" in
+            *zsh)
+                echo "→ Login shell is already zsh – no change needed"
+                ;;
+            *)
+                echo "[+] Current login shell: ${current_shell:-not found}"
+                echo "[+] Changing login shell to zsh... (may prompt for password)"
+                
+                if chsh -s "$(command -v zsh)"; then
+                    echo "→ Login shell updated (takes effect in new sessions)"
+                else
+                    echo "→ chsh failed – try running it manually"
+                fi
+                ;;
+        esac
+
+        # cp -v ./config/.zshrc  $HOME/
+
+        # Don't open new zsh shell
+        # if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then
+        #     zsh
+        # fi
+
+    fi
 
 }
 
@@ -133,7 +152,15 @@ setup_nix(){
 
     sudo systemctl restart nix-daemon
 
-    CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#{CALLING_USER}'"
+    # Replace flakes with proper username
+    sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./home.nix
+    sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./flake.nix
+
+    echo "[+] Running home-manager for the first time..."
+    nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}
+    echo "[+] Finished running home manager"
+
+    CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
 }
 
 ###########
@@ -202,9 +229,9 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # fi
 
     # NEW TESTING
-    # set_login_shell_zsh
-    setup_nix
     ./scripts/utils/config_copy.sh
+    setup_nix
+    set_login_shell_zsh
 
 fi
 
