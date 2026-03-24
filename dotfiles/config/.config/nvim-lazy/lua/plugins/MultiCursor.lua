@@ -1,0 +1,5 @@
+return {
+  {
+    "YacineDo/mc.nvim",
+  },
+}

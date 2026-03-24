@@ -82,7 +82,7 @@ sync_nvim_files(){
     [ -d "$HOME/.config/nvim" ] && mv "$HOME/.config/nvim" "$HOME/.config/nvim-backup"
 
     # Copy nvim files
-    cp -v -r ./config/.config/nvim  $HOME/.config/
+    cp -v -r ./dotfiles/.config/nvim  $HOME/.config/
 
     # [.local files (nvim cache) ] If backup folder exists move it so we can restore if needed and so that it leaves the .local dir empty to empty the cache
     [ -d "$HOME/.local/share/nvim-backup" ] && rm -rf "$HOME/.local/share/nvim-backup"
@@ -91,7 +91,7 @@ sync_nvim_files(){
     echo "[+] Nvim files copied!"
 
     # Vim
-    cp -f -v ./config/.vimrc  $HOME/
+    cp -f -v ./dotfiles/.vimrc  $HOME/
 
     echo "[+] Vim files copied!"
     echo
@@ -218,19 +218,31 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # ./scripts/utils/config_copy.sh
     # sync_nvim_files
 
+    read -p "Do you want nix to manage config files? (y/n) " yn
 
-    # if [ ! -d $HOME/.config/ ]; then
-    #     mkdir -p $HOME/.config/
-    # fi
-    #
-    #
-    # if [ ! -d $HOME/.config/spotify-player/ ]; then
-    #     mkdir -p $HOME/.config/spotify-player
-    # fi
+    use_home_manager=0
 
-    # NEW TESTING
-    ./scripts/utils/config_copy.sh
-    setup_nix
+    # Validate response using case statement
+    case $yn in
+        [Yy]* ) 
+            echo "[+] Setting up Nix/home-manager..."
+            use_home_manager=1
+            ;;
+        [Nn]* ) 
+            echo "Aborting..."
+            ;;
+        * ) 
+            echo "Invalid input. Defaulting to 'n'."
+            ;;
+    esac   
+
+
+    if [ $use_home_manager -eq 1 ]; then
+        setup_nix
+    else
+        . ./scripts/utils/config_copy.sh
+    fi
+
     set_login_shell_zsh
 
 fi

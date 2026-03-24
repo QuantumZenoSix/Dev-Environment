@@ -50,6 +50,8 @@ python-pipx
 python 
 ufw  			# gawk: AWK, base 
 nodejs-lts-jod
+treesitter-cli
+npm
 
 
 NOTE: Installing workflow and cli tools..."

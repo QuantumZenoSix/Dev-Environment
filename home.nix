@@ -190,44 +190,44 @@
     home.file = {
         # ───────────────────────────────────────────────
         # single files in $HOME
-        ".bashrc".source               = ./config/.bashrc;
-        ".zshrc".source                = ./config/.zshrc;
-        ".zsh_customizations".source   = ./config/.zsh_customizations;
-        ".p10k.zsh".source             = ./config/.p10k.zsh;
-        ".bash_aliases".source         = ./config/.bash_aliases;
-        ".bash_git".source             = ./config/.bash_git;
-        ".bash_pbx".source             = ./config/.bash_pbx;
-        ".bash_utils".source           = ./config/.bash_utils;
-        ".tmux.conf".source            = ./config/.tmux.conf;
-        ".vimrc".source                = ./config/.vimrc;
-        ".wezterm.lua".source          = ./config/.wezterm.lua;
-        ".config/starship.toml".source = ./config/.config/starship.toml;
+        ".bashrc".source               = ./dotfiles/.bashrc;
+        ".zshrc".source                = ./dotfiles/.zshrc;
+        ".zsh_customizations".source   = ./dotfiles/.zsh_customizations;
+        ".p10k.zsh".source             = ./dotfiles/.p10k.zsh;
+        ".bash_aliases".source         = ./dotfiles/.bash_aliases;
+        ".bash_git".source             = ./dotfiles/.bash_git;
+        ".bash_pbx".source             = ./dotfiles/.bash_pbx;
+        ".bash_utils".source           = ./dotfiles/.bash_utils;
+        ".tmux.conf".source            = ./dotfiles/.tmux.conf;
+        ".vimrc".source                = ./dotfiles/.vimrc;
+        ".wezterm.lua".source          = ./dotfiles/.wezterm.lua;
+        ".config/starship.toml".source = ./dotfiles/.config/starship.toml;
         ".tmux_init.sh" = {
-            source = ./config/.tmux_init.sh;
+            source = ./dotfiles/.tmux_init.sh;
             executable = true;   # only this one probably needs +x
           };
 
 
         # ───────────────────────────────────────────────
-        # Folders: programs inside ~/.config/<program>/
-        # recursive = true is usually better for .config/*
-        ".config/lazygit" = {
-          source = ./config/.config/lazygit;
+        # Folders: programs inside ~/.dotfiles/<program>/
+        # recursive = true is usually better for .dotfiles/*
+        ".dotfiles/lazygit" = {
+          source = ./dotfiles/.config/lazygit;
           recursive = true;
         };
 
         ".config/nvim" = {
-          source = ./config/.config/nvim;
+          source = ./dotfiles/.config/nvim;
           recursive = true;
         };
 
         ".config/yazi" = {
-          source = ./config/.config/yazi;
+          source = ./dotfiles/.config/yazi;
           recursive = true;
         };
 
         ".config/spotify-player" = {
-          source = ./config/.config/spotify-player;
+          source = ./dotfiles/.config/spotify-player;
           recursive = true;
         };
 
@@ -248,15 +248,37 @@
     # ────────────────────────────────────────────────────────────────
     #  Run ad-hoc shell cpmmands
     # ────────────────────────────────────────────────────────────────
-	# home.activation = { 
-	# 	touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
-	# 	touch grass.txt # creates ~/grass.txt
-	# 	''; 
-	#
-	# 	# After git is set up..
-	# 	# home.activation.cloneRepo = lib.hm.dag.entryAfter ["writeBoundary" "installPackages" "git"] ''
-	# 	## ...
-	# };
+	home.activation = { 
+		touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
+		touch grass.txt # creates ~/grass.txt
+
+        # Install fonts
+        # printf "[+] Installing fonts..."
+        # unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
+        # sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
+
+        # This removes ohmyzsh and powerline (since powerline installs it in ~/.oh-my-zsh) so make sure this is before powerline re-install
+        if [ -d $HOME/.oh-my-zsh ]; then
+            rm -rf $HOME/.oh-my-zsh
+        fi
+
+        printf "[+] Installing oh-my-zsh...\n\n"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+        # If powerline isn't installed, oh-my-zsh+powerline should be installed for installed for good measure - and shell updated
+        if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k/ ]; then
+
+            printf "[+] Installing powerlevel10k...\n\n"
+            git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+        
+        fi
+
+		''; 
+
+		# After git is set up..
+		# home.activation.cloneRepo = lib.hm.dag.entryAfter ["writeBoundary" "installPackages" "git"] ''
+		## ...
+	};
 
 
 
