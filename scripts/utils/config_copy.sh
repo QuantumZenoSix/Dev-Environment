@@ -15,38 +15,38 @@ if [ ! -d $HOME/.config/ ]; then
     mkdir -p $HOME/.config/
 fi
 
-# Sync local config files with cloned repo so i can push up my changes
-cp -f -v ./config/.bash_aliases  $HOME/
-cp -f -v ./config/.bash_git  $HOME/
-cp -f -v ./config/.bash_pbx  $HOME/
-cp -f -v ./config/.bash_utils  $HOME/
-cp -f -v ./config/.bashrc  $HOME/
-cp -f -v ./config/.p10k.zsh  $HOME/
-cp -f -v ./config/.tmux.conf  $HOME/
-cp -f -v ./config/.vimrc  $HOME/
-cp -f -v ./config/.zshrc   $HOME/
-cp -f -v ./config/.zsh_customizations  $HOME/
-cp -f -v ./config/.tmux_init.sh  $HOME/
-cp -f -v ./config/.wezterm.lua  $HOME/
-
-# __________ Spotify-player ___________
-if [ ! -d $HOME/.config/spotify-player/ ]; then
-    mkdir -p $HOME/.config/spotify-player
-fi
-cp -v -r ./config/.config/spotify-player  $HOME/.config/
-
-cp -v -f -r ./config/.config/lazygit  $HOME/.config/
-
-
-# ---------------------------------------------------------------------
-# Copy starship profile
-cp -v -f -r ./config/.config/starship.toml  $HOME/.config/
-
-# Copy Yazi config
-cp -v -f -r ./config/.config/yazi  $HOME/.config/
-
-# Install custom shell scripts and exes
-sudo cp -v -f -r ./config/usr_local_bin/* /usr/local/bin/
+# # Sync local config files with cloned repo so i can push up my changes
+# cp -f -v ./config/.bash_aliases  $HOME/
+# cp -f -v ./config/.bash_git  $HOME/
+# cp -f -v ./config/.bash_pbx  $HOME/
+# cp -f -v ./config/.bash_utils  $HOME/
+# cp -f -v ./config/.bashrc  $HOME/
+# cp -f -v ./config/.p10k.zsh  $HOME/
+# cp -f -v ./config/.tmux.conf  $HOME/
+# cp -f -v ./config/.vimrc  $HOME/
+# cp -f -v ./config/.zshrc   $HOME/
+# cp -f -v ./config/.zsh_customizations  $HOME/
+# cp -f -v ./config/.tmux_init.sh  $HOME/
+# cp -f -v ./config/.wezterm.lua  $HOME/
+#
+# # __________ Spotify-player ___________
+# if [ ! -d $HOME/.config/spotify-player/ ]; then
+#     mkdir -p $HOME/.config/spotify-player
+# fi
+# cp -v -r ./config/.config/spotify-player  $HOME/.config/
+#
+# cp -v -f -r ./config/.config/lazygit  $HOME/.config/
+#
+#
+# # ---------------------------------------------------------------------
+# # Copy starship profile
+# cp -v -f -r ./config/.config/starship.toml  $HOME/.config/
+#
+# # Copy Yazi config
+# cp -v -f -r ./config/.config/yazi  $HOME/.config/
+#
+# # Install custom shell scripts and exes
+# sudo cp -v -f -r ./config/usr_local_bin/* /usr/local/bin/
 
 
 # 'noupdateshellenv' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
@@ -91,7 +91,7 @@ if which zsh >/dev/null 2>&1; then
     # Set pwd to project root
     cd $(dirname "$0") && cd ../ && cd ../ && pwd || exit
 
-    cp -v ./config/.zshrc   $HOME/
+    # cp -v ./config/.zshrc   $HOME/
 
     current_shell=$(getent passwd "$USER" | cut -d: -f7 || echo "")
 
@@ -111,7 +111,7 @@ if which zsh >/dev/null 2>&1; then
             ;;
     esac
 
-    cp -v ./config/.zshrc  $HOME/
+    # cp -v ./config/.zshrc  $HOME/
 
     # Don't open new zsh shell
     # if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" -a "${INSTALL_SUBTYPE}" != "os-pop" ]; then

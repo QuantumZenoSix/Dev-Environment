@@ -202,8 +202,9 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # fi
 
     # NEW TESTING
-    set_login_shell_zsh
+    # set_login_shell_zsh
     setup_nix
+    ./scripts/utils/config_copy.sh
 
 fi
 

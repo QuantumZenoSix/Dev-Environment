@@ -5,8 +5,8 @@
     # ────────────────────────────────────────────────────────────────
     #  Identity & State
     # ────────────────────────────────────────────────────────────────
-    home.username      = "bobby";                    # ← change this
-    home.homeDirectory = "/home/bobby";
+    home.username      = "zeno";                    # ← change this
+    home.homeDirectory = "/home/zeno";
     home.stateVersion  = "25.05";                    # ← use current or newer stable version
                                                    #    NEVER change this value after first activation!
 
