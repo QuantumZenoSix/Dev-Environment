@@ -1,3 +1,4 @@
+exit
 #!/usr/bin/env bash
 
 # Go to project root
