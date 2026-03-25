@@ -119,3 +119,13 @@ git_setsshkey() {
     git config core.sshCommand "ssh -i \"$1\" -F /dev/null" &&
         echo "Repository now using SSH key: $1"
 }
+
+git_set_sshconnection(){
+        # Should prob add a check for 'https' here and change if not 
+        git_url_type="$(git config --get remote.origin.url)"
+
+        if [[ "${git_url_type}" =~ https ]]; then
+            git_url_type_ssh"$(git config --get remote.origin.url | sed -r 's_https://github.com/_git@github.com:_')"
+            git config remote.origin.url $git_url_type_ssh
+        fi
+}

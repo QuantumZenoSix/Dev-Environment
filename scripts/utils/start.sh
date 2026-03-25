@@ -21,12 +21,12 @@ echo ""
 
 # The array of choices (index 1-based in select)
 options=(
-  "Everything (Packages, config files, customized shell/prompt, and Neovim configuration)"
-  "Packages"
-  "Config files"
-  "Neovim configuration"
-  "[pop-os] Everything + applications optimized for pop! os (desktop apps, graphics drivers, gaming tools, and optimizations)"
-  "[cachy] Everything + applications optimized for cachy os (desktop apps, graphics drivers, gaming tools, and optimizations)"
+  "CLI - All"
+  "CLI - Apps"
+  "CLI - Dotfiles"
+  "CLI - Nvim config"
+  "DSK - Pop! OS"
+  "DSK - Cachy OS"
 )
 
 options+=("Quit")
