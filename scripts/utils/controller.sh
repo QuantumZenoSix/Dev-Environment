@@ -245,6 +245,8 @@ setup_nix(){
     [[ -f ~/.bashrc ]] && rm ~/.bashrc
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
+    git add flake.nix home.nix
+
     CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
 
 }
