@@ -380,6 +380,6 @@ function auto_list(){
 # Register them all
 add-zsh-hook chpwd auto_list
 add-zsh-hook chpwd auto_venv
-add-zsh-hook chpwd auto_nix
+# add-zsh-hook chpwd auto_nix
 add-zsh-hook chpwd auto_nvm
 add-zsh-hook chpwd auto_direnv
