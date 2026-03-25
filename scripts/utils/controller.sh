@@ -246,6 +246,7 @@ setup_nix(){
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
     CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
+
 }
 
 ###########
