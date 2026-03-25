@@ -246,6 +246,7 @@ hash -d ba=~/.bash_aliases
 hash -d nc=~/.config/nvim/lua/   # Edit nvim dir: nvim -n
 # hash -d de=~/Documents/Repos/Dev-Environment/         
 hash -d de=~/.config/home-manager/
+hash -d hm=~/.config/home-manager/
 
 # Ctrl-x followed by gc runs git commit with cursor inside msg
 bindkey -s '^Xgc' 'git commit -m ""\C-b'
