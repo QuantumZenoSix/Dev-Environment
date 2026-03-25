@@ -273,6 +273,9 @@ else
     echo "# ────────────────────────────────────────────────"
     printf "\n\n\n"
     echo "→ Run 'up' to update your local dotfiles with any changes made to your home flake (~/.config/home-manager/home.nix)"
+    echo "# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+    echo
+    echo
     echo
 
     zsh
@@ -426,21 +429,19 @@ fi
 
 
 
-
-
-printf "\n\n\n"
-echo "# ────────────────────────────────────────────────"
-echo "#        FINISHED! "
-echo "# ────────────────────────────────────────────────"
-printf "\n\n\n"
-
-
-
 if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # echo "$CONF_MSG"
     # echo "→ You may need to log out/in or simply run 'zsh'"
     # Just load a new shell to get going instead - not much overhead
     zsh
+else
+
+    printf "\n\n\n"
+    echo "# ────────────────────────────────────────────────"
+    echo "#        FINISHED! "
+    echo "# ────────────────────────────────────────────────"
+    printf "\n\n\n"
+
 fi
 
 
