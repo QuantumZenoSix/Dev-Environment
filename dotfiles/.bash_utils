@@ -604,7 +604,6 @@ up(){
 }
 
 get_wsl_diskusage(){
-
     # ncdu must be installed
     sudo ncdu / --exclude /mnt
 }
