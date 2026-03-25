@@ -248,29 +248,15 @@
     #  Run ad-hoc shell cpmmands
     # ────────────────────────────────────────────────────────────────
 	home.activation = { 
-		touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
-		touch grass.txt # creates ~/grass.txt
+		# touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
+		# touch grass.txt # creates ~/grass.txt
 
         # Install fonts
         # printf "[+] Installing fonts..."
         # unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
         # sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
 
-        # This removes ohmyzsh and powerline (since powerline installs it in ~/.oh-my-zsh) so make sure this is before powerline re-install
-        if [ -d $HOME/.oh-my-zsh ]; then
-            rm -rf $HOME/.oh-my-zsh
-        fi
 
-        printf "[+] Installing oh-my-zsh...\n\n"
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-        # If powerline isn't installed, oh-my-zsh+powerline should be installed for installed for good measure - and shell updated
-        if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k/ ]; then
-
-            printf "[+] Installing powerlevel10k...\n\n"
-            git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
-        
-        fi
 
 		''; 
 
