@@ -164,6 +164,7 @@ install_oh_my_zsh_and_powerline(){
 
         fi
 
+    fi
 }
 copy_config_files(){
 
