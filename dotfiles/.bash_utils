@@ -602,3 +602,9 @@ up(){
     home-manager switch -b backup --flake .#${USER}
 
 }
+
+get_wsl_diskusage(){
+
+    # ncdu must be installed
+    sudo ncdu / --exclude /mnt
+}
