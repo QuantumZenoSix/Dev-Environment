@@ -1,15 +1,35 @@
+# Dev Environment
 
 My entire dev environment setup via one command.  
 
+<br />
+
 ```bash
 bash -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/scripts/utils/start.sh -O -)"
-```
-
-{IMAGE OF DROPDOWN HERE}  
+```  
 
 <br />
 
-_Note: This is designed for Arch Linux and Arch-based distros though I've done some work on the debian side as well._
+Cli Preview   
+
+```sh
+What would you like to install/configure?
+
+1) CLI - All
+2) CLI - Apps
+3) CLI - Dotfiles
+4) CLI - Nvim config
+5) DSK - Pop! OS
+6) DSK - Cachy OS
+7) Quit
+Select an option (1-7) →
+
+```
+
+<br />
+
+
+<br />
 
 
 <br />
@@ -25,6 +45,10 @@ __What each option gives you__
 | CLI - Nvim Config | ✅                 | ❌                   | ❌            | ❌           | ❌                                  |
 | DSK - Pop! OS     | ✅                 | ✅                   | ✅            | ✅           | ✅                                  |
 | DSK - Cachy OS    | ✅                 | ✅                   | ✅            | ✅           | ✅                                  |
+
+<br />
+
+_Note: This is designed for Arch Linux/Arch-based distros though I've done some work on the debian side as well (all options should be functional thoughm more testing has been done on the arch side)._
 
 <br />
 
