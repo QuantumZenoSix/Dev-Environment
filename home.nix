@@ -210,7 +210,7 @@
         # ───────────────────────────────────────────────
         # Folders: programs inside ~/.dotfiles/<program>/
         # recursive = true is usually better for .dotfiles/*
-        ".dotfiles/lazygit" = {
+        ".config/lazygit" = {
           source = ./dotfiles/.config/lazygit;
           recursive = true;
         };
@@ -230,6 +230,20 @@
           recursive = true;
         };
 
+        ".oh-my-zsh" = {
+          source = ./dotfiles/.oh-my-zsh;
+          recursive = true;
+        };
+
+        ".tmux" = {
+          source = ./dotfiles/.tmux;
+          recursive = true;
+        };
+
+        ".vim" = {
+          source = ./dotfiles/.vim;
+          recursive = true;
+        };
 
         # Write to file
         # ".config/git/ignore".text = ''
