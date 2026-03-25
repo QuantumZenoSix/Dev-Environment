@@ -584,4 +584,21 @@ change_pop_graphics(){
 }
 
 
+up(){
 
+    # Git to pull down the latest and greatest and update my local dotfiles via nix home-manager
+    
+    cd ~/.config/home-manager/
+
+    # Add ssh-key to ssh-agent
+    ssh_keyupdate
+
+    # Stash anything lingering
+    git stash save
+    git pull
+    git stash apply
+    git add -A
+
+    home-manager switch -b backup --flake .#${USER}
+
+}
