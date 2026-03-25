@@ -258,7 +258,7 @@
 
 
 
-		''; 
+		#''; 
 
 		# After git is set up..
 		# home.activation.cloneRepo = lib.hm.dag.entryAfter ["writeBoundary" "installPackages" "git"] ''
