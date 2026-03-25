@@ -11,6 +11,9 @@ This means window management is verly similar - <C-W> for window actions in Wezt
 ---
 
 # Shell
+
+`up` - Pull and update locally via home manager  
+
 ## Apache  
 `apachelogacc` - tail -n15 -f /var/log/apache2/access.log  
 `apachelogerr` - tail -n15 -f /var/log/apache2/error.log  
@@ -84,6 +87,8 @@ repo synchronization tool
 `pscpu10` - ps auxf | sort -nr -k 3 | head -10  
 `psmem` - ps auxf | sort -nr -k 4  
 `psmem10` - ps auxf | sort -nr -k 4 | head -10  
+`get_wsl_diskusage`  
+
 
 ## Terminal Buffer Manipulation  
 `Ctrl+x+e` - Open temp buffer to run in cli (can run on previous commands or whatevs is in cli)  
@@ -136,7 +141,8 @@ repo synchronization tool
 `showmerges` - git log --oneline --merges -E --grep 'DEV-[0-9]+' -n 15  
 `git_force_push` - Add ssh key to agent and push  
 `gc` - 'Git Clean' - drop all local changes - head to master, git pull, and restart apache  
-
+`git_setsshkey` - Set ssh key  
+`git_set_sshconnection` - Set git connection to ssh instead of https (good if using ssh keys)  
 
 ## Oh-my-ZSH Plugins  
 - `ccat/cless` - colorized cat+less  
