@@ -132,6 +132,39 @@ set_login_shell_zsh(){
 
 }
 
+install_oh_my_zsh_and_powerline(){
+
+    # 'noupdateshellenv' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
+    if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" ]; then
+
+        # Install fonts
+        printf "[+] Installing fonts..."
+        unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
+        sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
+
+        if ! command -v zsh &> /dev/null
+        then
+
+            # This removes powerline (since powerline install in ~/.oh-my-zsh) so make sure this is before powerline install
+            if [ -d $HOME/.oh-my-zsh ]; then
+                rm -rf $HOME/.oh-my-zsh
+            fi
+
+            printf "[+] Installing oh-my-zsh...\n\n"
+            sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+            # If powerline isn't installed, oh-my-zsh+powerline should be installed for installed for good measure - and shell updated
+            if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k/ ]; then
+
+                printf "[+] Installing powerlevel10k...\n\n"
+                git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+                # sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+            
+            fi
+
+        fi
+
+}
 copy_config_files(){
 
     echo "# ────────────────────────────────────────────────"
@@ -174,38 +207,7 @@ copy_config_files(){
     # Install custom shell scripts and exes
     sudo cp -v -f -r ./usr_local_bin/* /usr/local/bin/
 
-
-    # 'noupdateshellenv' means we're just updating our local files - no need to install ohmyzsh/fonts/powerline
-    if [ "${INSTALL_SUBTYPE}" != "noupdateshellenv" ]; then
-
-        # Install fonts
-        printf "[+] Installing fonts..."
-        unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
-        sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
-
-        # for file in $(find ./fonts/ -type f -iname "*.ttf")
-        # do
-        #     echo $file
-        # done
-
-        # This removes powerline (since powerline install in ~/.oh-my-zsh) so make sure this is before powerline install
-        if [ -d $HOME/.oh-my-zsh ]; then
-            rm -rf $HOME/.oh-my-zsh
-        fi
-
-        printf "[+] Installing oh-my-zsh...\n\n"
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-        # If powerline isn't installed, oh-my-zsh+powerline should be installed for installed for good measure - and shell updated
-        if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k/ ]; then
-
-            printf "[+] Installing powerlevel10k...\n\n"
-            git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
-            # sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-        
-        fi
-
-    fi
+    install_oh_my_zsh_and_powerline
 
     # Installing oh-my-zsh can wipe out our ~/.zshrc - let's copy it over again in case
     cp -v ./dotfiles/.zshrc   $HOME/
@@ -214,6 +216,7 @@ copy_config_files(){
 
 
 }
+
 
 setup_nix(){
 
@@ -227,27 +230,32 @@ setup_nix(){
         echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
     fi
 
-    sudo systemctl restart nix-daemon
 
     # Replace flakes with proper username
     sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./home.nix
     sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./flake.nix
 
-    echo "[+] Running home-manager for the first time..."
-    nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}
-    echo "[+] Finished running home manager"
-    
+    git add flake.nix home.nix
     sudo systemctl daemon-reload
     sudo systemctl enable nix-daemon.socket
     sudo systemctl start nix-daemon.socket
+    sudo systemctl restart nix-daemon
     sudo systemctl status nix-daemon.service
+
+    install_oh_my_zsh_and_powerline
 
     [[ -f ~/.bashrc ]] && rm ~/.bashrc
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
-    git add flake.nix home.nix
+
+    if [[ -s /nix/var/nix/profiles/default/bin/nix ]]; then
+        echo "[+] Running home-manager for the first time..."
+        /nix/var/nix/profiles/default/bin/nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${CALLING_USER}
+        echo "[+] Finished running home manager"
+    fi
 
     CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
+
 
 }
 
