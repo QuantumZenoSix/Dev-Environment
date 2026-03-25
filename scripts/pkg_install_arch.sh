@@ -88,6 +88,12 @@ if ! command -v yay >/dev/null 2>&1 ; then
 
 fi
 
+# Ensure we're at project root
+cd ~/.config/home-manager/
+
+# remove yay source files
+rm -rvf ./yay
+
 
 echo
 

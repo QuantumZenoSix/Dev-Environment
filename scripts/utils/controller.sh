@@ -232,9 +232,16 @@ setup_nix(){
     fi
 
 
-    # Replace flakes with proper username
-    sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./home.nix
-    sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./flake.nix
+    if [ ! -s ~/.config/home-manager/home.nix ]; then
+        echo "Cannot find home flake, prinring ~/.config/home-manager contents"
+        echo "pwd: "
+        pwd
+        ls -hal ~/.config/home-manager
+    else
+        # Replace flakes with proper username
+        sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ~/.config/home-manager/flake.nix
+        sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ~/.config/home-manager/home.nix
+    fi
 
     # Stage everything and reload nix stuff
     git add flake.nix home.nix
