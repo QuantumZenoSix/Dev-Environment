@@ -253,23 +253,29 @@ setup_nix(){
 
     # We need to start a new shell to use nix and activate home-manager
     # However, if we can find the nix binary and the user profile (which we can create) we can likely automate the activation process
-    if [ -s /nix/var/nix/profiles/default/bin/nix ]; then
+    #
+    # if [ -s /nix/var/nix/profiles/default/bin/nix ]; then
+    #
+    #     mkdir -p ~/.local/state/nix/profiles  &> /dev/null
+    #
+    #     echo "[+] Found nix! Running home-manager for the first time..."
+    #     pwd
+    #     /nix/var/nix/profiles/default/bin/nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${CALLING_USER}
+    #     echo "[+] Finished running home manager"
+    # fi
+    #
+    # # If .zshrc has been created, home-manager must have done it's thing
+    # if [ -s ~/.zshrc ]; then
+    #     CONF_MSG="→ Home-Manager Activated!\nRun 'zsh' to load a new shell and run 'up' reload any home-manager changes (~/.config/home-manager/home.nix)"
+    # else
+    #     CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
+    # fi
 
-        mkdir -p ~/.local/state/nix/profiles  &> /dev/null
+    install_oh_my_zsh_and_powerline
+    cp ./dotfiles/.zshrc ~/.zshrc
 
-        echo "[+] Found nix! Running home-manager for the first time..."
-        pwd
-        /nix/var/nix/profiles/default/bin/nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${CALLING_USER}
-        echo "[+] Finished running home manager"
-    fi
-
-    # If .zshrc has been created, home-manager must have done it's thing
-    if [ -s ~/.zshrc ]; then
-        CONF_MSG="→ Home-Manager Activated!\nRun 'zsh' to load a new shell and run 'up' reload any home-manager changes (~/.config/home-manager/home.nix)"
-    else
-        CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
-    fi
-
+    CONF_MSG="→ After loading a new shell run 'up' to activate home-manager"
+    # CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
 
 }
 
@@ -401,7 +407,13 @@ echo "# ────────────────────────
 echo "#        FINISHED! "
 echo "# ────────────────────────────────────────────────"
 printf "\n\n\n"
-echo "→ You may need to log out/in or simply run 'zsh'"
-echo "$CONF_MSG"
+
+
+
+if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
+    echo "$CONF_MSG"
+    # echo "→ You may need to log out/in or simply run 'zsh'"
+    zsh
+fi
 
 
