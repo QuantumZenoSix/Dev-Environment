@@ -236,6 +236,7 @@ setup_nix(){
     sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./home.nix
     sed -i "s:REPLACETHISUSERNAME:${CALLING_USER}:g" ./flake.nix
 
+    # Stage everything and reload nix stuff
     git add flake.nix home.nix
     sudo systemctl daemon-reload
     sudo systemctl enable nix-daemon.socket
@@ -243,19 +244,31 @@ setup_nix(){
     sudo systemctl restart nix-daemon
     sudo systemctl status nix-daemon.service
 
+    # Setup oh-my-zsh but clear .bashrc/.zshrc so home-manager can create them
     install_oh_my_zsh_and_powerline
 
     [[ -f ~/.bashrc ]] && rm ~/.bashrc
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
 
-    if [[ -s /nix/var/nix/profiles/default/bin/nix ]]; then
-        echo "[+] Running home-manager for the first time..."
+    # We need to start a new shell to use nix and activate home-manager
+    # However, if we can find the nix binary and the user profile (which we can create) we can likely automate the activation process
+    if [ -s /nix/var/nix/profiles/default/bin/nix ]; then
+
+        mkdir -p ~/.local/state/nix/profiles  &> /dev/null
+
+        echo "[+] Found nix! Running home-manager for the first time..."
+        pwd
         /nix/var/nix/profiles/default/bin/nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${CALLING_USER}
         echo "[+] Finished running home manager"
     fi
 
-    CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
+    # If .zshrc has been created, home-manager must have done it's thing
+    if [ -s ~/.zshrc ]; then
+        CONF_MSG="→ Home-Manager Activated!\nRun 'zsh' to load a new shell and run 'up' reload any home-manager changes (~/.config/home-manager/home.nix)"
+    else
+        CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
+    fi
 
 
 }

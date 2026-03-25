@@ -230,11 +230,6 @@
           recursive = true;
         };
 
-        ".oh-my-zsh" = {
-          source = ./dotfiles/.oh-my-zsh;
-          recursive = true;
-        };
-
         ".tmux" = {
           source = ./dotfiles/.tmux;
           recursive = true;
