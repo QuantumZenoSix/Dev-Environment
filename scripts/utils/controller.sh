@@ -142,7 +142,7 @@ install_oh_my_zsh_and_powerline(){
         unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
         sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
 
-        if ! command -v zsh &> /dev/null
+        if command -v zsh &> /dev/null
         then
 
             # This removes powerline (since powerline install in ~/.oh-my-zsh) so make sure this is before powerline install
@@ -244,12 +244,26 @@ setup_nix(){
     sudo systemctl restart nix-daemon
     sudo systemctl status nix-daemon.service
 
-    # Setup oh-my-zsh but clear .bashrc/.zshrc so home-manager can create them
     install_oh_my_zsh_and_powerline
 
     [[ -f ~/.bashrc ]] && rm ~/.bashrc
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
+    # Create a ~/.zshrc which only starts home-manager - loading a new shell will trigger it
+    cat >  ~/.zshrc<< 'EOF'
+if [ -s /tmp/started_home_manager ]; then
+    echo "→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${USER}' to activate home-manager"
+else
+    touch /tmp/started_home_manager
+    cd ~/.config/home-manager/
+    git add -A
+    nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${USER}
+    echo "Run 'source ~/.zshrc' to see the latest changes '
+fi
+EOF
+
+    # CONF_MSG="→ After loading a new shell run 'up' to activate home-manager"
+    # CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
 
     # We need to start a new shell to use nix and activate home-manager
     # However, if we can find the nix binary and the user profile (which we can create) we can likely automate the activation process
@@ -271,11 +285,6 @@ setup_nix(){
     #     CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
     # fi
 
-    install_oh_my_zsh_and_powerline
-    cp ./dotfiles/.zshrc ~/.zshrc
-
-    CONF_MSG="→ After loading a new shell run 'up' to activate home-manager"
-    # CONF_MSG="→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}' to activate home-manager"
 
 }
 
@@ -411,8 +420,8 @@ printf "\n\n\n"
 
 
 if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
-    echo "$CONF_MSG"
-    # echo "→ You may need to log out/in or simply run 'zsh'"
+    # echo "$CONF_MSG"
+    echo "→ You may need to log out/in or simply run 'zsh'"
     zsh
 fi
 
