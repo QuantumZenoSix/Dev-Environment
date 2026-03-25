@@ -236,6 +236,14 @@ setup_nix(){
     echo "[+] Running home-manager for the first time..."
     nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}
     echo "[+] Finished running home manager"
+    
+    sudo systemctl daemon-reload
+    sudo systemctl enable nix-daemon.socket
+    sudo systemctl start nix-daemon.socket
+    sudo systemctl status nix-daemon.service
+
+    [[ -f ~/.bashrc ]] && rm ~/.bashrc
+    [[ -f ~/.zshrc ]] && rm ~/.zshrc
 
     CONF_MSG="After logging out/in run 'nix run github:nix-community/home-manager -- init --switch --flake .#${CALLING_USER}'"
 }
