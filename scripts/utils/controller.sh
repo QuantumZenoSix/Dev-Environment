@@ -258,7 +258,17 @@ else
     cd ~/.config/home-manager/
     git add -A
     nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${USER}
-    echo "Run 'source ~/.zshrc' to see the latest changes '
+    # echo "Run 'source ~/.zshrc' to see the latest changes '"
+
+    printf "\n\n\n"
+    echo "# ────────────────────────────────────────────────"
+    echo "#        NIX HOME MANAGER ACTIVATED! "
+    echo "# ────────────────────────────────────────────────"
+    printf "\n\n\n"
+    echo "→ Run 'up' to update your local dotfiles with any changes made to your home flake (~/.config/home-manager/home.nix)"
+    echo
+
+    zsh
 fi
 EOF
 
@@ -421,7 +431,8 @@ printf "\n\n\n"
 
 if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # echo "$CONF_MSG"
-    echo "→ You may need to log out/in or simply run 'zsh'"
+    # echo "→ You may need to log out/in or simply run 'zsh'"
+    # Just load a new shell to get going instead - not much overhead
     zsh
 fi
 
