@@ -34,6 +34,7 @@ which
 xclip  			# xclip: Clipboard, X11 integration 
 xsel  			# xsel: Clipboard, X11 
 sudo
+openssh
 
 
 NOTE: Installing programming languages and tools...
