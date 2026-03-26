@@ -5,13 +5,14 @@ mkdir -p ~/.config &> /dev/null
 cd ~/.config/
 
 if [ -f home-manager/home.nix ]; then
-    echo "'~/config/home-manager' not empty, please empty and try again"
-    exit
+    echo "[+] Found an existing home-manager home.nix flake.nix"
+    echo "[+] Skipping git clone..."
+    cd ~/.config/home-manager/
+else
+    git clone https://github.com/QuantumZenoSix/Dev-Environment.git
+    mv Dev-Environment home-manager
+    cd home-manager
 fi
-
-git clone https://github.com/QuantumZenoSix/Dev-Environment.git
-mv Dev-Environment home-manager
-cd home-manager
 
 pwd
 echo ""

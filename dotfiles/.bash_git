@@ -104,7 +104,7 @@ git_apply_stash_by_name(){
 
 
 
-git_setsshkey() {
+git_set_sshkey() {
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
         echo "Error: Not inside a git repository" >&2
         return 1
@@ -125,7 +125,7 @@ git_set_sshconnection(){
         git_url_type="$(git config --get remote.origin.url)"
 
         if [[ "${git_url_type}" =~ https ]]; then
-            git_url_type_ssh"$(git config --get remote.origin.url | sed -r 's_https://github.com/_git@github.com:_')"
+            git_url_type_ssh="$(git config --get remote.origin.url | sed -r 's_https://github.com/_git@github.com:_')"
             git config remote.origin.url $git_url_type_ssh
         fi
 }
