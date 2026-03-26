@@ -74,14 +74,16 @@ Absolutely unecessary, but fun.
 ## ❄️ How are configuration files managed once installed?
 This repo will be cloned and saved as `~/.config/home-manager`.  
 Upon installation you'll have the option to manage config files via Nix.  
+
 Choosing yes installs nix and uses the provided home.nix flake to sync your config files in `~/.config/home-manager/dotfiles` to their respective locations.  
+
 Choosing no runs a simple copy command to copy the files in `~/.config/home-manager/dotfiles` to their respective locations.  
 
 Note: I didn't hardcode a username in the home.nix flake. The username will auto-populate based on the user who's logged in. Meaning, anyone can fork this repo, edit the home.nix flake and it should still work.  
 
 
-The home.nix uses the legacy system of just copying the dotfiles instead of the declarative approach.  
-I plan on making it declarative, but until then this will do - also makes it easier to fork the repo and edit the home.nix file I suppose.  
+The `home.nix` uses the legacy system of just copying the dotfiles instead of the declarative approach.  
+I plan on making it declarative, but until then this will do - also makes it easier to fork the repo and edit the `home.nix` file I suppose.  
 
 
 ## ❔ What apps are included?
