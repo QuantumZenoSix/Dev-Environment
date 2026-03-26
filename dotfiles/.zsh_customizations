@@ -270,7 +270,7 @@ eval "$(direnv hook zsh)"
 
 
 # cheat.sh cmdline tool (cht.sh)
-PATH_DIR="$HOME/bin"  # or another directory on your $PATH
+PATH_DIR="$HOME/.config/cht/bin"  # or another directory on your $PATH
 mkdir -p "$PATH_DIR"
 [ ! -f "$PATH_DIR/cht.sh" ] && curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
 chmod +x "$PATH_DIR/cht.sh"
