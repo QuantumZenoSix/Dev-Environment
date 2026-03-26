@@ -119,7 +119,7 @@ csvlens
 dust
 yazi
 lazygit
-
+informant       # Read arch news before updating
 
 
 

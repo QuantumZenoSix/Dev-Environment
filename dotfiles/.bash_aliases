@@ -76,4 +76,4 @@ alias ds="ollama run deepseek-r1:14b"
 alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
 
-
+alias archeck="informant list"
