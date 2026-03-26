@@ -182,6 +182,6 @@ Fedora, maybe one day.
 | --- |--|  
 | `up`  | Pull down latest nix home manager changes and apply them (`git pull` + `home-manager switch`) |  
 
-More keybinds in my workflow: [keybinds](./notes/key_bindings.md)
+More keybinds in my workflow: [keybinds](./key_bindings.md)
 
 
