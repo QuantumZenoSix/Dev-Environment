@@ -434,7 +434,7 @@ if [ "${INSTALL_TYPE}" = "full" ] || [ "${INSTALL_TYPE}" = "configonly" ]; then
     # echo "→ You may need to log out/in or simply run 'zsh'"
     # Just load a new shell to get going instead - not much overhead
 
-    if command -v zsh &> /dev/null
+    if command -v zsh &> /dev/null; then
         zsh
     else
         echo "→ zsh is not installed. To utilize zsh features install zsh."
